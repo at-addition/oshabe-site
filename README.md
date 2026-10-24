@@ -12,8 +12,8 @@ Astro で作り、GitHub Pages に出す。`hazieta-site` と同じ作り。
 
 | 場所 | 中身 |
 | :--- | :--- |
-| `src/content/posts/` | 記事の Markdown。昔の記事 332 本は `scripts/import.py` が書き出す（手で直さない）。新しい記事は手で置く |
-| `src/content/wp-content/` | 昔の記事の画像 9,161 枚。`import.py` が毎回作り直す |
+| `src/content/posts/` | 記事の Markdown。昔の記事 329 本は `scripts/import.py` が書き出す（手で直さない）。新しい記事は手で置く |
+| `src/content/wp-content/` | 昔の記事の画像 9,155 枚。`import.py` が毎回作り直す |
 | `src/content/images/` | 新しい記事の画像を置くところ |
 | `src/pages/` | 一覧（`index.astro`）・記事（`[...slug].astro`）・404・プライバシーポリシー（`privacy.astro`）・お問い合わせ（`contact.astro`） |
 | `src/components/PostCard.astro` | 一覧のカード（画像・テーマのバッジ・日付・タイトル・抜き出し） |
@@ -80,13 +80,13 @@ npm run build
 | 何を | 本数 | 理由 | 戻し方 |
 | :--- | ---: | :--- | :--- |
 | 芸能の記事 | 113 | 芸能人の写真（他人が撮ったもの）と噂話が多い | `INCLUDE_GOSSIP = True` |
-| カテゴリ「漫画」の記事 | 1 | 本人の判断 | `INCLUDE_HIDDEN = True`（または `HIDDEN_CATS` から外す） |
+| カテゴリ「漫画」「家電」「雑学」の記事 | 4（漫画 1・家電 2・雑学 1） | 本人の判断 | `INCLUDE_HIDDEN = True`（または `HIDDEN_CATS` から外す） |
 
 - 芸能の記事は、芸能のカテゴリ（`GOSSIP_CATS`。女優・俳優・お笑い・10月ドラマ・アーティストなど）を持つ記事と、
   カテゴリが「未分類」だけの記事（2016年の記事はほぼ芸能）。未分類でも芸能でない記事は `NOT_GOSSIP` に並べて残す
 - ほかのカテゴリを隠したいときは `HIDDEN_CATS` に名前を足す
 - 外した記事の一覧は `import.py` が `scripts/excluded.tsv` に書き出す。タイトルも噂話なので**リポジトリには入れない**（`.gitignore`）
-- 漫画の記事は最初の公開に入っていたので、このリポジトリの履歴には残っている。芸能の記事は一度も入れていない
+- 漫画・家電・雑学の記事は最初の公開に入っていたので、このリポジトリの履歴には残っている。芸能の記事は一度も入れていない
 
 ## ドメインと DNS
 
@@ -138,5 +138,5 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 
 - 画像は無作為に選んだ 150 枚をコンタクトシートで見た。どれもお店の売り場と商品の写真で、
   「OSHABE」の透かしが入った本人の撮影。人の顔は商品のパッケージに印刷されたものだけだった。
-  9,161 枚すべては見ていない（どれも元のブログで公開していた写真）
+  9,155 枚すべては見ていない（どれも元のブログで公開していた写真）
 - 本文にメールアドレスや本名は無い。プライバシーポリシーは取り込んでいない

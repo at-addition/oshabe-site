@@ -11,7 +11,7 @@
 - 固定ページ（サイトマップ・プライバシーポリシー・お問い合わせ）は取り込まない。サイトマップはトップが代わりになる
 - 芸能の記事は外す（2026-10-24 本人判断。他人が撮った芸能人の写真と噂話が多いため）。
   外した記事は scripts/excluded.tsv に並べる。戻すときは INCLUDE_GOSSIP を True にして取り込み直すだけ
-- 漫画のカテゴリの記事も外す（2026-10-24 本人指示）。戻すときは INCLUDE_HIDDEN を True にする
+- 漫画・家電・雑学のカテゴリの記事も外す（2026-10-24 本人指示）。戻すときは INCLUDE_HIDDEN を True にする
 """
 import json, os, re, shutil, sys
 
@@ -22,10 +22,10 @@ GOSSIP_CATS = {'女優', '俳優', 'お笑い', '10月ドラマ', 'アーティ�
 # 未分類・カテゴリ無しでも芸能ではない記事
 NOT_GOSSIP = {'halloween2016', 'usj_amex2'}
 
-# 芸能とは別に、今は出さないカテゴリ（2026-10-24 本人指示「漫画もいつでも復活できるように非表示に」）。
+# 芸能とは別に、今は出さないカテゴリ（2026-10-24 本人指示「漫画もいつでも復活できるように非表示に」、同日に家電・雑学も）。
 # 戻すときは集合から外すか INCLUDE_HIDDEN を True にして取り込み直す
 INCLUDE_HIDDEN = False
-HIDDEN_CATS = {'漫画'}
+HIDDEN_CATS = {'漫画', '家電', '雑学'}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOMAIN = 'oshabe.com'
