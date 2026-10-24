@@ -61,8 +61,15 @@ for name in sorted(os.listdir(SRC)):
     if path not in SKIP_PAGES and meta.get('公開') and not INCLUDE_GOSSIP and is_gossip(path, cats):
         excluded[path] = (meta['公開'][:10], title, ','.join(cats))
 
-shutil.rmtree(POSTS, ignore_errors=True)
-os.makedirs(POSTS)
+# 前回この道具が書いた記事だけを消す。手で書き足した記事は消さない
+IMPORTED = os.path.join(ROOT, 'scripts', 'imported.txt')
+if os.path.exists(IMPORTED):
+    for rel in open(IMPORTED, encoding='utf-8').read().split():
+        p = os.path.join(POSTS, *rel.split('/'))
+        if os.path.exists(p):
+            os.remove(p)
+os.makedirs(POSTS, exist_ok=True)
+written = []
 used, n, dropped = set(), 0, 0
 for name in sorted(os.listdir(SRC)):
     meta, title, path, cats, body = read(name)
@@ -106,7 +113,10 @@ for name in sorted(os.listdir(SRC)):
     lines = ['---'] + [f'{k}: {json.dumps(v, ensure_ascii=False)}' for k, v in fm.items()] + ['---', '']
     dst = os.path.join(POSTS, *path.split('/')) + '.md'
     os.makedirs(os.path.dirname(dst), exist_ok=True)
+    if os.path.exists(dst):
+        sys.exit(f'{dst} は手で書いた記事と重なっている。どちらかの場所を変える')
     open(dst, 'w', encoding='utf-8', newline='\n').write('\n'.join(lines) + body.strip() + '\n')
+    written.append(path + '.md')
     n += 1
 
 # 画像は src/content/wp-content に置く。記事の .md から見た相対パスがそのままここを指し、
@@ -122,4 +132,5 @@ with open(os.path.join(ROOT, 'scripts', 'excluded.tsv'), 'w', encoding='utf-8', 
     f.write('公開日\tパス\tカテゴリ\tタイトル\n')
     for p, (d, t, c) in sorted(excluded.items(), key=lambda kv: kv[1][0]):
         f.write(f'{d}\t{p}\t{c}\t{t}\n')
+open(IMPORTED, 'w', encoding='utf-8', newline='\n').write('\n'.join(sorted(written)) + '\n')
 print('posts', n, 'excluded', len(excluded), 'images', len(used), 'dropped', dropped, file=sys.stderr)
