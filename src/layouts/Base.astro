@@ -4,6 +4,8 @@ interface Props {
   description?: string;
 }
 const SITE_NAME = 'オシャベ';
+// Google アドセンスのパブリッシャー ID（hqzietq のアカウント。public/ads.txt と揃える）
+const ADSENSE_CLIENT = 'ca-pub-5250963766765858';
 const { title, description = '100均・USJ・季節のイベントの話題' } = Astro.props;
 const base = import.meta.env.BASE_URL;
 ---
@@ -16,6 +18,12 @@ const base = import.meta.env.BASE_URL;
     <meta name="description" content={description} />
     <link rel="icon" href={`${base}favicon.ico`} />
     <title>{title ? `${title} | ${SITE_NAME}` : SITE_NAME}</title>
+    <script
+      is:inline
+      async
+      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <header class="site-header">
@@ -25,6 +33,9 @@ const base = import.meta.env.BASE_URL;
       <slot />
     </main>
     <footer class="site-footer">
+      <p>
+        <a href={`${base}privacy/`}>プライバシーポリシー</a> ・ <a href={`${base}contact/`}>お問い合わせ</a>
+      </p>
       <p>© {SITE_NAME}</p>
     </footer>
   </body>

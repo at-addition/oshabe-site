@@ -15,9 +15,10 @@ Astro で作り、GitHub Pages に出す。`hazieta-site` と同じ作り。
 | `src/content/posts/` | 記事の Markdown。昔の記事 332 本は `scripts/import.py` が書き出す（手で直さない）。新しい記事は手で置く |
 | `src/content/wp-content/` | 昔の記事の画像 9,161 枚。`import.py` が毎回作り直す |
 | `src/content/images/` | 新しい記事の画像を置くところ |
-| `src/pages/` | 一覧（`index.astro`）・記事（`[...slug].astro`）・404 |
-| `src/layouts/Base.astro` | 全ページ共通の枠（サイト名・説明文・フッター・色） |
+| `src/pages/` | 一覧（`index.astro`）・記事（`[...slug].astro`）・404・プライバシーポリシー（`privacy.astro`）・お問い合わせ（`contact.astro`） |
+| `src/layouts/Base.astro` | 全ページ共通の枠（サイト名・説明文・フッター・色・アドセンスのコード） |
 | `public/CNAME` | 独自ドメイン `oshabe.com` |
+| `public/ads.txt` | アドセンスのパブリッシャー ID（`Base.astro` の `ADSENSE_CLIENT` と揃える） |
 | `scripts/import.py` | 取り出した昔の記事と画像を、このサイトの形に書き直して取り込む |
 | `scripts/imported.txt` | `import.py` が前回書いた記事の一覧。取り込み直すとき、ここに載った記事だけを消す |
 | `scripts/images.txt` | 昔の記事が使っている画像の一覧 |
@@ -97,6 +98,17 @@ npm run build
 gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=
 gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 ```
+
+## 広告とお問い合わせ
+
+- **広告は Google アドセンス。** パブリッシャー ID は `pub-5250963766765858`（hqzietq のアカウント。
+  2026-10-24 時点で「一定期間ご利用がないため無効」で、再有効化して `google@nakagawamail.com` を管理者に招待する予定）。
+  全ページの `<head>` に `adsbygoogle.js` を入れ、`https://oshabe.com/ads.txt` に同じ ID を出している。
+  ID を変えるときは `Base.astro` の `ADSENSE_CLIENT` と `public/ads.txt` の両方を直す
+- **お問い合わせは Google フォーム**「オシャベ お問い合わせ」（`google@nakagawamail.com` の持ち物。
+  Drive では `@Addition\google-context\doc_nat\AdSenseブログ\oshabe.com\`）。
+  ログインなしで誰でも送れる。新しい回答はメールで届く。フォームの URL は `contact.astro` の `FORM_URL`
+- プライバシーポリシーは昔のものを取り込まず、2026-10-24 に書き直した（`privacy.astro`）
 
 ## ブランチ運用
 

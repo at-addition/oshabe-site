@@ -1,0 +1,27 @@
+---
+import Base from '../layouts/Base.astro';
+
+// Google フォーム（google@nakagawamail.com の「オシャベ お問い合わせ」）。回答はフォームの持ち主にメールで届く
+const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe-4MkaUQhV3FFJeS-wK_DSC8Z-I2mjR6WYnogk2Jhb_QxrMw/viewform';
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="お問い合わせ" description="オシャベへのお問い合わせ">
+  <article>
+    <h1>お問い合わせ</h1>
+    <p>当サイトへのお問い合わせは、下のフォームからお送りください。返信が必要なときは、メールアドレスもご記入ください。</p>
+    <p><a class="button" href={FORM_URL}>お問い合わせフォームを開く</a></p>
+    <p>いただいた情報の扱いは<a href={`${base}privacy/`}>プライバシーポリシー</a>に書いています。</p>
+  </article>
+</Base>
+
+<style>
+  h1 { font-size: 1.5rem; line-height: 1.5; margin: 32px 0 16px; }
+  .button {
+    display: inline-block;
+    padding: 8px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    text-decoration: none;
+  }
+</style>
