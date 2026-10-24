@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<Base title="プライバシーポリシー" description="オシャベのプライバシーポリシー">
+  <article>
+    <h1>プライバシーポリシー</h1>
+
+    <h2>広告の配信について</h2>
+    <p>
+      当サイトは、第三者配信の広告サービス「Google アドセンス」を利用しています。
+      Google などの広告配信事業者は、利用者の興味に応じた広告を表示するために Cookie を使い、
+      当サイトや他のサイトへの過去のアクセス情報をもとに広告を配信することがあります。
+    </p>
+    <p>
+      Cookie を使った広告の配信は、<a href="https://adssettings.google.com/">Google の広告設定</a>で無効にできます。
+      第三者の広告配信事業者による Cookie は、<a href="https://www.aboutads.info/">www.aboutads.info</a> で無効にできます。
+      Google による情報の扱いは、<a href="https://policies.google.com/technologies/ads?hl=ja">Google のポリシーと規約（広告）</a>をご覧ください。
+    </p>
+
+    <h2>お問い合わせでいただいた情報について</h2>
+    <p>
+      <a href={`${base}contact/`}>お問い合わせ</a>でいただいたお名前やメールアドレスは、お返事のためだけに使い、
+      法令にもとづく場合を除いて第三者に渡しません。
+    </p>
+
+    <h2>免責事項</h2>
+    <p>
+      記事の内容は、書いた時点のものです。商品の価格や取り扱い、イベントの内容は変わっていることがあります。
+      当サイトの情報を使って生じた損害について、責任を負いかねます。
+    </p>
+
+    <h2>著作権について</h2>
+    <p>当サイトの文章と写真の無断転載はご遠慮ください。</p>
+
+    <p class="meta">2026年10月24日 制定</p>
+  </article>
+</Base>
+
+<style>
+  h1 { font-size: 1.5rem; line-height: 1.5; margin: 32px 0 16px; }
+  h2 { font-size: 1.1rem; margin: 32px 0 8px; }
+  .meta { color: var(--muted); font-size: 0.85rem; margin-top: 32px; }
+</style>
