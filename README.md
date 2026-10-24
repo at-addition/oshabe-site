@@ -18,6 +18,11 @@ Astro で作り、GitHub Pages に出す。`hazieta-site` と同じ作り。
 | `src/pages/` | 一覧（`index.astro`）・記事（`[...slug].astro`）・404・プライバシーポリシー（`privacy.astro`）・お問い合わせ（`contact.astro`） |
 | `src/layouts/Base.astro` | 全ページ共通の枠（サイト名・説明文・フッター・色・アドセンスのコード） |
 | `public/CNAME` | 独自ドメイン `oshabe.com` |
+| `src/assets/oshabe-logo.svg` | ヘッダーの当時のロゴ（OSHABE.com）。元の PNG を色ごとになぞった SVG。黒は文字色、白は背景の色に合わせる |
+| `public/favicon.svg` / `favicon.ico` / `apple-touch-icon.png` / `icon-192.png` / `icon-512.png` / `site.webmanifest` | 当時のマスコット（鳥）のアイコン。タブは SVG、スマホは白地の正方形 |
+| `design/original/` | 当時の画像（Wayback から）。ロゴ `logo_338x109.png`（`wp-content/uploads/tcd-w/logo.png`）とマスコット `beyan_177x156.png`（SNS で共有したときの画像） |
+| `design/beyan-square_1214.png` | マスコットの正方形アイコンの元 |
+| `scripts/trace-logo-color.py` | 数色のロゴを色ごとになぞって SVG にする道具（vtracer・Pillow・numpy） |
 | `public/ads.txt` | アドセンスのパブリッシャー ID（`Base.astro` の `ADSENSE_CLIENT` と揃える） |
 | `scripts/import.py` | 取り出した昔の記事と画像を、このサイトの形に書き直して取り込む |
 | `scripts/imported.txt` | `import.py` が前回書いた記事の一覧。取り込み直すとき、ここに載った記事だけを消す |
