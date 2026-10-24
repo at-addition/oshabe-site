@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const posts = (await getCollection('posts')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const base = import.meta.env.BASE_URL;
+const fmt = (d: Date) => d.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', month: 'numeric', day: 'numeric' });
+const ym = (d: Date) => d.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long' });
+
+// 月ごとにまとめる（新しい順）
+const months = new Map<string, typeof posts>();
+for (const p of posts) {
+  const k = ym(p.data.pubDate);
+  if (!months.has(k)) months.set(k, []);
+  months.get(k)!.push(p);
+}
+const cats = [...new Set(posts.flatMap((p) => p.data.categories))];
+---
+
+<Base>
+  <p class="lead">記事 {posts.length} 本。新しい順に並べています。</p>
+  <nav class="cats" aria-label="カテゴリで絞り込む">
+    <button type="button" data-cat="" aria-pressed="true">すべて</button>
+    {cats.map((c) => <button type="button" data-cat={c} aria-pressed="false">{c}</button>)}
+  </nav>
+  {[...months].map(([m, list]) => (
+    <section>
+      <h2>{m}</h2>
+      <ul>
+        {list.map((p) => (
+          <li data-cats={p.data.categories.join('|')}>
+            <span class="date">{fmt(p.data.pubDate)}</span>
+            <a href={`${base}${p.id}/`}>{p.data.title}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</Base>
+
+<script>
+  // カテゴリのボタンで一覧を絞る。月の見出しは中身が全部隠れたら一緒に隠す
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.cats button');
+  buttons.forEach((b) =>
+    b.addEventListener('click', () => {
+      const cat = b.dataset.cat ?? '';
+      buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      document.querySelectorAll<HTMLLIElement>('li[data-cats]').forEach((li) => {
+        li.hidden = cat !== '' && !(li.dataset.cats ?? '').split('|').includes(cat);
+      });
+      document.querySelectorAll('section').forEach((s) => {
+        (s as HTMLElement).hidden = s.querySelectorAll('li:not([hidden])').length === 0;
+      });
+    }),
+  );
+</script>
+
+<style>
+  .lead { color: var(--muted); margin: 24px 0 12px; }
+  .cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .cats button {
+    font: inherit; font-size: 0.85rem; padding: 2px 10px; border-radius: 999px;
+    border: 1px solid var(--line); background: transparent; color: var(--fg); cursor: pointer;
+  }
+  .cats button[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  h2 { font-size: 1.05rem; margin: 28px 0 4px; color: var(--muted); }
+  ul { list-style: none; padding: 0; margin: 0; }
+  li { display: flex; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .date { flex: none; width: 3.5em; color: var(--muted); font-variant-numeric: tabular-nums; }
+</style>
