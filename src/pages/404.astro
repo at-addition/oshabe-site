@@ -3,7 +3,17 @@ import Base from '../layouts/Base.astro';
 ---
 
 <Base title="ページが見つかりません">
-  <h1>ページが見つかりません</h1>
-  <p>URL が違うか、記事が無くなっています。</p>
-  <p><a href={import.meta.env.BASE_URL}>記事の一覧へ</a></p>
+  <section class="nf">
+    <p class="code">404</p>
+    <h1>ページが見つかりません</h1>
+    <p>URL が違うか、記事が無くなっています。</p>
+    <p><a href={import.meta.env.BASE_URL}>← 記事の一覧へ</a></p>
+  </section>
 </Base>
+
+<style>
+  .nf { text-align: center; padding: 80px 0 40px; }
+  .code { margin: 0; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900; font-size: 4.5rem; line-height: 1; color: var(--accent); }
+  h1 { font-size: 1.4rem; margin: 12px 0; }
+  p { color: var(--muted); }
+</style>
