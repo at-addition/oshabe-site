@@ -198,9 +198,6 @@ wp-content/uploads/2016/09/grs3.jpg
 wp-content/uploads/2016/09/gz1212121222.jpg
 wp-content/uploads/2016/09/gz313131311.jpg
 wp-content/uploads/2016/09/hat155166.jpg
-wp-content/uploads/2016/09/icoka2-300x250.jpg
-wp-content/uploads/2016/09/iphone6s2-300x250.jpg
-wp-content/uploads/2016/09/iphone72-300x250.png
 wp-content/uploads/2016/09/is1-300x250.jpg
 wp-content/uploads/2016/09/kac121-300x250.jpg
 wp-content/uploads/2016/09/kac1211-300x250.jpg
@@ -232,8 +229,6 @@ wp-content/uploads/2016/09/kami64.jpg
 wp-content/uploads/2016/09/kami754.jpg
 wp-content/uploads/2016/09/kan15151.jpg
 wp-content/uploads/2016/09/kane00.jpg
-wp-content/uploads/2016/09/kane1-300x250.jpg
-wp-content/uploads/2016/09/kane2-300x250.jpg
 wp-content/uploads/2016/09/kaso11111-300x250.jpg
 wp-content/uploads/2016/09/kaso1212123123.jpg
 wp-content/uploads/2016/09/kaso12124444.jpg
@@ -313,7 +308,6 @@ wp-content/uploads/2016/09/pet2.jpg
 wp-content/uploads/2016/09/pet3.jpg
 wp-content/uploads/2016/09/pet4.jpg
 wp-content/uploads/2016/09/pet41-300x250.jpg
-wp-content/uploads/2016/09/pitapa3-300x250.jpg
 wp-content/uploads/2016/09/qrqrr-300x250.jpg
 wp-content/uploads/2016/09/qrrq-300x250.jpg
 wp-content/uploads/2016/09/re1.jpg
