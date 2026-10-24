@@ -4,7 +4,7 @@
 Wayback Machine に残っていた記録から復元した静的サイト。Astro で作り、GitHub Pages に出す。
 `hazieta-site` と同じ作り。
 
-- 公開先: https://at-addition.github.io/oshabe-site/
+- 公開先: https://oshabe.com/ （2026-10-24 から。それまでは https://at-addition.github.io/oshabe-site/）
 - 記事の URL は元のサイトと同じ道のり（`/2017/05/25/257/` など）
 - 書いた本人の了承を得て公開（2026-10-24）
 
