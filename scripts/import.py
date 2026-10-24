@@ -37,6 +37,17 @@ def read(name):
     return meta, title, path, cats, body
 
 
+def true_case(rel):
+    """ディスク上の大文字・小文字に合わせる。元のサーバー（Linux）には FEWFEWF.jpg と fewfewf.jpg が別にあったが、
+    Windows に落とすと1つに重なる。記事が小文字で指していても、GitHub の Linux でビルドが通るよう実在する名前にする
+    （重なった片方は別の画像だった可能性がある）"""
+    d, name = os.path.split(os.path.join(BIN, *rel.split('/')))
+    for real in os.listdir(d):
+        if real.lower() == name.lower():
+            return rel[:len(rel) - len(name)] + real
+    return rel
+
+
 def is_gossip(path, cats):
     if path in NOT_GOSSIP:
         return False
@@ -66,6 +77,7 @@ for name in sorted(os.listdir(SRC)):
         full = re.sub(r'-\d+x\d+(\.\w+)$', r'\1', rel)
         if full != rel and os.path.exists(os.path.join(BIN, *full.split('/'))):
             rel = full
+        rel = true_case(rel)
         used.add(rel)
         return f']({up}{rel})'
     body = re.sub(r'\]\((?:\.\./)+doc_bin/AdSenseブログ/' + re.escape(DOMAIN) + r'/([^)]+)\)', local_img, body)
