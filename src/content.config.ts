@@ -2,7 +2,8 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-// 記事は scripts/import.py が google-context から書き出す。id は元の URL のパス（mhxr/events/... など）
+// 昔の記事は scripts/import.py が google-context から書き出す。新しい記事は同じフォルダに手で足す。
+// id はフォルダからのパスで、そのまま URL になる
 const posts = defineCollection({
   loader: glob({
     base: './src/content/posts',
@@ -14,7 +15,7 @@ const posts = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     categories: z.array(z.string()).default([]),
-    original: z.string(),
+    original: z.string().optional(),
   }),
 });
 
