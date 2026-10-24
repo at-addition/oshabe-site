@@ -345,10 +345,6 @@ wp-content/uploads/2016/09/www-300x250.jpg
 wp-content/uploads/2016/09/yuki1-300x250.jpg
 wp-content/uploads/2016/09/yuki4564.jpg
 wp-content/uploads/2016/09/yuki646.jpg
-wp-content/uploads/2016/10/redb1-0.39.50.jpg
-wp-content/uploads/2016/10/reijyuu2-300x250.jpg
-wp-content/uploads/2016/10/sanmama1-0.39.50.jpg
-wp-content/uploads/2016/10/sanmama2-0.39.50.jpg
 wp-content/uploads/2016/11/100fgyuyutut.jpg
 wp-content/uploads/2016/11/100fmewaa.jpg
 wp-content/uploads/2016/11/100fyuyus.jpg
