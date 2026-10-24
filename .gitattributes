@@ -1,0 +1,13 @@
+* text=auto eol=crlf
+
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.sh text eol=lf
+
+*.lnk binary
+*.pptx binary
+*.xlsx binary
+*.docx binary
+*.pdf binary
