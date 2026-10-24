@@ -10,6 +10,7 @@
 - 固定ページ（サイトマップ・プライバシーポリシー・お問い合わせ）は取り込まない。サイトマップはトップが代わりになる
 - 芸能の記事は外す（2026-10-24 本人判断。他人が撮った芸能人の写真と噂話が多いため）。
   外した記事は scripts/excluded.tsv に並べる。戻すときは INCLUDE_GOSSIP を True にして取り込み直すだけ
+- 漫画のカテゴリの記事も外す（2026-10-24 本人指示）。戻すときは INCLUDE_HIDDEN を True にする
 """
 import json, os, re, shutil, sys
 
@@ -19,6 +20,11 @@ INCLUDE_GOSSIP = False
 GOSSIP_CATS = {'女優', '俳優', 'お笑い', '10月ドラマ', 'アーティスト', 'グラビアアイドル', 'モデル', 'アイドル', 'ニュース'}
 # 未分類・カテゴリ無しでも芸能ではない記事
 NOT_GOSSIP = {'halloween2016', 'usj_amex2'}
+
+# 芸能とは別に、今は出さないカテゴリ（2026-10-24 本人指示「漫画もいつでも復活できるように非表示に」）。
+# 戻すときは集合から外すか INCLUDE_HIDDEN を True にして取り込み直す
+INCLUDE_HIDDEN = False
+HIDDEN_CATS = {'漫画'}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOMAIN = 'oshabe.com'
@@ -58,7 +64,9 @@ def is_gossip(path, cats):
 excluded = {}
 for name in sorted(os.listdir(SRC)):
     meta, title, path, cats, _ = read(name)
-    if path not in SKIP_PAGES and meta.get('公開') and not INCLUDE_GOSSIP and is_gossip(path, cats):
+    if path in SKIP_PAGES or not meta.get('公開'):
+        continue
+    if (not INCLUDE_GOSSIP and is_gossip(path, cats)) or (not INCLUDE_HIDDEN and HIDDEN_CATS & set(cats)):
         excluded[path] = (meta['公開'][:10], title, ','.join(cats))
 
 # 前回この道具が書いた記事だけを消す。手で書き足した記事は消さない
