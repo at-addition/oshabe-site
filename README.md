@@ -56,10 +56,11 @@ pubDate: "2026-10-24"
 categories: ["カテゴリ"]
 ---
 
-本文。画像は記事の .md から見た相対パスで書く（`src/content/` の下に置けば縮小・変換される）。
+本文。画像は src/content/images/ に置き、記事の .md から見た相対パスで書く（縮小・変換される）。
 ```
 
 - `original` は昔の記事の元の URL なので、新しい記事には書かない
+- **新しい画像を `src/content/wp-content/` に置かない。** そこは `import.py` が毎回消して作り直す
 - `scripts/import.py` を動かし直しても、手で足した記事は消えない。消すのは前回この道具が書いた記事
   （`scripts/imported.txt` に並んでいるもの）だけ。昔の記事と同じパスに置くと `import.py` が止まって知らせる
 
