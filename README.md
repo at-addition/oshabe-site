@@ -44,6 +44,25 @@ npm run build
 `scripts/import.py` の `INCLUDE_GOSSIP` を `True` にして取り込み直し、PR で `main` に入れる。
 戻した記事の画像は公開前に開いて見ること。
 
+## 新しい記事を書き足す
+
+`src/content/posts/` の下に Markdown を1本置き、PR で `main` に入れると公開される。
+**置いた場所のパスがそのまま URL になる**（`src/content/posts/2026/10/24/halloween.md` → `/2026/10/24/halloween/`）。
+
+```markdown
+---
+title: "記事のタイトル"
+pubDate: "2026-10-24"
+categories: ["カテゴリ"]
+---
+
+本文。画像は記事の .md から見た相対パスで書く（`src/content/` の下に置けば縮小・変換される）。
+```
+
+- `original` は昔の記事の元の URL なので、新しい記事には書かない
+- `scripts/import.py` を動かし直しても、手で足した記事は消えない。消すのは前回この道具が書いた記事
+  （`scripts/imported.txt` に並んでいるもの）だけ。昔の記事と同じパスに置くと `import.py` が止まって知らせる
+
 ## 独自ドメインにするとき
 
 `oshabe.com` のドメインは今も契約が続いている（エックスサーバー、期限 2027-08-04）。
