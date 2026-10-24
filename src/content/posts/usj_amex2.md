@@ -4,6 +4,7 @@ pubDate: "2018-08-30T07:17:10Z"
 categories: []
 original: "http://oshabe.com/usj_amex2/"
 updatedDate: "2018-09-30T13:12:42Z"
+cover: "../wp-content/uploads/2018/08/amex.png"
 ---
 USJではアメリカン・エキスプレスカードが大変お得だということをお話ししましたが、
 

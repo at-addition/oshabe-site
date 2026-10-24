@@ -10,13 +10,16 @@ const posts = defineCollection({
     pattern: '**/*.md',
     generateId: ({ entry }) => entry.replace(/\.md$/, ''),
   }),
-  schema: z.object({
-    title: z.string(),
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    categories: z.array(z.string()).default([]),
-    original: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      pubDate: z.coerce.date(),
+      updatedDate: z.coerce.date().optional(),
+      categories: z.array(z.string()).default([]),
+      // 一覧のカードに出す画像。記事の .md から見た相対パス（無ければテーマの色の帯になる）
+      cover: image().optional(),
+      original: z.string().optional(),
+    }),
 });
 
 export const collections = { posts };
