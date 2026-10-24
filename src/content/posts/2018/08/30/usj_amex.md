@@ -4,6 +4,7 @@ pubDate: "2018-08-30T07:16:57Z"
 categories: ["USJ"]
 original: "http://oshabe.com/2018/08/30/usj_amex/"
 updatedDate: "2018-09-30T13:09:04Z"
+cover: "../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg"
 ---
 ユニバーサルスタジオジャパンが大好きで年パスを持っている方、
 

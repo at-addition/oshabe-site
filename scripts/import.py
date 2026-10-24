@@ -119,6 +119,10 @@ for name in sorted(os.listdir(SRC)):
     }
     if meta.get('更新'):
         fm['updatedDate'] = meta['更新']
+    # 一覧のカードに出す画像は、本文の最初の画像（記事の .md から見た相対パス。Astro が縮小して出す）
+    first = re.search(r'!\[[^\]]*\]\((\.\./[^)]+)\)', body)
+    if first:
+        fm['cover'] = first.group(1)
     lines = ['---'] + [f'{k}: {json.dumps(v, ensure_ascii=False)}' for k, v in fm.items()] + ['---', '']
     dst = os.path.join(POSTS, *path.split('/')) + '.md'
     os.makedirs(os.path.dirname(dst), exist_ok=True)
