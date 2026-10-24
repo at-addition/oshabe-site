@@ -17,18 +17,6 @@ const last = latest?.data.pubDate.getFullYear();
 ---
 
 <Base>
-  <section class="hero">
-    <div class="hero-text">
-      <p class="hero-kicker">OSHABE.com</p>
-      <h1>あなたを<br />おしゃべりにする<br />ひとネタ</h1>
-      <p class="hero-lead">100均の新商品、USJ やディズニーのグッズ、ハロウィンやクリスマスの小物。写真たっぷりで紹介します。</p>
-      <p class="hero-stats">
-        <span><b>{posts.length}</b> 記事</span>
-        <span><b>{first === last ? first : `${first}–${last}`}</b></span>
-      </p>
-    </div>
-    <div class="hero-bird" aria-hidden="true" set:html={bird} />
-  </section>
 
   {latest && (
     <section class="latest" aria-label="いちばん新しい記事">
@@ -49,6 +37,20 @@ const last = latest?.data.pubDate.getFullYear();
     {rest.map((p) => <PostCard post={p} />)}
   </section>
   <p class="empty" hidden>この条件の記事はありません。</p>
+
+  <!-- サイトの紹介は一覧のあと、フッターの直前に置く（開いたらすぐ記事が見えるように） -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="hero-kicker">OSHABE.com</p>
+      <h1>あなたを<br />おしゃべりにする<br />ひとネタ</h1>
+      <p class="hero-lead">100均の新商品、USJ やディズニーのグッズ、ハロウィンやクリスマスの小物。写真たっぷりで紹介します。</p>
+      <p class="hero-stats">
+        <span><b>{posts.length}</b> 記事</span>
+        <span><b>{first === last ? first : `${first}–${last}`}</b></span>
+      </p>
+    </div>
+    <div class="hero-bird" aria-hidden="true" set:html={bird} />
+  </section>
 </Base>
 
 <script>
@@ -76,7 +78,10 @@ const last = latest?.data.pubDate.getFullYear();
 </script>
 
 <style>
-  .hero { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; padding: 48px 0 36px; }
+  .hero {
+    display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px;
+    margin-top: 64px; padding: 40px 0 8px; border-top: 1px solid var(--line);
+  }
   .hero-kicker { margin: 0; font-size: 0.78rem; letter-spacing: 0.28em; color: var(--accent); font-weight: 700; }
   .hero h1 {
     margin: 8px 0 14px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900;
@@ -97,7 +102,7 @@ const last = latest?.data.pubDate.getFullYear();
     .hero-bird { order: -1; width: 120px; }
   }
 
-  .latest { margin-bottom: 36px; }
+  .latest { margin: 32px 0 36px; }
 
   .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
   .filters button {
