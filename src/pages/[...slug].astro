@@ -1,0 +1,41 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const fmt = (d: Date) => d.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Base title={post.data.title}>
+  <article>
+    <h1>{post.data.title}</h1>
+    <p class="meta">
+      <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+      {post.data.categories.length > 0 && <span> ・ {post.data.categories.join(' / ')}</span>}
+    </p>
+    <div class="body">
+      <Content />
+    </div>
+  </article>
+  <p class="back"><a href={import.meta.env.BASE_URL}>記事の一覧へ</a></p>
+</Base>
+
+<style>
+  h1 { font-size: 1.5rem; line-height: 1.5; margin: 32px 0 8px; }
+  .meta { color: var(--muted); font-size: 0.9rem; margin: 0 0 32px; }
+  .body :global(h2), .body :global(h3) { margin-top: 2em; line-height: 1.5; }
+  .body :global(h2) { font-size: 1.3rem; border-left: 4px solid var(--accent); padding-left: 8px; }
+  .body :global(h3) { font-size: 1.15rem; }
+  /* 元の記事は1行ずつ段落になっているので、段落の間を詰めて当時の見え方に寄せる */
+  .body :global(p) { margin: 0.15em 0; }
+  .body :global(img) { display: block; margin: 12px 0; border-radius: 4px; width: auto; max-height: 560px; }
+  /* 関連記事のカードの画像は小さく */
+  .body :global(a img) { display: inline-block; vertical-align: middle; max-height: 96px; margin: 4px 8px 4px 0; }
+  .back { margin-top: 40px; }
+</style>
