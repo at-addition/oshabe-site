@@ -1,4 +1,5 @@
 ---
+import { THEMES } from '../lib/themes';
 interface Props {
   title?: string;
   description?: string;
@@ -10,6 +11,8 @@ import logo from '../assets/oshabe-logo.svg?raw';
 const ADSENSE_CLIENT = 'ca-pub-5250963766765858';
 const { title, description = '100均・USJ・季節のイベントの話題' } = Astro.props;
 const base = import.meta.env.BASE_URL;
+// ヘッダーに出すテーマ（よく書いた順）
+const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでかけ'].map((c) => THEMES.find((t) => t.cat === c)!);
 ---
 
 <!doctype html>
@@ -18,11 +21,18 @@ const base = import.meta.env.BASE_URL;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
     <!-- 当時のマスコット（鳥）。タブは SVG、スマホのホーム画面とブックマークは白地の正方形の PNG -->
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
     <link rel="icon" href={`${base}favicon.ico`} sizes="48x48" />
     <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
     <link rel="manifest" href={`${base}site.webmanifest`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap"
+    />
     <title>{title ? `${title} | ${SITE_NAME}` : SITE_NAME}</title>
     <script
       is:inline
@@ -33,58 +43,115 @@ const base = import.meta.env.BASE_URL;
   </head>
   <body>
     <header class="site-header">
-      <a class="site-name" href={base} aria-label={SITE_NAME}>
-        <span class="site-logo" set:html={logo} />
-      </a>
+      <div class="inner">
+        <a class="site-name" href={base} aria-label={SITE_NAME}>
+          <span class="site-logo" set:html={logo} />
+        </a>
+        <nav class="site-nav" aria-label="テーマ">
+          {NAV.map((t) => (
+            <a href={`${base}?cat=${encodeURIComponent(t.cat)}`} style={`--hue:${t.hue}`}>{t.label}</a>
+          ))}
+        </nav>
+      </div>
     </header>
     <main>
       <slot />
     </main>
     <footer class="site-footer">
-      <p>
-        <a href={`${base}privacy/`}>プライバシーポリシー</a> ・ <a href={`${base}contact/`}>お問い合わせ</a>
-      </p>
-      <p>© {SITE_NAME}</p>
+      <div class="inner">
+        <p class="footer-links">
+          <a href={`${base}privacy/`}>プライバシーポリシー</a>
+          <a href={`${base}contact/`}>お問い合わせ</a>
+        </p>
+        <p>© {SITE_NAME}</p>
+      </div>
     </footer>
   </body>
 </html>
 
 <style is:global>
   :root {
-    --bg: #fbfaf7;
-    --fg: #222;
-    --muted: #666;
-    --line: #e4e0d8;
-    --accent: #a0522d;
+    --bg: #f7f9fa;
+    --surface: #ffffff;
+    --fg: #231815;
+    --muted: #6f6763;
+    --line: #e3e8eb;
+    --accent: #0093d6;
+    --shadow: 0 1px 2px rgb(20 40 60 / 6%), 0 8px 24px rgb(20 40 60 / 8%);
+    --radius: 16px;
+    --sat: 70%;
+    --light: 42%;
+    --tint: 93%;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg: #1b1a18;
-      --fg: #e8e6e1;
-      --muted: #a39e94;
-      --line: #36332e;
-      --accent: #e0a070;
+      --bg: #141618;
+      --surface: #1e2124;
+      --fg: #ebe7e4;
+      --muted: #a39d98;
+      --line: #30353a;
+      --accent: #4cc3f5;
+      --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 8px 24px rgb(0 0 0 / 35%);
+      --light: 66%;
+      --tint: 20%;
     }
   }
   * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--fg);
-    font-family: system-ui, -apple-system, 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
-    line-height: 1.8;
+    font-family: 'Zen Kaku Gothic New', system-ui, -apple-system, 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
+    line-height: 1.85;
+    letter-spacing: 0.02em;
   }
-  main, .site-header, .site-footer {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
-  .site-header { padding-top: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
-  .site-name { color: var(--fg); font-weight: 700; font-size: 1.25rem; text-decoration: none; display: inline-block; }
-  /* 当時のロゴ。黒は文字色、目などの白は背景の色に合わせる（暗い画面でも読める） */
-  .site-logo { display: block; width: min(260px, 70vw); }
-  .site-logo :global(svg) { display: block; width: 100%; height: auto; --logo-hole: var(--bg); }
-  .site-footer { margin-top: 48px; padding-top: 16px; padding-bottom: 32px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; }
   a { color: var(--accent); }
   img { max-width: 100%; height: auto; }
+  .inner, main { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+
+  /* ヘッダー */
+  .site-header {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 85%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .site-header .inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 68px; flex-wrap: wrap; }
+  .site-name { color: var(--fg); text-decoration: none; display: inline-block; padding: 8px 0; }
+  /* 当時のロゴ。黒は文字色、目などの白は背景の色に合わせる（暗い画面でも読める） */
+  .site-logo { display: block; width: clamp(170px, 40vw, 220px); }
+  .site-logo :global(svg) { display: block; width: 100%; height: auto; --logo-hole: var(--bg); }
+  .site-nav { display: flex; gap: 6px; flex-wrap: wrap; padding: 6px 0; }
+  .site-nav a {
+    font-size: 0.8rem; font-weight: 700; text-decoration: none; padding: 4px 12px; border-radius: 999px;
+    color: hsl(var(--hue) var(--sat) var(--light));
+    background: hsl(var(--hue) 70% var(--tint));
+  }
+
+  /* 固定ページ（プライバシーポリシー・お問い合わせなど）。記事ページは .post で別に組む */
+  main > article:not(.post) {
+    max-width: 760px; margin: 40px auto 0; background: var(--surface); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 28px clamp(18px, 5vw, 44px);
+  }
+  main > article:not(.post) h1 { font-family: 'Zen Maru Gothic', sans-serif; font-size: 1.6rem; margin: 0 0 16px; }
+  main > article:not(.post) h2 { font-size: 1.15rem; margin: 1.8em 0 0.5em; }
+
+  /* フッター */
+  .site-footer { margin-top: 72px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.85rem; }
+  .site-footer .inner { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 24px; padding-bottom: 40px; flex-wrap: wrap; }
+  .site-footer p { margin: 0; }
+  .footer-links { display: flex; gap: 16px; }
+
+  /* テーマのバッジ（--hue を付けて使う） */
+  .theme-badge {
+    display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
+    padding: 2px 10px; border-radius: 999px;
+    color: hsl(var(--hue) var(--sat) var(--light));
+    background: hsl(var(--hue) 70% var(--tint));
+  }
+  .chip {
+    display: inline-block; font-size: 0.75rem; color: var(--muted);
+    border: 1px solid var(--line); padding: 1px 10px; border-radius: 999px;
+  }
 </style>

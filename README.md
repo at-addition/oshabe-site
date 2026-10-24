@@ -16,6 +16,9 @@ Astro で作り、GitHub Pages に出す。`hazieta-site` と同じ作り。
 | `src/content/wp-content/` | 昔の記事の画像 9,161 枚。`import.py` が毎回作り直す |
 | `src/content/images/` | 新しい記事の画像を置くところ |
 | `src/pages/` | 一覧（`index.astro`）・記事（`[...slug].astro`）・404・プライバシーポリシー（`privacy.astro`）・お問い合わせ（`contact.astro`） |
+| `src/components/PostCard.astro` | 一覧のカード（画像・テーマのバッジ・日付・タイトル・抜き出し） |
+| `src/lib/themes.ts` | カテゴリから決める「テーマ」（USJ・ディズニー・ハロウィン・100均など）と色。カードの抜き出しもここ |
+| `src/assets/beyan.svg` | トップのマスコットの鳥（なぞった SVG） |
 | `src/layouts/Base.astro` | 全ページ共通の枠（サイト名・説明文・フッター・色・アドセンスのコード） |
 | `public/CNAME` | 独自ドメイン `oshabe.com` |
 | `src/assets/oshabe-logo.svg` | ヘッダーの当時のロゴ（OSHABE.com）。元の PNG を色ごとになぞった SVG。黒は文字色、白は背景の色に合わせる |
@@ -39,6 +42,7 @@ Astro で作り、GitHub Pages に出す。`hazieta-site` と同じ作り。
 title: "記事のタイトル"
 pubDate: "2026-10-24"
 categories: ["100均", "ハロウィン"]
+cover: "../../../../images/2026-10-24-top.jpg"   # 一覧のカードに出す画像（省いてよい）
 ---
 
 本文。画像は src/content/images/ に置き、記事の .md から見た相対パスで書く（縮小・変換される）。
@@ -66,6 +70,7 @@ npm run build
 - 画像の名前の大文字・小文字をディスク上の名前に合わせる（下の「踏んだこと」）
 - Wayback に残っていなかった画像は落とす
 - 関連記事のカード（改行入りのリンク）を1行に詰める
+- 本文の最初の画像を `cover` にする（一覧のカードに出る。画像の無い記事はテーマの色の帯になる）
 - 手で書き足した記事は消さない。消すのは `scripts/imported.txt` に載った前回の記事だけ
 
 ## 出していない記事
