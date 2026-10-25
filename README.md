@@ -157,3 +157,7 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 - 昔の `/feed/`・`/sitemap/`・出していないカテゴリの一覧は `astro.config.mjs` の redirects で今のページへ
 - 閉店・移転した店や無くなったページへのリンクには注記を書き添える（表は `scripts/link_notes.tsv`、取り込みで付く）。PONEY の招待リンクはアフィリエイトと同じ扱い
 - トップにタイトルの検索窓（?q=）。画像の無い記事のカードはマスコットの板
+- カテゴリの一覧も最初の24本だけ HTML に入れ、「もっと見る」で `/cards.json`（全記事）から足す（`src/lib/cardlist.ts`、トップと共通）
+- 1年より前の記事には「この記事は〇年に書いたもの」の注記、記事の最後に X・LINE の共有ボタン（リンクだけ）
+- 404 ページに検索窓と入口のリンク。ページのタイトル（検索結果・タブ）は40字を超えたら切る（`Base.astro` の shortTitle、見出しはそのまま）
+- フォントは Google から読まずに @fontsource でサイトから出す
