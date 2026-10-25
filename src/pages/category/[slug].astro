@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PostCard from '../../components/PostCard.astro';
 import Crumbs from '../../components/Crumbs.astro';
-import { THEMES, catSlug, catUrl } from '../../lib/themes';
+import { THEMES, catSlug, catUrl, FIRST } from '../../lib/themes';
 import { breadcrumbLd } from '../../lib/crumbs';
 
 // カテゴリごとの記事の一覧（/category/<slug>/）。記事が1本でもあるカテゴリは自動でページになる
@@ -32,13 +32,40 @@ const jsonld = {
     <h1>{cat}</h1>
     <p>{posts.length} 本の記事</p>
   </header>
-  <section class="grid" aria-label={`${cat}の記事の一覧`}>
-    {posts.map((p) => <PostCard post={p} />)}
+  <section class="grid" aria-label={`${cat}の記事の一覧`} data-cat={cat} data-total={posts.length} data-src={`${base}cards.json`}>
+    {posts.slice(0, FIRST).map((p) => <PostCard post={p} />)}
   </section>
+  {posts.length > FIRST && <p class="more-wrap"><button type="button" class="more">もっと見る（残り {posts.length - FIRST} 本）</button></p>}
   <p class="back"><a href={base}>← トップへ</a></p>
 </Base>
 
+<script>
+  // 最初の24本だけ HTML に入っている。「もっと見る」で残りを cards.json から足し、24本ずつ見せる
+  import { addCards } from '../../lib/cardlist';
+  const grid = document.querySelector<HTMLElement>('.grid')!;
+  const more = document.querySelector<HTMLButtonElement>('.more');
+  const cat = grid.dataset.cat!;
+  const total = Number(grid.dataset.total);
+  let loaded: Promise<void> | undefined;
+  let limit = 24;
+  more?.addEventListener('click', async () => {
+    loaded ??= addCards(grid, (r) => r.c.split('|').includes(cat));
+    await loaded;
+    limit += 24;
+    const cards = [...grid.querySelectorAll<HTMLElement>('.card')];
+    cards.forEach((c, i) => { c.hidden = i >= limit; });
+    const rest = total - Math.min(limit, total);
+    more.hidden = rest <= 0;
+    more.textContent = `もっと見る（残り ${rest} 本）`;
+  });
+</script>
+
 <style>
+  .more-wrap { text-align: center; margin: 28px 0 0; }
+  .more {
+    font-family: inherit; font-size: 1rem; font-weight: 700; padding: 12px 40px; border-radius: 999px; cursor: pointer;
+    background: var(--surface); color: var(--fg); border: 1px solid var(--line); box-shadow: var(--shadow);
+  }
   .cat-head { margin: 12px 0 24px; padding: 18px 22px; border-radius: var(--radius); background: hsl(var(--hue) 70% var(--tint)); border-left: 5px solid hsl(var(--hue) 70% var(--light)); }
   .cat-head h1 { margin: 0; font-size: 1.5rem; }
   .cat-head p { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; }
