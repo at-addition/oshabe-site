@@ -18,7 +18,7 @@ cover: "../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg"
 
 それは超お得でVIPな優待が付いてくるからなのです！
 
-[❶ユニバーサルVIPツアー](http://www.usj.co.jp/ticket/partner/amex-viptour.html)
+[❶ユニバーサルVIPツアー](http://www.usj.co.jp/ticket/partner/amex-viptour.html)（当時のプラン）
 
 ![USJに行くならAMEXカードがおすすめ！VIP待遇が受けられる？！（写真 1）](../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg)
 
@@ -44,7 +44,7 @@ cover: "../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg"
 
 特典③：パークの下記人気アトラクションの中から3つを優先案内！
 
-- [アメージング・アドベンチャー・オブ・スパイダーマン・ザ・ライド 4K3D](http://www.usj.co.jp/attraction/the-amazing-adventures-of-spiderman-the-ride.html)
+- [アメージング・アドベンチャー・オブ・スパイダーマン・ザ・ライド 4K3D](http://www.usj.co.jp/attraction/the-amazing-adventures-of-spiderman-the-ride.html)（2024年に終了したアトラクション）
 
 - [ハリウッド・ドリーム・ザ・ライド](http://www.usj.co.jp/attraction/hollywood-dream-the-ride.html)
 
@@ -54,7 +54,7 @@ cover: "../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg"
 
 - [ターミネーター 2:3-D®](http://www.usj.co.jp/attraction/terminator2-3-d.html)
 
-- [バックドラフト™](http://www.usj.co.jp/attraction/backdraft.html)
+- [バックドラフト™](http://www.usj.co.jp/attraction/backdraft.html)（2016年に終了したアトラクション）
 
 特典④：「三本の箒™」や「パークサイド・グリル™」など、パーク内レストランでのお食事代が10％割引に！
 
@@ -66,7 +66,7 @@ cover: "../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg"
 
 ３ヶ月前から売り切れが続出するプランですよ☆
 
-[❷ロイヤル・スタジオ・パス](http://www.usj.co.jp/ticket/partner/amex-royal.html)
+[❷ロイヤル・スタジオ・パス](http://www.usj.co.jp/ticket/partner/amex-royal.html)（当時のプラン）
 
 対象アトラクションを何度でも通常より短い待ち時間で体験でき、さらに、さまざまなサービスや特典がついたプラン。
 
@@ -88,7 +88,7 @@ USJは待ち時間がとにかく長いので短縮出来るのは本当にあ�
 
 こちらのプランの会員専用申し込み枠を１日10名様分ご用意！
 
-[❸ユニバーサル・トラベル](http://www.usj.co.jp/tour-hotel/plan/amex/201807/zanmai.html)
+[❸ユニバーサル・トラベル](http://www.usj.co.jp/tour-hotel/plan/amex/201807/zanmai.html)（当時のプラン）
 
 ![USJに行くならAMEXカードがおすすめ！VIP待遇が受けられる？！（写真 2）](../../../../wp-content/uploads/2018/08/zanmai_main.jpg)
 

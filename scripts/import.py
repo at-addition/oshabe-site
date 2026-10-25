@@ -148,7 +148,8 @@ with open(os.path.join(ROOT, 'scripts', 'excluded.tsv'), 'w', encoding='utf-8', 
 # アフィリエイト（楽天・A8・バリューコマース）の広告とリンクを外す（2026-10-25 本人指示「いつでも復活できるようにメモして外して」）。
 # 外したものは scripts/affiliates.tsv に記事ごとに書き出す（リポジトリには入れない）。戻すときは INCLUDE_AFFILIATE を True に
 INCLUDE_AFFILIATE = False
-AFF = r'https?://(?:hbb?\.afl\.rakuten\.co\.jp|px\.a8\.net|ck\.jp\.ap\.valuecommerce\.com)/[^)\s]*'
+# ポイントサイト PONEY の招待リンク（紹介料が入る）も同じ扱い（同日、本人指示）
+AFF = r'https?://(?:hbb?\.afl\.rakuten\.co\.jp|px\.a8\.net|ck\.jp\.ap\.valuecommerce\.com|(?:www|cdn)\.poney\.jp)/[^)\s]*'
 aff_rows = []
 if not INCLUDE_AFFILIATE:
     for rel in written:
@@ -223,6 +224,26 @@ for rel in written:
         http_dropped += k
         open(f, 'w', encoding='utf-8', newline='\n').write(s2)
 print('http images dropped', http_dropped, file=sys.stderr)
+
+# 閉店・移転した店や、無くなったページへのリンクには、後ろに注記を書き添える（2026-10-25 本人指示。表は scripts/link_notes.tsv）
+notes = dict(l.split('\t', 1) for l in open(os.path.join(ROOT, 'scripts', 'link_notes.tsv'), encoding='utf-8').read().splitlines()
+             if l and not l.startswith('#'))
+noted = 0
+for rel in written:
+    f = os.path.join(POSTS, *rel.split('/'))
+    s = open(f, encoding='utf-8').read()
+
+    def note(m):
+        global noted
+        n = notes.get(m.group(2))
+        if not n or s[m.end():m.end() + len(n)] == n:
+            return m.group(0)
+        noted += 1
+        return m.group(0) + n
+    s2 = re.sub(r'(?<!!)\[([^\]\n]*)\]\(([^)\s]+)\)', note, s)
+    if s2 != s:
+        open(f, 'w', encoding='utf-8', newline='\n').write(s2)
+print('link notes', noted, file=sys.stderr)
 
 # 書いた記事の中の、サイト内に無いページへのリンク（昔の WordPress のカテゴリ・タグの一覧や、2ページ目など）は
 # 開くと「見つかりません」になるので、リンクを外して文字だけ残す。画像と、実在する記事・手で足した記事へのリンクは残す

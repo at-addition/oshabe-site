@@ -25,6 +25,10 @@ const last = latest?.data.pubDate.getFullYear();
     </section>
   )}
 
+  <div class="search">
+    <input type="search" class="q" placeholder="記事のタイトルを検索（例: ダイソー ハロウィン）" aria-label="記事のタイトルを検索" />
+  </div>
+
   <section class="filters" aria-label="カテゴリで絞り込む">
     <button type="button" class="f-cat" data-cat="" aria-pressed="true">すべて <small>{posts.length}</small></button>
     {cats.map((c) => (
@@ -57,7 +61,13 @@ const last = latest?.data.pubDate.getFullYear();
 
 <script>
   // カテゴリ（?cat=）で一覧を絞る。いちばん新しい記事のカードも同じ条件で隠す
-  let cat = new URLSearchParams(location.search).get('cat') ?? '';
+  const params = new URLSearchParams(location.search);
+  let cat = params.get('cat') ?? '';
+  // タイトルの検索（?q=）。空白で区切った語をすべて含む記事を出す。全角・半角と大文字・小文字は区別しない
+  const qInput = document.querySelector<HTMLInputElement>('.q')!;
+  qInput.value = params.get('q') ?? '';
+  const norm = (s: string) => s.normalize('NFKC').toLowerCase();
+  let words: string[] = [];
   const buttons = document.querySelectorAll<HTMLButtonElement>('.f-cat');
   const grid = document.querySelector<HTMLElement>('.grid')!;
   const empty = document.querySelector<HTMLElement>('.empty')!;
@@ -80,6 +90,7 @@ const last = latest?.data.pubDate.getFullYear();
         const c = tpl.cloneNode(true) as HTMLElement;
         c.style.setProperty('--hue', String(r.h));
         c.dataset.cats = r.c;
+        c.dataset.title = r.t;
         c.querySelector('a')!.href = r.u;
         const thumb = c.querySelector<HTMLElement>('.thumb')!;
         const img = thumb.querySelector('img');
@@ -108,7 +119,8 @@ const last = latest?.data.pubDate.getFullYear();
     buttons.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.cat ?? '') === cat)));
     let shown = 0, inGrid = 0;
     document.querySelectorAll<HTMLElement>('.card').forEach((c) => {
-      const ok = !cat || (c.dataset.cats ?? '').split('|').includes(cat);
+      const title = norm(c.dataset.title ?? '');
+      const ok = (!cat || (c.dataset.cats ?? '').split('|').includes(cat)) && words.every((w) => title.includes(w));
       const latest = c.parentElement?.classList.contains('latest');
       if (ok) shown++;
       if (latest) { c.parentElement!.hidden = !ok; return; }
@@ -116,13 +128,18 @@ const last = latest?.data.pubDate.getFullYear();
       c.hidden = !ok || inGrid > limit;
     });
     empty.hidden = shown > 0;
-    more.hidden = (loaded || cat ? inGrid : total) <= limit;
+    more.hidden = (loaded || cat || words.length ? inGrid : total) <= limit;
     const url = new URL(location.href);
     cat ? url.searchParams.set('cat', cat) : url.searchParams.delete('cat');
+    qInput.value.trim() ? url.searchParams.set('q', qInput.value.trim()) : url.searchParams.delete('q');
     history.replaceState(null, '', url);
   }
   // 絞り込むときと、最初の24本より先を見るときは、残りを読み込んでから並べ直す
-  const update = () => (cat || limit > STEP ? loadRest().then(apply) : apply());
+  const update = () => {
+    words = norm(qInput.value).split(/\s+/).filter(Boolean);
+    return cat || words.length || limit > STEP ? loadRest().then(apply) : apply();
+  };
+  qInput.addEventListener('input', () => { limit = STEP; update(); });
   buttons.forEach((b) => b.addEventListener('click', () => { cat = b.dataset.cat ?? ''; limit = STEP; update(); }));
   more.addEventListener('click', () => { limit += STEP; update(); });
   update();
@@ -155,6 +172,11 @@ const last = latest?.data.pubDate.getFullYear();
 
   .latest { margin: 32px 0 36px; }
 
+  .search { margin: 0 0 14px; }
+  .search input {
+    width: 100%; box-sizing: border-box; font: inherit; font-size: 16px; padding: 12px 16px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface); color: var(--fg);
+  }
   .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
   .filters button {
     font: inherit; font-size: 0.82rem; cursor: pointer; padding: 4px 13px; border-radius: 999px;
