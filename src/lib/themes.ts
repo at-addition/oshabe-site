@@ -41,3 +41,11 @@ export function excerpt(body: string | undefined, len = 70): string {
 
 // トップの一覧で最初から HTML に入れる本数（残りは cards.json から読む）
 export const FIRST = 24;
+
+// カテゴリの一覧ページの URL（/category/<slug>/）。昔の WordPress と同じにして、検索結果や他のサイトに残るリンクを生かす。
+// 英字だったものだけ表に書き、ほかはカテゴリ名そのまま
+const SLUGS: Record<string, string> = { USJ: 'usj', クリスマス: 'xmas', プチプラ: 'puchipura', グッズ: 'goods', イベント: 'event' };
+export const catSlug = (cat: string) => SLUGS[cat] ?? cat;
+export const catUrl = (base: string, cat: string) => `${base}category/${catSlug(cat)}/`;
+/** 記事のパンくずに出すカテゴリ（テーマのカテゴリ、無ければ最初のカテゴリ） */
+export const mainCat = (categories: string[]) => (categories.includes(themeOf(categories).cat) ? themeOf(categories).cat : categories[0]);
