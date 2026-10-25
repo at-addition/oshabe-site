@@ -1,5 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
+import { THEMES, catUrl } from '../lib/themes';
+const base = import.meta.env.BASE_URL;
+// よく書いたカテゴリへの入口
+const cats = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでかけ', 'バレンタイン'].map((c) => ({ c, hue: THEMES.find((t) => t.cat === c)?.hue }));
 ---
 
 <Base title="ページが見つかりません">
@@ -7,6 +11,11 @@ import Base from '../layouts/Base.astro';
     <p class="code">404</p>
     <h1>ページが見つかりません</h1>
     <p>URL が違うか、記事が無くなっています。</p>
+    <form class="nf-search" action={base} method="get" role="search">
+      <input type="search" name="q" placeholder="記事のタイトルで探す" aria-label="記事のタイトルで探す" />
+      <button type="submit">探す</button>
+    </form>
+    <p class="nf-cats">{cats.map(({ c, hue }) => <a href={catUrl(base, c)} style={`--hue:${hue}`}>{c}</a>)}</p>
     <p><a href={import.meta.env.BASE_URL}>← 記事の一覧へ</a></p>
   </section>
 </Base>
@@ -16,4 +25,9 @@ import Base from '../layouts/Base.astro';
   .code { margin: 0; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900; font-size: 4.5rem; line-height: 1; color: var(--accent); }
   h1 { font-size: 1.4rem; margin: 12px 0; }
   p { color: var(--muted); }
+  .nf-search { display: flex; gap: 8px; max-width: 460px; margin: 22px auto 0; }
+  .nf-search input { flex: 1; min-width: 0; font: inherit; font-size: 16px; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--fg); }
+  .nf-search button { font: inherit; font-weight: 700; padding: 10px 18px; border-radius: 999px; border: 0; cursor: pointer; background: var(--fg); color: var(--bg); }
+  .nf-cats { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 18px 0; }
+  .nf-cats a { padding: 6px 14px; border-radius: 999px; text-decoration: none; font-size: 0.88rem; color: var(--fg); border: 1px solid hsl(var(--hue) 70% 50% / 50%); }
 </style>

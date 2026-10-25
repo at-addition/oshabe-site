@@ -60,6 +60,7 @@ const last = latest?.data.pubDate.getFullYear();
 </Base>
 
 <script>
+  import { addCards } from '../lib/cardlist';
   // カテゴリ（?cat=）で一覧を絞る。いちばん新しい記事のカードも同じ条件で隠す
   const params = new URLSearchParams(location.search);
   let cat = params.get('cat') ?? '';
@@ -72,46 +73,15 @@ const last = latest?.data.pubDate.getFullYear();
   const grid = document.querySelector<HTMLElement>('.grid')!;
   const empty = document.querySelector<HTMLElement>('.empty')!;
   // 一覧は最初に24本だけ見せ、「もっと見る」で24本ずつ足す（絞り込みを変えたら24本に戻す）。
-  // HTML に入っているのは最初の24本だけで、残りは「もっと見る」か絞り込みのときに cards.json から足す
+  // HTML に入っているのは最初の24本だけで、残りは「もっと見る」・絞り込み・検索のときに cards.json から足す
   const STEP = 24;
   let limit = STEP;
   const more = document.querySelector<HTMLButtonElement>('.more')!;
   const total = Number(grid.dataset.total);
   let loaded: Promise<void> | undefined;
 
-  type Row = { u: string; t: string; c: string; h: number; l: string; d: string; e: string; i?: string; w?: number; ht?: number };
-  const fmt = (iso: string) => new Date(iso).toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
   function loadRest() {
-    loaded ??= fetch(grid.dataset.src!).then((r) => r.json()).then((rows: Row[]) => {
-      const tpl = grid.querySelector<HTMLElement>('.card');
-      if (!tpl) return;
-      for (const r of rows) {
-        // 最初のカードを写して中身を入れ替える（見た目のクラスをそのまま使うため）
-        const c = tpl.cloneNode(true) as HTMLElement;
-        c.style.setProperty('--hue', String(r.h));
-        c.dataset.cats = r.c;
-        c.dataset.title = r.t;
-        c.querySelector('a')!.href = r.u;
-        const thumb = c.querySelector<HTMLElement>('.thumb')!;
-        const img = thumb.querySelector('img');
-        if (r.i && img) {
-          img.removeAttribute('srcset');
-          img.src = r.i; img.width = r.w ?? 480; img.height = r.ht ?? 360; img.alt = '';
-        } else if (img) {
-          const s = document.createElement('span');
-          for (const a of img.getAttributeNames()) if (a.startsWith('data-astro')) s.setAttribute(a, '');
-          s.className = 'thumb-fallback'; s.textContent = r.l;
-          img.replaceWith(s);
-        }
-        c.querySelector('.theme-badge')!.textContent = r.l;
-        const time = c.querySelector('time')!;
-        time.dateTime = r.d; time.textContent = fmt(r.d);
-        c.querySelector('h3')!.textContent = r.t;
-        c.querySelector('.excerpt')!.textContent = r.e;
-        c.hidden = true;
-        grid.append(c);
-      }
-    });
+    loaded ??= addCards(grid);
     return loaded;
   }
 
