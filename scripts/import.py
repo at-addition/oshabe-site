@@ -145,6 +145,42 @@ with open(os.path.join(ROOT, 'scripts', 'excluded.tsv'), 'w', encoding='utf-8', 
     f.write('公開日\tパス\tカテゴリ\tタイトル\n')
     for p, (d, t, c) in sorted(excluded.items(), key=lambda kv: kv[1][0]):
         f.write(f'{d}\t{p}\t{c}\t{t}\n')
+# アフィリエイト（楽天・A8・バリューコマース）の広告とリンクを外す（2026-10-25 本人指示「いつでも復活できるようにメモして外して」）。
+# 外したものは scripts/affiliates.tsv に記事ごとに書き出す（リポジトリには入れない）。戻すときは INCLUDE_AFFILIATE を True に
+INCLUDE_AFFILIATE = False
+AFF = r'https?://(?:hbb?\.afl\.rakuten\.co\.jp|px\.a8\.net|ck\.jp\.ap\.valuecommerce\.com)/[^)\s]*'
+aff_rows = []
+if not INCLUDE_AFFILIATE:
+    for rel in written:
+        f = os.path.join(POSTS, *rel.split('/'))
+        s = open(f, encoding='utf-8').read()
+        found = re.findall(AFF, s)
+        if not found:
+            continue
+        aff_rows += [(rel, u) for u in dict.fromkeys(found)]
+        s = re.sub(r'!\[(?:[^\[\]]|\[[^\]]*\])*\]\(' + AFF + r'\)', '', s)       # 広告の画像
+        s = re.sub(r'\[[^\]\n]*\]\(' + AFF + r'\)', '', s)                        # 商品名のリンク
+        s = re.sub(r'^\s*\]?\(?' + AFF + r'\)?\s*$', '', s, flags=re.M)           # 改行で割れたリンクの残り
+        s = re.sub(r'^[ \t]*\]\(' + AFF + r'\)[ \t]*$', '', s, flags=re.M)
+        s = re.sub(r'^\s*\[\s*$', '', s, flags=re.M)                                # 取り残しの [
+        s = re.sub(r'^\s*価格：[^\n]*時点\)\s*$', '', s, flags=re.M)                 # 当時の価格の行
+        s = re.sub(r'\n{3,}', '\n\n', s)
+        open(f, 'w', encoding='utf-8', newline='\n').write(s)
+    with open(os.path.join(ROOT, 'scripts', 'affiliates.tsv'), 'w', encoding='utf-8', newline='\n') as fh:
+        fh.write('記事\tURL\n' + ''.join(f'{r}\t{u}\n' for r, u in aff_rows))
+    print('affiliate removed', len(aff_rows), file=sys.stderr)
+
+# http の画像は https のページから読み込まれず崩れて見えるので外す（2026-10-25 本人指示）
+http_dropped = 0
+for rel in written:
+    f = os.path.join(POSTS, *rel.split('/'))
+    s = open(f, encoding='utf-8').read()
+    s2, k = re.subn(r'!\[(?:[^\[\]]|\[[^\]]*\])*\]\(http://[^)]*\)', '', s)
+    if k:
+        http_dropped += k
+        open(f, 'w', encoding='utf-8', newline='\n').write(s2)
+print('http images dropped', http_dropped, file=sys.stderr)
+
 # 書いた記事の中の、サイト内に無いページへのリンク（昔の WordPress のカテゴリ・タグの一覧や、2ページ目など）は
 # 開くと「見つかりません」になるので、リンクを外して文字だけ残す。画像と、実在する記事・手で足した記事へのリンクは残す
 pages = {os.path.relpath(os.path.join(dp, f), POSTS).replace(os.sep, '/')[:-3]
@@ -168,4 +204,8 @@ for rel in written:
         open(f, 'w', encoding='utf-8', newline='\n').write(s2)
 print('unlinked', unlinked, file=sys.stderr)
 open(IMPORTED, 'w', encoding='utf-8', newline='\n').write('\n'.join(sorted(written)) + '\n')
+
+# 画像の説明（alt）を付ける。新しい記事は公開のたびに同じ道具が付ける
+import subprocess
+subprocess.run([sys.executable, '-I', os.path.join(ROOT, 'scripts', 'fill_alt.py')], check=True)
 print('posts', n, 'excluded', len(excluded), 'images', len(used), 'dropped', dropped, file=sys.stderr)

@@ -17,9 +17,23 @@ const theme = themeOf(post.data.categories);
 const ogImage = post.data.cover ? (await getImage({ src: post.data.cover, width: 1200, format: 'jpeg' })).src : undefined;
 const base = import.meta.env.BASE_URL;
 const fmt = (d: Date) => d.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
+// 検索エンジン向けの構造化データ（記事）。新しい記事も同じ形で付く
+const ldUrl = new URL(`${base}${post.id}/`, Astro.site).href;
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  datePublished: post.data.pubDate.toISOString(),
+  dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+  ...(ogImage ? { image: new URL(ogImage, Astro.site).href } : {}),
+  author: { '@type': 'Person', name: 'オシャベ' },
+  publisher: { '@type': 'Organization', name: 'オシャベ', logo: { '@type': 'ImageObject', url: new URL(`${base}icon-512.png`, Astro.site).href } },
+  mainEntityOfPage: ldUrl,
+  inLanguage: 'ja',
+};
 ---
 
-<Base title={post.data.title} description={excerpt(post.body, 110)} image={ogImage} type="article">
+<Base title={post.data.title} description={excerpt(post.body, 110)} image={ogImage} type="article" jsonld={jsonld}>
   <article class="post" style={`--hue:${theme.hue}`}>
     <header class="post-head">
       <div class="meta">

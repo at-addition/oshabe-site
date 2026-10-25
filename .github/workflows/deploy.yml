@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+      # 新しい記事の画像にも説明（alt）を付けてからビルドする
+      - run: python3 scripts/fill_alt.py
       - uses: withastro/action@v6
 
   deploy:
