@@ -25,3 +25,4 @@ pnpm-debug.log*
 
 preview.log
 scripts/excluded.tsv
+scripts/affiliates.tsv

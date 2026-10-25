@@ -20,9 +20,7 @@ cover: "../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg"
 
 [❶ユニバーサルVIPツアー](http://www.usj.co.jp/ticket/partner/amex-viptour.html)
 
-[
-
-![](../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg)
+![USJに行くならAMEXカードがおすすめ！VIP待遇が受けられる？！（写真 1）](../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg)
 
 ](http://www.usj.co.jp/ticket/partner/amex-viptour.html)
 
@@ -62,8 +60,6 @@ cover: "../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg"
 
 特典⑤：参加証、ペットボトルドリンク、ライド・ポンチョをプレゼント！
 
-[お申込みはこちら](https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3414648&pid=885370463)
-
 [アメリカン・エキスプレスについて](../../../../usj_amex2/)
 
 まさに“VIPな一日”を過ごすことができるこのプランの会員専用申し込み枠を１日20名様分ご用意！
@@ -86,8 +82,6 @@ cover: "../../../../wp-content/uploads/2018/08/viptour_main_p01.jpg"
 
 特典④：当日パーキングを無料でご利用可
 
-[お申込みはこちら](https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3414648&pid=885370463)
-
 [アメリカン・エキスプレスについて](../../../../usj_amex2/)
 
 USJは待ち時間がとにかく長いので短縮出来るのは本当にありがたいですね☆
@@ -96,9 +90,7 @@ USJは待ち時間がとにかく長いので短縮出来るのは本当にあ�
 
 [❸ユニバーサル・トラベル](http://www.usj.co.jp/tour-hotel/plan/amex/201807/zanmai.html)
 
-[
-
-![](../../../../wp-content/uploads/2018/08/zanmai_main.jpg)
+![USJに行くならAMEXカードがおすすめ！VIP待遇が受けられる？！（写真 2）](../../../../wp-content/uploads/2018/08/zanmai_main.jpg)
 
 ](http://www.usj.co.jp/tour-hotel/plan/amex/201807/zanmai.html)
 
@@ -115,8 +107,6 @@ USJは待ち時間がとにかく長いので短縮出来るのは本当にあ�
 
 ●1.5 デイ限定プラン！
  ⇒到着日の15：00から入場可能、翌日は朝から遊びつくせる1.5日プランだからパークを思う存分に満喫できる！
-
-[お申込みはこちら](https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3414648&pid=885370463)
 
 [アメリカン・エキスプレスについて](../../../../usj_amex2/)
 
