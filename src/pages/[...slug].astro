@@ -1,5 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import { themeOf, excerpt } from '../lib/themes';
 
@@ -12,11 +13,13 @@ export async function getStaticPaths() {
 const { post, prev, next } = Astro.props;
 const { Content } = await render(post);
 const theme = themeOf(post.data.categories);
+// SNS で共有したときの画像（記事の最初の画像を JPEG で幅 1200 まで）
+const ogImage = post.data.cover ? (await getImage({ src: post.data.cover, width: 1200, format: 'jpeg' })).src : undefined;
 const base = import.meta.env.BASE_URL;
 const fmt = (d: Date) => d.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<Base title={post.data.title} description={excerpt(post.body, 110)}>
+<Base title={post.data.title} description={excerpt(post.body, 110)} image={ogImage} type="article">
   <article class="post" style={`--hue:${theme.hue}`}>
     <header class="post-head">
       <div class="meta">
