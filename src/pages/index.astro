@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import { THEMES } from '../lib/themes';
+import { FIRST } from '../lib/themes';
 // 当時のマスコットの鳥（design/original/beyan_177x156.png をなぞった SVG）
 import bird from '../assets/beyan.svg?raw';
 
@@ -33,8 +34,8 @@ const last = latest?.data.pubDate.getFullYear();
     ))}
   </section>
 
-  <section class="grid" aria-label="記事の一覧">
-    {rest.map((p) => <PostCard post={p} />)}
+  <section class="grid" aria-label="記事の一覧" data-total={rest.length} data-src={`${import.meta.env.BASE_URL}cards.json`}>
+    {rest.slice(0, FIRST).map((p) => <PostCard post={p} />)}
   </section>
   <p class="more-wrap"><button type="button" class="more" hidden>もっと見る</button></p>
   <p class="empty" hidden>この条件の記事はありません。</p>
@@ -58,17 +59,55 @@ const last = latest?.data.pubDate.getFullYear();
   // カテゴリ（?cat=）で一覧を絞る。いちばん新しい記事のカードも同じ条件で隠す
   let cat = new URLSearchParams(location.search).get('cat') ?? '';
   const buttons = document.querySelectorAll<HTMLButtonElement>('.f-cat');
-  const cards = document.querySelectorAll<HTMLElement>('.card');
+  const grid = document.querySelector<HTMLElement>('.grid')!;
   const empty = document.querySelector<HTMLElement>('.empty')!;
-  // 一覧は最初に24本だけ見せ、「もっと見る」で24本ずつ足す（絞り込みを変えたら24本に戻す）
+  // 一覧は最初に24本だけ見せ、「もっと見る」で24本ずつ足す（絞り込みを変えたら24本に戻す）。
+  // HTML に入っているのは最初の24本だけで、残りは「もっと見る」か絞り込みのときに cards.json から足す
   const STEP = 24;
   let limit = STEP;
   const more = document.querySelector<HTMLButtonElement>('.more')!;
+  const total = Number(grid.dataset.total);
+  let loaded: Promise<void> | undefined;
+
+  type Row = { u: string; t: string; c: string; h: number; l: string; d: string; e: string; i?: string; w?: number; ht?: number };
+  const fmt = (iso: string) => new Date(iso).toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
+  function loadRest() {
+    loaded ??= fetch(grid.dataset.src!).then((r) => r.json()).then((rows: Row[]) => {
+      const tpl = grid.querySelector<HTMLElement>('.card');
+      if (!tpl) return;
+      for (const r of rows) {
+        // 最初のカードを写して中身を入れ替える（見た目のクラスをそのまま使うため）
+        const c = tpl.cloneNode(true) as HTMLElement;
+        c.style.setProperty('--hue', String(r.h));
+        c.dataset.cats = r.c;
+        c.querySelector('a')!.href = r.u;
+        const thumb = c.querySelector<HTMLElement>('.thumb')!;
+        const img = thumb.querySelector('img');
+        if (r.i && img) {
+          img.removeAttribute('srcset');
+          img.src = r.i; img.width = r.w ?? 480; img.height = r.ht ?? 360; img.alt = '';
+        } else if (img) {
+          const s = document.createElement('span');
+          for (const a of img.getAttributeNames()) if (a.startsWith('data-astro')) s.setAttribute(a, '');
+          s.className = 'thumb-fallback'; s.textContent = r.l;
+          img.replaceWith(s);
+        }
+        c.querySelector('.theme-badge')!.textContent = r.l;
+        const time = c.querySelector('time')!;
+        time.dateTime = r.d; time.textContent = fmt(r.d);
+        c.querySelector('h3')!.textContent = r.t;
+        c.querySelector('.excerpt')!.textContent = r.e;
+        c.hidden = true;
+        grid.append(c);
+      }
+    });
+    return loaded;
+  }
 
   function apply() {
     buttons.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.cat ?? '') === cat)));
     let shown = 0, inGrid = 0;
-    cards.forEach((c) => {
+    document.querySelectorAll<HTMLElement>('.card').forEach((c) => {
       const ok = !cat || (c.dataset.cats ?? '').split('|').includes(cat);
       const latest = c.parentElement?.classList.contains('latest');
       if (ok) shown++;
@@ -77,14 +116,16 @@ const last = latest?.data.pubDate.getFullYear();
       c.hidden = !ok || inGrid > limit;
     });
     empty.hidden = shown > 0;
-    more.hidden = inGrid <= limit;
+    more.hidden = (loaded || cat ? inGrid : total) <= limit;
     const url = new URL(location.href);
     cat ? url.searchParams.set('cat', cat) : url.searchParams.delete('cat');
     history.replaceState(null, '', url);
   }
-  buttons.forEach((b) => b.addEventListener('click', () => { cat = b.dataset.cat ?? ''; limit = STEP; apply(); }));
-  more.addEventListener('click', () => { limit += STEP; apply(); });
-  apply();
+  // 絞り込むときと、最初の24本より先を見るときは、残りを読み込んでから並べ直す
+  const update = () => (cat || limit > STEP ? loadRest().then(apply) : apply());
+  buttons.forEach((b) => b.addEventListener('click', () => { cat = b.dataset.cat ?? ''; limit = STEP; update(); }));
+  more.addEventListener('click', () => { limit += STEP; update(); });
+  update();
 </script>
 
 <style>

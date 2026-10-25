@@ -38,3 +38,6 @@ export function excerpt(body: string | undefined, len = 70): string {
     .trim();
   return text.length > len ? text.slice(0, len) + '…' : text;
 }
+
+// トップの一覧で最初から HTML に入れる本数（残りは cards.json から読む）
+export const FIRST = 24;
