@@ -145,5 +145,27 @@ with open(os.path.join(ROOT, 'scripts', 'excluded.tsv'), 'w', encoding='utf-8', 
     f.write('公開日\tパス\tカテゴリ\tタイトル\n')
     for p, (d, t, c) in sorted(excluded.items(), key=lambda kv: kv[1][0]):
         f.write(f'{d}\t{p}\t{c}\t{t}\n')
+# 書いた記事の中の、サイト内に無いページへのリンク（昔の WordPress のカテゴリ・タグの一覧や、2ページ目など）は
+# 開くと「見つかりません」になるので、リンクを外して文字だけ残す。画像と、実在する記事・手で足した記事へのリンクは残す
+pages = {os.path.relpath(os.path.join(dp, f), POSTS).replace(os.sep, '/')[:-3]
+         for dp, _, fs in os.walk(POSTS) for f in fs if f.endswith('.md')}
+unlinked = 0
+for rel in written:
+    f = os.path.join(POSTS, *rel.split('/'))
+    here = rel[:-3]   # 記事は /<パス>/ に出るので、リンクはそのフォルダから見た相対
+    s = open(f, encoding='utf-8').read()
+
+    def fix(m):
+        global unlinked
+        text, url = m.group(1), m.group(2)
+        target = os.path.normpath(os.path.join(here, url.split('#')[0])).replace(os.sep, '/').strip('/')
+        if url.startswith('http') or target.startswith('wp-content') or target in pages or target == '.':
+            return m.group(0)
+        unlinked += 1
+        return text
+    s2 = re.sub(r'(?<!!)\[((?:[^\[\]]|!\[[^\]]*\]\([^)]*\))*)\]\((\.\./[^)\s]*)\)', fix, s)
+    if s2 != s:
+        open(f, 'w', encoding='utf-8', newline='\n').write(s2)
+print('unlinked', unlinked, file=sys.stderr)
 open(IMPORTED, 'w', encoding='utf-8', newline='\n').write('\n'.join(sorted(written)) + '\n')
 print('posts', n, 'excluded', len(excluded), 'images', len(used), 'dropped', dropped, file=sys.stderr)
