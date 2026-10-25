@@ -149,3 +149,7 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 - http の画像は取り込みで外す（https のページでは出ないため）
 - アフィリエイト（楽天・A8・バリューコマース）の広告とリンクは外している。外したものは取り込みのたびに `scripts/affiliates.tsv`（git に入れない）へ書き出す。戻すときは `scripts/import.py` の `INCLUDE_AFFILIATE` を True にして取り込み直す
 - トップの一覧は24本ずつ。「もっと見る」で足す
+- はてなブックマークの件数リンクは外している（`scripts/hatena.tsv` に記録、git に入れない）。戻すときは `INCLUDE_HATENA` を True に
+- Instagram の埋め込みの残りは「📷 Instagram で見る（@id）」の1行に、崩れたブログカードは URL の行と「このサイト内」の行を外す
+- トップの HTML は最初の24本だけ。25本目からは `/cards.json` を「もっと見る」・絞り込みのときに読む（本数は `src/lib/themes.ts` の FIRST）
+- 記事の最後に「あわせて読みたい」（カテゴリの重なりが多い順に4本）
