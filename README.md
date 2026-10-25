@@ -140,3 +140,12 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
   「OSHABE」の透かしが入った本人の撮影。人の顔は商品のパッケージに印刷されたものだけだった。
   9,155 枚すべては見ていない（どれも元のブログで公開していた写真）
 - 本文にメールアドレスや本名は無い。プライバシーポリシーは取り込んでいない
+
+## 自動で付くもの（2026-10-25）
+
+- 画像の説明（alt）: 空なら「記事のタイトル（写真 n）」。`scripts/fill_alt.py` が取り込みの最後と公開のたび（deploy.yml）に付ける
+- 構造化データ（JSON-LD）: 記事は BlogPosting、それ以外は WebSite（`src/layouts/Base.astro`）
+- RSS: `/rss.xml`（新しい50本、`src/pages/rss.xml.ts`）
+- http の画像は取り込みで外す（https のページでは出ないため）
+- アフィリエイト（楽天・A8・バリューコマース）の広告とリンクは外している。外したものは取り込みのたびに `scripts/affiliates.tsv`（git に入れない）へ書き出す。戻すときは `scripts/import.py` の `INCLUDE_AFFILIATE` を True にして取り込み直す
+- トップの一覧は24本ずつ。「もっと見る」で足す
