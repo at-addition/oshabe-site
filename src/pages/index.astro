@@ -36,6 +36,7 @@ const last = latest?.data.pubDate.getFullYear();
   <section class="grid" aria-label="記事の一覧">
     {rest.map((p) => <PostCard post={p} />)}
   </section>
+  <p class="more-wrap"><button type="button" class="more" hidden>もっと見る</button></p>
   <p class="empty" hidden>この条件の記事はありません。</p>
 
   <!-- サイトの紹介は一覧のあと、フッターの直前に置く（開いたらすぐ記事が見えるように） -->
@@ -59,21 +60,30 @@ const last = latest?.data.pubDate.getFullYear();
   const buttons = document.querySelectorAll<HTMLButtonElement>('.f-cat');
   const cards = document.querySelectorAll<HTMLElement>('.card');
   const empty = document.querySelector<HTMLElement>('.empty')!;
+  // 一覧は最初に24本だけ見せ、「もっと見る」で24本ずつ足す（絞り込みを変えたら24本に戻す）
+  const STEP = 24;
+  let limit = STEP;
+  const more = document.querySelector<HTMLButtonElement>('.more')!;
 
   function apply() {
     buttons.forEach((b) => b.setAttribute('aria-pressed', String((b.dataset.cat ?? '') === cat)));
-    let shown = 0;
+    let shown = 0, inGrid = 0;
     cards.forEach((c) => {
       const ok = !cat || (c.dataset.cats ?? '').split('|').includes(cat);
-      (c.parentElement?.classList.contains('latest') ? c.parentElement : c).hidden = !ok;
+      const latest = c.parentElement?.classList.contains('latest');
       if (ok) shown++;
+      if (latest) { c.parentElement!.hidden = !ok; return; }
+      if (ok) inGrid++;
+      c.hidden = !ok || inGrid > limit;
     });
     empty.hidden = shown > 0;
+    more.hidden = inGrid <= limit;
     const url = new URL(location.href);
     cat ? url.searchParams.set('cat', cat) : url.searchParams.delete('cat');
     history.replaceState(null, '', url);
   }
-  buttons.forEach((b) => b.addEventListener('click', () => { cat = b.dataset.cat ?? ''; apply(); }));
+  buttons.forEach((b) => b.addEventListener('click', () => { cat = b.dataset.cat ?? ''; limit = STEP; apply(); }));
+  more.addEventListener('click', () => { limit += STEP; apply(); });
   apply();
 </script>
 
@@ -115,6 +125,12 @@ const last = latest?.data.pubDate.getFullYear();
   .filters button[style][aria-pressed='true'] { background: hsl(var(--hue) 70% var(--light)); color: #fff; }
   .filters button[aria-pressed='true'] small { color: inherit; opacity: 0.8; }
 
+  .more-wrap { text-align: center; margin: 28px 0 0; }
+  .more {
+    font-family: inherit; font-size: 1rem; font-weight: 700; padding: 12px 40px; border-radius: 999px; cursor: pointer;
+    background: var(--surface); color: var(--fg); border: 1px solid var(--line); box-shadow: var(--shadow);
+  }
+  .more:hover { border-color: var(--fg); }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px; }
   .empty { color: var(--muted); text-align: center; padding: 40px 0; }
 </style>
