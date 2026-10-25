@@ -170,6 +170,49 @@ if not INCLUDE_AFFILIATE:
         fh.write('記事\tURL\n' + ''.join(f'{r}\t{u}\n' for r, u in aff_rows))
     print('affiliate removed', len(aff_rows), file=sys.stderr)
 
+# はてなブックマークの件数（「1 user」）は当時の飾りなので外す（2026-10-25 本人指示「裏にメモ残して外して」）。
+# 外したものは scripts/hatena.tsv（リポジトリには入れない）。戻すときは INCLUDE_HATENA を True に
+INCLUDE_HATENA = False
+HATENA = r'\[([^\]]*)\]\((https?://b\.hatena\.ne\.jp/[^)]*)\)'
+# Instagram の埋め込みは、取り出すと「〜さん(@id)がシェアした投稿 – 日時」の文字だけになるので、1行のリンクに直す
+INSTA = r'\[([^\]\n]*)\]\((https://www\.instagram\.com/p/[^)]+)\)(?:[ \t]*–[^\n]*)?'
+insta = 0
+hatena_rows = []
+# 記事のパス → タイトル（ブログカードの直しに使う）
+titles = {}
+for rel in written:
+    m = re.search(r'^title: (.*)$', open(os.path.join(POSTS, *rel.split('/')), encoding='utf-8').read(), re.M)
+    titles[rel[:-3]] = json.loads(m.group(1))
+for rel in written:
+    f = os.path.join(POSTS, *rel.split('/'))
+    s = open(f, encoding='utf-8').read()
+    s2 = s
+    if not INCLUDE_HATENA:
+        hatena_rows += [(rel, m.group(1), m.group(2)) for m in re.finditer(HATENA, s2)]
+        s2 = re.sub(r'[ \t]*' + HATENA, '', s2)
+    def insta_link(m):
+        if m.group(1).startswith('Instagram で見る'):
+            return m.group(0)
+        who = re.search(r'@([\w.]+)', m.group(1))
+        return f"📷 [Instagram で見る{f'（@{who.group(1)}）' if who else ''}]({m.group(2)})"
+    s2, k = re.subn(INSTA, insta_link, s2)
+    # 記事の中の「ブログカード」は、取り出すと URL の行と「oshabe.com（このサイト内）」の行に崩れるので、
+    # URL をその記事のタイトルに直し、「このサイト内」の行は外す
+    s2 = re.sub(r'^\[ ?oshabe\.com（このサイト内）\]\([^)]*\)[ \t]*\n?', '', s2, flags=re.M)
+    def card_url(m):
+        # 直前にカード（画像とタイトルのリンク）があれば URL の行ごと外し、無ければタイトルのリンクにする
+        if m.group(2) in s2[max(0, m.start() - 600):m.start()]:
+            return ''
+        return f"[{titles.get(m.group(1).strip('/'), 'この記事')}]({m.group(2)})"
+    s2 = re.sub(r'^\[https?://oshabe\.com/([^\]]*?)/?\]\(([^)]*)\)[ \t]*$', card_url, s2, flags=re.M)
+    s2 = re.sub(r'\n{3,}', '\n\n', s2)
+    insta += k
+    if s2 != s:
+        open(f, 'w', encoding='utf-8', newline='\n').write(s2)
+with open(os.path.join(ROOT, 'scripts', 'hatena.tsv'), 'w', encoding='utf-8', newline='\n') as fh:
+    fh.write('記事\t文字\tURL\n' + ''.join(f'{r}\t{x}\t{u}\n' for r, x, u in hatena_rows))
+print('hatena removed', len(hatena_rows), 'instagram', insta, file=sys.stderr)
+
 # http の画像は https のページから読み込まれず崩れて見えるので外す（2026-10-25 本人指示）
 http_dropped = 0
 for rel in written:
