@@ -1,16 +1,30 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
 import { themeOf, excerpt } from '../lib/themes';
 
 export async function getStaticPaths() {
+  // getStaticPaths はこの中だけで動くので、関連記事を選ぶ関数もここに置く。
+  // 関連記事: カテゴリが多く重なる順、同じなら公開日が近い順に4本（前後の記事は除く）。新しい記事にも自動で付く
+  const relatedOf = (post: CollectionEntry<'posts'>, pool: CollectionEntry<'posts'>[]) => {
+    const mine = new Set(post.data.categories);
+    const i = pool.indexOf(post);
+    const skip = new Set([post, pool[i - 1], pool[i + 1]]);
+    return pool
+      .filter((p) => !skip.has(p))
+      .map((p) => ({ p, score: p.data.categories.filter((c) => mine.has(c)).length, gap: Math.abs(p.data.pubDate.valueOf() - post.data.pubDate.valueOf()) }))
+      .sort((a, b) => b.score - a.score || a.gap - b.gap)
+      .slice(0, 4)
+      .map((x) => x.p);
+  }
   const posts = (await getCollection('posts')).sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf());
   // 前後の記事は公開日の順でたどる
-  return posts.map((post, i) => ({ params: { slug: post.id }, props: { post, prev: posts[i - 1], next: posts[i + 1] } }));
+  return posts.map((post, i) => ({ params: { slug: post.id }, props: { post, prev: posts[i - 1], next: posts[i + 1], related: relatedOf(post, posts) } }));
 }
 
-const { post, prev, next } = Astro.props;
+const { post, prev, next, related } = Astro.props;
 const { Content } = await render(post);
 const theme = themeOf(post.data.categories);
 // SNS で共有したときの画像（記事の最初の画像を JPEG で幅 1200 まで）
@@ -49,6 +63,13 @@ const jsonld = {
       <Content />
     </div>
   </article>
+
+  {related.length > 0 && (
+    <section class="related" aria-labelledby="h-related">
+      <h2 id="h-related">あわせて読みたい</h2>
+      <div class="related-grid">{related.map((p) => <PostCard post={p} />)}</div>
+    </section>
+  )}
 
   <nav class="pager" aria-label="前後の記事">
     {prev ? (
@@ -89,6 +110,9 @@ const jsonld = {
   .body :global(table) { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
   .body :global(td), .body :global(th) { border: 1px solid var(--line); padding: 6px 8px; }
 
+  .related { max-width: 760px; margin: 36px auto 0; }
+  .related h2 { font-size: 1.1rem; margin: 0 0 14px; }
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
   .pager { max-width: 760px; margin: 28px auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .pager a {
     display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: var(--radius);
