@@ -14,13 +14,9 @@ USJではアメリカン・エキスプレスカードが大変お得だとい�
 
 ### ❶アメリカン・エキスプレス・カード／ゴールドカード
 
-![](../wp-content/uploads/2018/08/amex.png)
+![AMEXはUSJのサービス以外にもメリット！（写真 1）](../wp-content/uploads/2018/08/amex.png)
 
-[お申込みはこちら](https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3414648&pid=885370463)
-
-![](../wp-content/uploads/2018/08/amex_gold.jpg)
-
-[お申込みはこちら](https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3414648&pid=885370458)
+![AMEXはUSJのサービス以外にもメリット！（写真 2）](../wp-content/uploads/2018/08/amex_gold.jpg)
 
 - アメックスブランドの代表カード
 
