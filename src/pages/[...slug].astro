@@ -49,6 +49,12 @@ const posting = {
   mainEntityOfPage: ldUrl,
   inLanguage: 'ja',
 };
+// 1年より前の記事には、内容が当時のものだと書き添える（ビルドした日から数える）
+const age = (Date.now() - post.data.pubDate.valueOf()) / (365.25 * 24 * 3600 * 1000);
+const year = Number(post.data.pubDate.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric' }).replace(/\D/g, ''));
+// 共有ボタン（外部の部品は読み込まず、リンクだけ）
+const shareUrl = encodeURIComponent(ldUrl);
+const shareText = encodeURIComponent(post.data.title);
 const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrumbLd(crumbs, `${base}${post.id}/`, Astro.site)] };
 ---
 
@@ -65,8 +71,16 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
         {post.data.updatedDate && <span>（{fmt(post.data.updatedDate)} 更新）</span>}
       </p>
     </header>
+    {age >= 1 && (
+      <p class="old-note">この記事は {year} 年に書いたものです。値段や販売の状況は当時のもので、今とは違うことがあります。</p>
+    )}
     <div class="body">
       <Content />
+    </div>
+    <div class="share" aria-label="この記事を共有">
+      <span>この記事をシェア</span>
+      <a class="x" href={`https://x.com/intent/post?text=${shareText}&url=${shareUrl}`} target="_blank" rel="noopener">X でポスト</a>
+      <a class="line" href={`https://social-plugins.line.me/lineit/share?url=${shareUrl}`} target="_blank" rel="noopener">LINE で送る</a>
     </div>
   </article>
 
@@ -119,6 +133,15 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
   .related { max-width: 760px; margin: 36px auto 0; }
   .related h2 { font-size: 1.1rem; margin: 0 0 14px; }
   .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 16px; }
+  .old-note {
+    margin: 0 0 18px; padding: 10px 14px; border-radius: 10px; font-size: 0.85rem; line-height: 1.6;
+    border: 1px solid hsl(40 90% 50% / 45%); background: hsl(40 90% 50% / 12%);
+  }
+  .share { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 22px 0 0; }
+  .share span { font-size: 0.85rem; color: var(--muted); margin-right: 4px; }
+  .share a { padding: 8px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; text-decoration: none; color: #fff; }
+  .share .x { background: #000; border: 1px solid #444; }
+  .share .line { background: #06c755; }
   .pager { max-width: 760px; margin: 28px auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .pager a {
     display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: var(--radius);
