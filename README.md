@@ -153,3 +153,7 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 - Instagram の埋め込みの残りは「📷 Instagram で見る（@id）」の1行に、崩れたブログカードは URL の行と「このサイト内」の行を外す
 - トップの HTML は最初の24本だけ。25本目からは `/cards.json` を「もっと見る」・絞り込みのときに読む（本数は `src/lib/themes.ts` の FIRST）
 - 記事の最後に「あわせて読みたい」（カテゴリの重なりが多い順に4本）
+- カテゴリの一覧 `/category/<名前>/`（昔の WordPress と同じ URL。英字の名前は `src/lib/themes.ts` の SLUGS）。記事にはパンくず（構造化データにも）
+- 昔の `/feed/`・`/sitemap/`・出していないカテゴリの一覧は `astro.config.mjs` の redirects で今のページへ
+- 閉店・移転した店や無くなったページへのリンクには注記を書き添える（表は `scripts/link_notes.tsv`、取り込みで付く）。PONEY の招待リンクはアフィリエイトと同じ扱い
+- トップにタイトルの検索窓（?q=）。画像の無い記事のカードはマスコットの板
