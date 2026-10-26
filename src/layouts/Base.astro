@@ -36,6 +36,8 @@ const shortTitle = (s: string) => {
   const i = Math.max(cut.lastIndexOf(' '), cut.lastIndexOf('　'), cut.lastIndexOf('【'), cut.lastIndexOf('・'));
   return (i >= 24 ? cut.slice(0, i) : cut).trimEnd() + '…';
 };
+// 翻訳ボタン: 押すと Google 翻訳でこのページを英語・中国語にして開く（外部の部品は読み込まず、リンクだけ）
+const translate = (tl: string) => `https://translate.google.com/translate?sl=ja&tl=${tl}&u=${encodeURIComponent(canonical)}`;
 const pageTitle = title ? `${shortTitle(title)} | ${SITE_NAME}` : SITE_NAME;
 // ヘッダーに出すテーマ（よく書いた順）
 const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでかけ'].map((c) => THEMES.find((t) => t.cat === c)!);
@@ -86,6 +88,10 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
         </nav>
       </div>
     </header>
+    <nav class="translate" aria-label="翻訳" translate="no">
+      <a href={translate('en')} rel="nofollow noopener" lang="en">English</a>
+      <a href={translate('zh-CN')} rel="nofollow noopener" lang="zh-CN">中文</a>
+    </nav>
     <main>
       <slot />
     </main>
@@ -186,4 +192,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
     display: inline-block; font-size: 0.75rem; color: var(--muted);
     border: 1px solid var(--line); padding: 1px 10px; border-radius: 999px;
   }
+  .translate { display: flex; justify-content: flex-end; gap: 6px; max-width: 1080px; margin: 6px auto 0; padding: 0 16px; box-sizing: border-box; }
+  .translate a { font-size: 0.75rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); text-decoration: none; }
+  .translate a:hover { color: var(--fg); border-color: var(--fg); }
 </style>
