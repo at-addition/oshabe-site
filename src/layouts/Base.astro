@@ -36,7 +36,8 @@ const shortTitle = (s: string) => {
   const i = Math.max(cut.lastIndexOf(' '), cut.lastIndexOf('　'), cut.lastIndexOf('【'), cut.lastIndexOf('・'));
   return (i >= 24 ? cut.slice(0, i) : cut).trimEnd() + '…';
 };
-// 翻訳ボタン: 押すと Google 翻訳でこのページを英語・中国語にして開く（外部の部品は読み込まず、リンクだけ）
+// 翻訳ボタン: 押すと Google 翻訳でこのページを英語・繁体字中国語・韓国語にして開く（外部の部品は読み込まず、リンクだけ）。
+// 中国語は台湾・香港向けの繁体字（本土は Google の広告が出ないため。2026-10-27）
 const translate = (tl: string) => `https://translate.google.com/translate?sl=ja&tl=${tl}&u=${encodeURIComponent(canonical)}`;
 const pageTitle = title ? `${shortTitle(title)} | ${SITE_NAME}` : SITE_NAME;
 // ヘッダーに出すテーマ（よく書いた順）
@@ -90,7 +91,8 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
     </header>
     <nav class="translate" aria-label="翻訳" translate="no">
       <a href={translate('en')} rel="nofollow noopener" lang="en">English</a>
-      <a href={translate('zh-CN')} rel="nofollow noopener" lang="zh-CN">中文</a>
+      <a href={translate('zh-TW')} rel="nofollow noopener" lang="zh-TW">繁體中文</a>
+      <a href={translate('ko')} rel="nofollow noopener" lang="ko">한국어</a>
     </nav>
     <main>
       <slot />

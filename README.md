@@ -161,4 +161,4 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 - 1年より前の記事には「この記事は〇年に書いたもの」の注記、記事の最後に X・LINE の共有ボタン（リンクだけ）
 - 404 ページに検索窓と入口のリンク。ページのタイトル（検索結果・タブ）は40字を超えたら切る（`Base.astro` の shortTitle、見出しはそのまま）
 - フォントは Google から読まずに @fontsource でサイトから出す
-- 全ページの上に翻訳ボタン（English・中文）。Google 翻訳へのリンクだけで、翻訳後のページは Google のアドレスで開く（`Base.astro` の translate）
+- 全ページの上に翻訳ボタン（English・繁體中文・한국어）。Google 翻訳へのリンクだけで、翻訳後のページは Google のアドレスで開く（`Base.astro` の translate）
