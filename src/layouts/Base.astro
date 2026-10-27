@@ -94,6 +94,18 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
       <a href={translate('zh-TW')} rel="nofollow noopener" lang="zh-TW">繁體中文</a>
       <a href={translate('ko')} rel="nofollow noopener" lang="ko">한국어</a>
     </nav>
+    <script is:inline>
+      // 翻訳されたページ（*.translate.goog）の中では、Google がボタンのリンクを書き換えて「Can't translate this page」になる。
+      // そこでは押したときに、今の翻訳ページの言語（_x_tr_tl）だけを差し替えて開き直す（2026-10-27）
+      if (location.hostname.endsWith('.translate.goog')) {
+        document.querySelectorAll('.translate a').forEach((a) => a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const u = new URL(location.href);
+          u.searchParams.set('_x_tr_tl', a.getAttribute('lang'));
+          location.href = u.href;
+        }));
+      }
+    </script>
     <main>
       <slot />
     </main>
