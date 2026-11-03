@@ -165,6 +165,8 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 - はてなブックマークの件数リンクは外している（`scripts/hatena.tsv` に記録、git に入れない）。戻すときは `INCLUDE_HATENA` を True に
 - Instagram の埋め込みの残りは「📷 Instagram で見る（@id）」の1行に、崩れたブログカードは URL の行と「このサイト内」の行を外す
 - トップの HTML は最初の24本だけ。25本目からは `/cards.json` を「もっと見る」・絞り込みのときに読む（本数は `src/lib/themes.ts` の FIRST）
+- 月別アーカイブ `/YYYY/MM/`（昔の WordPress と同じ URL。全記事を HTML のリンクでたどれる）と入口 `/archive/`（フッター）。記事の日付からその月へ（`src/lib/months.ts`）
+- 昔のタイトルの直しは `scripts/titles.tsv`（取り込みで当てる）。画像の説明は、すぐ前の商品名の行から付ける（無ければタイトル）
 - 記事の最後に「あわせて読みたい」（カテゴリの重なりが多い順に4本）
 - カテゴリの一覧 `/category/<名前>/`（昔の WordPress と同じ URL。英字の名前は `src/lib/themes.ts` の SLUGS）。記事にはパンくず（構造化データにも）
 - 昔の `/feed/`・`/sitemap/`・出していないカテゴリの一覧は `astro.config.mjs` の redirects で今のページへ
