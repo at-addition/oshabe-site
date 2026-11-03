@@ -1,10 +1,9 @@
 ---
 // フォントは Google から読まずに、このサイトから出す（@fontsource。文字の範囲ごとに分かれていて、使う分だけ読まれる）
-import '@fontsource/zen-maru-gothic/500.css';
-import '@fontsource/zen-maru-gothic/700.css';
+// 使う太さだけ読む（2026-11-03 に6つから3つへ）: 丸ゴシックは大見出しの 900、角ゴシックは本文の 400 と太字の 700。
+// 太さを足すと CSS が1つにつき百数十行（約 130KB）増える
 import '@fontsource/zen-maru-gothic/900.css';
 import '@fontsource/zen-kaku-gothic-new/400.css';
-import '@fontsource/zen-kaku-gothic-new/500.css';
 import '@fontsource/zen-kaku-gothic-new/700.css';
 import { THEMES } from '../lib/themes';
 interface Props {
@@ -191,7 +190,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
     max-width: 760px; margin: 40px auto 0; background: var(--surface); border-radius: var(--radius);
     box-shadow: var(--shadow); padding: 28px clamp(18px, 5vw, 44px);
   }
-  main > article:not(.post) h1 { font-family: 'Zen Maru Gothic', sans-serif; font-size: 1.6rem; margin: 0 0 16px; }
+  main > article:not(.post) h1 { font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900; font-size: 1.6rem; margin: 0 0 16px; }
   main > article:not(.post) h2 { font-size: 1.15rem; margin: 1.8em 0 0.5em; }
 
   /* フッター */
