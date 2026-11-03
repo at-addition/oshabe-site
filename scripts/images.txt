@@ -8201,8 +8201,6 @@ wp-content/uploads/2018/08/aasd-300x250.jpg
 wp-content/uploads/2018/08/ad-300x250.jpg
 wp-content/uploads/2018/08/af-300x250.jpg
 wp-content/uploads/2018/08/affafa-300x250.jpg
-wp-content/uploads/2018/08/amex.png
-wp-content/uploads/2018/08/amex_gold.jpg
 wp-content/uploads/2018/08/as-1-300x250.jpg
 wp-content/uploads/2018/08/as.jpg
 wp-content/uploads/2018/08/asasa-300x250.jpg
@@ -8548,7 +8546,6 @@ wp-content/uploads/2018/08/vdvd-1.jpg
 wp-content/uploads/2018/08/ve-1-300x250.jpg
 wp-content/uploads/2018/08/ve.jpg
 wp-content/uploads/2018/08/vew-300x250.jpg
-wp-content/uploads/2018/08/viptour_main_p01.jpg
 wp-content/uploads/2018/08/vsde.jpg
 wp-content/uploads/2018/08/vsdv.jpg
 wp-content/uploads/2018/08/vsvv-300x250.jpg
@@ -8581,7 +8578,6 @@ wp-content/uploads/2018/08/xxx-300x250.jpg
 wp-content/uploads/2018/08/y4y4-300x250.jpg
 wp-content/uploads/2018/08/z-1-300x250.jpg
 wp-content/uploads/2018/08/z-300x250.jpg
-wp-content/uploads/2018/08/zanmai_main.jpg
 wp-content/uploads/2018/08/zczc.jpg
 wp-content/uploads/2018/08/zq.jpg
 wp-content/uploads/2018/08/zs-1-300x250.jpg
