@@ -18,6 +18,7 @@ export default defineConfig({
     '/category/news': '/', '/category/未分類': '/', '/category/漫画': '/', '/category/家電': '/', '/category/雑学': '/',
     // 公開した日の URL で出してしまった記事を、写真を撮った日へ移した（2026-11-03）
     '/2026/11/03/koalas-march-fantasy-soda': '/2026/07/15/koalas-march-fantasy-soda/',
+    '/2026/11/04/usj-mario-goods': '/2026/09/21/usj-mario-goods/',
     // 外した記事（2026-11-03 本人「AMEX の記事、中身の薄い記事、重複の1本を外して」。scripts/import.py の HIDDEN_POSTS）は近いカテゴリの一覧へ
     '/2018/08/30/usj_amex': '/category/usj/', '/usj_amex2': '/category/usj/', '/2016/09/23/65': '/category/usj/',
     '/2017/02/07/149': '/category/バレンタイン/', '/2016/09/07/48': '/category/ハロウィン/', '/2017/03/26/192': '/category/puchipura/',
