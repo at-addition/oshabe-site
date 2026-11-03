@@ -28,6 +28,14 @@ NOT_GOSSIP = {'halloween2016', 'usj_amex2'}
 # 戻すときは集合から外すか INCLUDE_HIDDEN を True にして取り込み直す
 INCLUDE_HIDDEN = False
 HIDDEN_CATS = {'漫画', '家電', '雑学'}
+# 記事ごとに外すもの（2026-11-03 本人「AMEX の記事、中身の薄い記事、重複の1本を外して」）。戻すときは集合から消すか INCLUDE_HIDDEN を True に。
+# 外した URL は astro.config.mjs の redirects でカテゴリの一覧などへ送る
+HIDDEN_POSTS = {
+    '2018/08/30/usj_amex', 'usj_amex2',   # AMEX カードの宣伝（元アフィリエイト、特典は 2018 年のまま）
+    '2017/02/07/149', '2016/09/07/48', '2017/03/26/192', '2016/09/23/65',   # 中身の薄い記事
+    '2016/11/11/113', '2016/11/11/114', '2016/11/18/121', '2017/03/03/177', '2017/03/03/178', '2017/04/04/208',   # 題に「画像」とあるのに画像が残っていない
+    '2016/11/18/120/310',   # 2016/11/18/120 と同じ記事（WordPress の別 URL）
+}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOMAIN = 'oshabe.com'
@@ -70,7 +78,7 @@ for name in sorted(os.listdir(SRC)):
     meta, title, path, cats, _ = read(name)
     if path in SKIP_PAGES or not meta.get('公開'):
         continue
-    if (not INCLUDE_GOSSIP and is_gossip(path, cats)) or (not INCLUDE_HIDDEN and HIDDEN_CATS & set(cats)):
+    if (not INCLUDE_GOSSIP and is_gossip(path, cats)) or (not INCLUDE_HIDDEN and (HIDDEN_CATS & set(cats) or path in HIDDEN_POSTS)):
         excluded[path] = (meta['公開'][:10], title, ','.join(cats))
 
 # 前回この道具が書いた記事だけを消す。手で書き足した記事は消さない
@@ -243,6 +251,32 @@ for rel in written:
     body, k = re.subn(r'^[ \t　]*[|｜]+[ \t　]*$', '', body, flags=re.M)
     cleaned['「|」の段落'] += k
     up = '../' * len(rel[:-3].split('/'))
+    # 見出しの段を詰める（## の次が #### の記事が多く、読み上げや検索では段が飛んで見えた）。使っている段を ## から順に振り直す
+    used_lv = sorted({len(h) for h in re.findall(r'^(#{2,6}) ', body, flags=re.M)})
+    remap = {lv: 2 + i for i, lv in enumerate(used_lv)}
+    if any(k != v for k, v in remap.items()):
+        body = re.sub(r'^(#{2,6}) ', lambda m: '#' * remap[len(m.group(1))] + ' ', body, flags=re.M)
+        cleaned['見出しの段を詰めた記事'] += 1
+    # それでも1つ上の見出しより2段以上深いもの（## の直後の #### など）は、1段深いところまで上げる
+    prev = [1]
+
+    def clamp(m):
+        lv = min(len(m.group(1)), prev[0] + 1)
+        prev[0] = lv
+        return '#' * lv + ' '
+    body = re.sub(r'^(#{2,6}) ', clamp, body, flags=re.M)
+    # 外した記事を指す崩れたブログカード（URL の行・抜粋・「このサイト内」の行と、直前の【見出し】）は丸ごと外す
+    body, k = re.subn(r'(?:^【[^】\n]*】[ \t]*\n+)?^[ \t]*https?://(?:www\.)?' + re.escape(DOMAIN) + '/(?:' + '|'.join(map(re.escape, excluded)) +
+                      r')/?[ \t]*\n+(?:^[^\n]*(?:\.\.\.|…)[ \t]*\n+)?(?:^[ \t]*' + re.escape(DOMAIN) + r'（このサイト内）[ \t]*$)?', '', body, flags=re.M)
+    cleaned['外した記事へのカード'] += k
+    # AMEX の記事を外したので、USJ の記事に入っていた宣伝の見出し・カードと抜粋・バナーも外す
+    if not INCLUDE_HIDDEN:
+        n0 = len(body)
+        body = re.sub(r'^【[^】\n]*AMEX[^】\n]*】[ \t]*$', '', body, flags=re.M)
+        body = re.sub(r'^\[!\[[^\]]*\]\([^)]*\)[^\n]*\]\([^)]*usj_amex2?/\)[ \t]*\n+[^\n]*(?:\.\.\.|…)[ \t]*$', '', body, flags=re.M)
+        body = re.sub(r'^\[\s*\n\s*!\[[^\]]*\]\([^)]*\)\s*\n\s*\]\([^)]*usj_amex2?/\)[ \t]*$', '', body, flags=re.M)
+        if len(body) != n0:
+            cleaned['AMEX の宣伝を外した記事'] += 1
 
     def self_url(m):
         path = m.group(1).strip('/')
