@@ -60,7 +60,7 @@ const shareText = encodeURIComponent(post.data.title);
 const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrumbLd(crumbs, `${base}${post.id}/`, Astro.site)] };
 ---
 
-<Base title={post.data.title} description={excerpt(post.body, 110)} image={ogImage} largeImage={(post.data.cover?.width ?? 0) >= 600} type="article" jsonld={jsonld}>
+<Base title={post.data.title} description={excerpt(post.body, 110) || post.data.title} image={ogImage} largeImage={(post.data.cover?.width ?? 0) >= 600} type="article" jsonld={jsonld}>
   <Crumbs items={crumbs} />
   <article class="post" style={`--hue:${theme.hue}`}>
     <header class="post-head">
