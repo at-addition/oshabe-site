@@ -32,6 +32,7 @@ const jsonld = {
     <h1>{cat}</h1>
     <p>{posts.length} 本の記事</p>
   </header>
+  <h2 class="sr-only">記事の一覧</h2>
   <section class="grid" aria-label={`${cat}の記事の一覧`} data-cat={cat} data-total={posts.length} data-src={`${base}cards.json`}>
     {posts.slice(0, FIRST).map((p, i) => <PostCard post={p} eager={i === 0} />)}
   </section>
