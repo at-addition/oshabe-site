@@ -53,6 +53,7 @@ cover: "../../../../images/2026-10-24-top.jpg"   # 一覧のカードに出す�
 - **新しい画像を `src/content/wp-content/` に置かない。** そこは `import.py` が毎回消して作り直す
 - スマホで撮った写真は `python -I scripts/prep_photos.py <写真のフォルダ> --date yyyy-mm-dd` で置く。
   撮った順に `yyyy-mm-dd-01.jpg` からの連番にし、向きを直し、長辺 1600px に縮め、位置情報などの EXIF を落とす。
+  右下に昔の写真と同じ「OSHABE」の透かしを入れる（`scripts/watermark.png`。`--no-mark` で入れない、置いた画像に入れるだけなら `--mark <画像>`）。
   HEIC は `pip install pillow-heif` が要る。`--sheet 一覧.jpg` で番号入りの縮小一覧も出せる
 - 昔の記事と同じパスに置くと、次に `import.py` を動かしたときに止まって知らせる
 
