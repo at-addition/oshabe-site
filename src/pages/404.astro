@@ -6,7 +6,7 @@ const base = import.meta.env.BASE_URL;
 const cats = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでかけ', 'バレンタイン'].map((c) => ({ c, hue: THEMES.find((t) => t.cat === c)?.hue }));
 ---
 
-<Base title="ページが見つかりません">
+<Base title="ページが見つかりません" description="お探しのページは見つかりませんでした。" bare>
   <section class="nf">
     <p class="code">404</p>
     <h1>ページが見つかりません</h1>
