@@ -2,7 +2,7 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-// 昔の記事は scripts/import.py が取り込み元から書き出す。新しい記事は同じフォルダに手で足す。
+// 昔の記事は scripts/import.py が手元の取り出し結果から書き出す。新しい記事は同じフォルダに手で足す。
 // id はフォルダからのパスで、そのまま URL になる
 const posts = defineCollection({
   loader: glob({

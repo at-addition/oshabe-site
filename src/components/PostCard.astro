@@ -6,8 +6,10 @@ import { themeOf, excerpt } from '../lib/themes';
 interface Props {
   post: CollectionEntry<'posts'>;
   featured?: boolean;
+  /** 画面の最初に出るカード。画像を遅延読み込みにしない */
+  eager?: boolean;
 }
-const { post, featured = false } = Astro.props;
+const { post, featured = false, eager = featured } = Astro.props;
 const theme = themeOf(post.data.categories);
 const base = import.meta.env.BASE_URL;
 const date = post.data.pubDate.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
@@ -17,7 +19,7 @@ const date = post.data.pubDate.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tok
   <a href={`${base}${post.id}/`} class="card-link">
     <div class="thumb">
       {post.data.cover ? (
-        <Image src={post.data.cover} alt="" width={featured ? 720 : 480} loading={featured ? 'eager' : 'lazy'} />
+        <Image src={post.data.cover} alt="" width={featured ? 720 : 480} loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} />
       ) : (
         <span class="thumb-fallback">{theme.label}</span>
       )}

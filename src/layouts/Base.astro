@@ -16,13 +16,17 @@ interface Props {
   type?: 'website' | 'article';
   /** 検索エンジン向けの構造化データ（JSON-LD）。無ければサイト全体（WebSite）の分を出す */
   jsonld?: Record<string, unknown>;
+  /** 404 など、中身の無いページ。広告のコードを入れず、検索に載せない（AdSense は中身の無い画面への広告を認めていない） */
+  bare?: boolean;
+  /** 共有の画像が十分大きい（幅 600px 以上）とき true。昔の記事の画像は幅 300px が多く、大きいカードだとぼやける */
+  largeImage?: boolean;
 }
 const SITE_NAME = 'オシャベ';
 // 当時のロゴ（OSHABE.com）。元の PNG を色ごとになぞって SVG にしたもの（design/original/logo_338x109.png）
 import logo from '../assets/oshabe-logo.svg?raw';
 // Google アドセンスのパブリッシャー ID（運営者のアカウント。public/ads.txt と揃える）
 const ADSENSE_CLIENT = 'ca-pub-5250963766765858';
-const { title, description = '100均・USJ・季節のイベントの話題', image, type = 'website', jsonld } = Astro.props;
+const { title, description = '100均・USJ・季節のイベントの話題', image, type = 'website', jsonld, bare = false, largeImage = true } = Astro.props;
 const base = import.meta.env.BASE_URL;
 // 検索と SNS 向け。正規の URL と、共有したときのタイトル・説明・画像
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -50,7 +54,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {bare ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="sitemap" href={`${base}sitemap.xml`} />
     <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href={`${base}rss.xml`} />
     <script type="application/ld+json" set:html={JSON.stringify(ld)} />
@@ -61,7 +65,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:locale" content="ja_JP" />
-    <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:card" content={image && largeImage ? 'summary_large_image' : 'summary'} />
     <meta name="color-scheme" content="light dark" />
     <!-- 当時のマスコット（鳥）。タブは SVG、スマホのホーム画面とブックマークは白地の正方形の PNG -->
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
@@ -69,12 +73,12 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
     <link rel="apple-touch-icon" href={`${base}apple-touch-icon.png`} />
     <link rel="manifest" href={`${base}site.webmanifest`} />
     <title>{pageTitle}</title>
-    <script
+    {!bare && <script
       is:inline
       async
       src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
       crossorigin="anonymous"
-    ></script>
+    ></script>}
   </head>
   <body>
     <header class="site-header">
