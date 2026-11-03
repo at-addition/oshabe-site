@@ -94,7 +94,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
     </header>
     <nav class="translate" aria-label="翻訳" translate="no">
       <!-- 翻訳されたページの中でだけ出す「日本語」（元のページへ戻る。2026-11-03） -->
-      <a href={canonical} class="tr-ja" lang="ja" data-origin={canonical} hidden>日本語</a>
+      <a href={bare ? new URL(base, Astro.site).href : canonical} class="tr-ja" lang="ja" data-origin={bare ? new URL(base, Astro.site).href : canonical} hidden>日本語</a>
       <a href={translate('en')} rel="nofollow noopener" lang="en">English</a>
       <a href={translate('zh-TW')} rel="nofollow noopener" lang="zh-TW">繁體中文</a>
       <a href={translate('ko')} rel="nofollow noopener" lang="ko">한국어</a>
