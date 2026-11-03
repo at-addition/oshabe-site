@@ -38,6 +38,7 @@ const last = latest?.data.pubDate.getFullYear();
     ))}
   </section>
 
+  <h2 class="sr-only">記事の一覧</h2>
   <section class="grid" aria-label="記事の一覧" data-total={rest.length} data-src={`${import.meta.env.BASE_URL}cards.json`}>
     {rest.slice(0, FIRST).map((p) => <PostCard post={p} />)}
   </section>
