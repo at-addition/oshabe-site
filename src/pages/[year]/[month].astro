@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import Crumbs from '../../components/Crumbs.astro';
+import { breadcrumbLd } from '../../lib/crumbs';
+import { byMonth, monthLabel, monthUrl } from '../../lib/months';
+
+// 月別アーカイブ（/YYYY/MM/）。昔の WordPress と同じ URL。その月の記事を全部 HTML のリンクで並べる（「もっと見る」を使わない）
+export async function getStaticPaths() {
+  const months = byMonth(await getCollection('posts'));
+  const keys = [...months.keys()];
+  return keys.map((ym, i) => ({
+    params: { year: ym.slice(0, 4), month: ym.slice(5, 7) },
+    props: { ym, posts: months.get(ym)!, newer: keys[i - 1], older: keys[i + 1] },
+  }));
+}
+const { ym, posts, newer, older } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const label = monthLabel(ym);
+const items = [{ name: 'トップ', href: base }, { name: '月別アーカイブ', href: `${base}archive/` }, { name: label }];
+const self = monthUrl(base, ym);
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'CollectionPage', name: `${label}の記事`, url: new URL(self, Astro.site).href, inLanguage: 'ja' },
+    breadcrumbLd(items, self, Astro.site),
+  ],
+};
+---
+
+<Base title={`${label}の記事`} description={`オシャベで${label}に書いた記事 ${posts.length} 本。${posts.slice(0, 3).map((p) => p.data.title).join('／')}`} jsonld={jsonld}>
+  <Crumbs items={items} wide />
+  <header class="month-head">
+    <h1>{label}の記事</h1>
+    <p>{posts.length} 本</p>
+  </header>
+  <h2 class="sr-only">記事の一覧</h2>
+  <section class="grid" aria-label={`${label}の記事の一覧`}>
+    {posts.map((p, i) => <PostCard post={p} eager={i === 0} />)}
+  </section>
+  <nav class="months" aria-label="前後の月">
+    {older ? <a href={monthUrl(base, older)}>← {monthLabel(older)}</a> : <span />}
+    <a href={`${base}archive/`}>月別アーカイブ</a>
+    {newer ? <a href={monthUrl(base, newer)}>{monthLabel(newer)} →</a> : <span />}
+  </nav>
+</Base>
+
+<style>
+  .month-head { margin: 12px 0 24px; padding: 18px 22px; border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+  .month-head h1 { margin: 0; font-size: 1.5rem; }
+  .month-head p { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px; }
+  .months { display: flex; justify-content: space-between; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+</style>

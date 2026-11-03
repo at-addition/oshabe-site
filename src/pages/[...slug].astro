@@ -6,6 +6,7 @@ import PostCard from '../components/PostCard.astro';
 import Crumbs from '../components/Crumbs.astro';
 import { breadcrumbLd } from '../lib/crumbs';
 import { themeOf, excerpt, catUrl, mainCat } from '../lib/themes';
+import { monthOf, monthUrl } from '../lib/months';
 
 export async function getStaticPaths() {
   // getStaticPaths はこの中だけで動くので、関連記事を選ぶ関数もここに置く。
@@ -69,7 +70,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
       </div>
       <h1>{post.data.title}</h1>
       <p class="date">
-        <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+        <a href={monthUrl(base, monthOf(post))} class="date-link"><time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time></a>
         {updated && <span>（{fmt(updated)} 更新）</span>}
       </p>
     </header>
@@ -111,6 +112,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
   .meta .chip { text-decoration: none; }
   h1 { font-family: 'Zen Maru Gothic', sans-serif; font-size: clamp(1.4rem, 4vw, 2rem); line-height: 1.45; margin: 14px 0 8px; font-weight: 900; }
   .date { margin: 0; color: var(--muted); font-size: 0.88rem; }
+  .date-link { color: inherit; }
 
   .body { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px clamp(18px, 5vw, 48px); }
   /* 元の記事は1行ずつ段落になっているので、段落の間を詰めて当時の見え方に寄せる */

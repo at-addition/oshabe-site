@@ -45,13 +45,19 @@ SRC, BIN = sys.argv[1], sys.argv[2]
 POSTS = os.path.join(ROOT, 'src', 'content', 'posts')
 SKIP_PAGES = {'sitemap', 'privacy', 'contact_form'}
 
+# 昔のタイトルの直し（scripts/titles.tsv。2026-11-03、書いた本人の確認済み）
+TITLE_FIX = dict(l.split('\t', 1) for l in open(os.path.join(ROOT, 'scripts', 'titles.tsv'), encoding='utf-8').read().splitlines()
+                 if l and not l.startswith('#'))
+
+
 def read(name):
     text = open(os.path.join(SRC, name), encoding='utf-8').read()
     head, _, body = text.partition('\n---\n')
     meta = dict(re.findall(r'^- ([^:]+): (.*)$', head, re.M))
     title = re.search(r'^# (.*)$', head, re.M).group(1).strip()
     path = re.sub(r'^https?://[^/]+/', '', meta['元の URL']).strip('/')
-    cats = [c.strip() for c in meta.get('カテゴリ', '').split(',') if c.strip()]
+    title = TITLE_FIX.get(path, title)
+    cats =[c.strip() for c in meta.get('カテゴリ', '').split(',') if c.strip()]
     return meta, title, path, cats, body
 
 
@@ -294,6 +300,50 @@ for rel in written:
     if s2 != s:
         open(f, 'w', encoding='utf-8', newline='\n').write(s2)
 print('cleaned', dict(cleaned), file=sys.stderr)
+
+# 画像の説明（alt）を、すぐ前にある商品名の行から付ける（2026-11-03 本人「改修お願い」）。
+# 当時の説明は、ファイル名のような英数字（fa343431 など）か、記事をまたいで同じ文（「ダイソー　ハロウィン　2016」が136枚など）が多かった。
+# 説明が空・英数字だけ・サイト全体で10回以上使われている画像に限り、4行以内の前にある短い文の行（商品名・小見出し）を使う。
+# 同じ行の下に写真が何枚も続くときは「（2）」から番号を付ける。前に使える行が無い画像は、このあと fill_alt.py がタイトルで埋める
+IMG_LINE = re.compile(r'^!\[((?:[^\[\]]|\[[^\]]*\])*)\]\(([^)\s]+)\)[ \t]*$')
+alt_count = collections.Counter()
+for rel in written:
+    for m in re.finditer(r'^!\[((?:[^\[\]]|\[[^\]]*\])*)\]\(', open(os.path.join(POSTS, *rel.split('/')), encoding='utf-8').read(), re.M):
+        alt_count[m.group(1)] += 1
+alt_set = 0
+for rel in written:
+    f = os.path.join(POSTS, *rel.split('/'))
+    s = open(f, encoding='utf-8').read()
+    head, sep, body = s.partition('\n---\n')
+    lines = body.split('\n')
+    cand, since, used_alt = None, 0, collections.Counter()
+    for i, ln in enumerate(lines):
+        t = ln.strip()
+        if not t:
+            continue
+        m = IMG_LINE.match(t)
+        if m:
+            alt = m.group(1)
+            weak = not alt.strip() or not re.search(r'[ぁ-んァ-ヶ一-龠]', alt) or alt_count[alt] >= 10
+            if weak and cand and since <= 4:
+                used_alt[cand] += 1
+                new = cand + (f'（{used_alt[cand]}）' if used_alt[cand] > 1 else '')
+                lines[i] = ln.replace(f'![{alt}](', f'![{new}](', 1)
+                alt_set += 1
+            continue
+        since += 1
+        text = re.sub(r'^#+\s*', '', t)
+        text = re.sub(r'[*_`]|\[([^\]]*)\]\([^)]*\)', lambda x: x.group(1) or '', text).strip()
+        # 短い文の行だけを候補にする（値段だけの行・抜粋「...」・リンクだけの行・箇条書きの記号は使わない）
+        if (2 <= len(text) <= 60 and not t.startswith(('[', '!', '|', '>', '-', '*', '▼', '↓', '※'))
+                and not re.search(r'(?:\.\.\.|…)$', text) and not re.fullmatch(r'[^\n]{0,12}\d[\d,]*円[^\n]{0,12}', text)):
+            text = text.replace('[', '［').replace(']', '］')
+            if text != cand:
+                cand, since = text, 0
+    s2 = head + sep + '\n'.join(lines)
+    if s2 != s:
+        open(f, 'w', encoding='utf-8', newline='\n').write(s2)
+print('alt from product lines', alt_set, file=sys.stderr)
 
 # 閉店・移転した店や、無くなったページへのリンクには、後ろに注記を書き添える（2026-10-25 本人指示。表は scripts/link_notes.tsv）
 notes = dict(l.split('\t', 1) for l in open(os.path.join(ROOT, 'scripts', 'link_notes.tsv'), encoding='utf-8').read().splitlines()
