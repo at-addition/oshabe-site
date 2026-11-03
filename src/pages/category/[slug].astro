@@ -33,7 +33,7 @@ const jsonld = {
     <p>{posts.length} 本の記事</p>
   </header>
   <section class="grid" aria-label={`${cat}の記事の一覧`} data-cat={cat} data-total={posts.length} data-src={`${base}cards.json`}>
-    {posts.slice(0, FIRST).map((p) => <PostCard post={p} />)}
+    {posts.slice(0, FIRST).map((p, i) => <PostCard post={p} eager={i === 0} />)}
   </section>
   {posts.length > FIRST && <p class="more-wrap"><button type="button" class="more">もっと見る（残り {posts.length - FIRST} 本）</button></p>}
   <p class="back"><a href={base}>← トップへ</a></p>

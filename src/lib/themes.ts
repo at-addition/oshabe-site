@@ -29,6 +29,11 @@ export function themeOf(categories: string[]): Theme {
 /** Markdown の本文から、カードに出す短い抜き出しを作る */
 export function excerpt(body: string | undefined, len = 70): string {
   const text = (body ?? '')
+    // 説明にしない行: 他の年の記事への案内や更新の注記（↓↓↓2018年版はこちら↓↓↓・※９月１２日更新・▼…）、
+    // リンクだけの行（関連記事のカード）と、その抜粋（末尾が ... の行）
+    .replace(/^[ 　]*(?:[↓▼※]|.*年(?:版|度)はこちら).*$/gm, '')
+    .replace(/^[ 　]*(?:[-*][ 　]+)?\[.*\]\([^)]*\)[ 　]*$/gm, '')
+    .replace(/^.*(?:\.\.\.|…)[ 　]*$/gm, '')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/^#+\s.*$/gm, '')
