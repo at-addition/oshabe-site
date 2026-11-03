@@ -31,7 +31,7 @@ Astro で作り、GitHub Pages に出す。`hazieta-site` と同じ作り。
 | `scripts/imported.txt` | `import.py` が前回書いた記事の一覧。取り込み直すとき、ここに載った記事だけを消す |
 | `scripts/images.txt` | 昔の記事が使っている画像の一覧 |
 | `.github/workflows/deploy.yml` | `main` に入ったらビルドして Pages へ出す |
-| `.github/workflows/auto-publish.yml` | `claude/` ブランチの最後の commit に `[公開OK]` があれば、記事と画像だけの差分でビルドが通るときに PR を作って `main` へ入れ、公開を起動する（2026-11-03〜） |
+| `.github/workflows/auto-pr.yml` | `claude/` ブランチの最後の commit に `[PR作成]` があれば、記事と画像だけの差分でビルドが通るときに PR を作る（マージはしない。2026-11-03〜） |
 
 ## 新しい記事を書き足す
 
@@ -129,8 +129,8 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 `main` に入るとそのまま公開される。
 
 **例外: `claude/<依頼ID>`**（2026-11-03〜）。Claude_作業依頼（所有者だけが送れるフォームから起動する Claude の routine）が記事を push するブランチ。
-ふだんは所有者が PR を作る。依頼で「チェックなしで公開でOK」とされたときだけ、routine が最後の commit に `[公開OK]` を付け、
-`auto-publish.yml` が PR の作成からマージまで行う（差分が `src/content/posts/` と `src/content/images/` の外にあれば止まる）。
+ふだんは所有者が PR を作る。依頼で「PR まで作って」とされたときは、routine が最後の commit に `[PR作成]` を付け、
+`auto-pr.yml` が PR を作る（差分が `src/content/posts/` と `src/content/images/` の外にあれば止まる）。マージは所有者が行う。
 
 ## 踏んだこと
 
