@@ -34,7 +34,8 @@ export function excerpt(body: string | undefined, len = 70): string {
     .replace(/^#+\s.*$/gm, '')
     .replace(/https?:\/\/\S+/g, '')
     .replace(/[*_`>|-]/g, '')
-    .replace(/\s+/g, '')
+    // 空白と改行は詰める。ただし英語の語の間（Koala's March など）は1つ残す
+    .replace(/\s+/g, (_, i: number, s: string) => (/[A-Za-z0-9'’.,!?]/.test(s[i - 1] ?? '') && /[A-Za-z0-9]/.test(s[i + _.length] ?? '') ? ' ' : ''))
     .trim();
   return text.length > len ? text.slice(0, len) + '…' : text;
 }
