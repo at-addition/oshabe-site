@@ -1,5 +1,9 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { readFileSync } from 'node:fs';
+
+// 2026-11-04 に外した記事（本文の薄い30本とインスタ映えの8本。scripts/import.py の HIDDEN_POSTS）の転送先。記事のテーマのカテゴリの一覧へ
+const hidden = JSON.parse(readFileSync(new URL('./scripts/redirects.json', import.meta.url), 'utf-8'));
 
 // 独自ドメイン oshabe.com の直下に出す（public/CNAME と GitHub の Pages 設定も oshabe.com）。
 // 記事の本文の画像とリンクは相対パスで書いてある（scripts/import.py）ので、site や base を変えても記事は直さなくてよい
@@ -20,5 +24,6 @@ export default defineConfig({
     '/2016/11/11/113': '/category/xmas/', '/2016/11/11/114': '/category/xmas/', '/2016/11/18/121': '/category/100均/',
     '/2017/03/03/177': '/category/event/', '/2017/03/03/178': '/category/event/', '/2017/04/04/208': '/category/100均/',
     '/2016/11/18/120/310': '/2016/11/18/120/',
+    ...hidden,
   },
 });
