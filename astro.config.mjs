@@ -12,5 +12,7 @@ export default defineConfig({
   redirects: {
     '/feed': '/rss.xml', '/sitemap': '/',
     '/category/news': '/', '/category/未分類': '/', '/category/漫画': '/', '/category/家電': '/', '/category/雑学': '/',
+    // 公開した日の URL で出してしまった記事を、写真を撮った日へ移した（2026-11-03）
+    '/2026/11/03/koalas-march-fantasy-soda': '/2026/07/15/koalas-march-fantasy-soda/',
   },
 });
