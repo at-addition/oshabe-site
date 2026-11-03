@@ -61,9 +61,11 @@ cover: "../../../../images/2026-10-24-top.jpg"   # 一覧のカードに出す�
 記事の元は、Wayback Machine から取り出して手元に置いたもの（このリポジトリの外）。
 
 ```powershell
-python -I scripts/import.py
+python -I scripts/import.py <記事のフォルダ> <画像のフォルダ>
 npm run build
 ```
+
+取り込み元の場所はこのリポジトリには書かない（公開しているため）。
 
 `import.py` がやること:
 
@@ -169,3 +171,5 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 - 404 ページに検索窓と入口のリンク。ページのタイトル（検索結果・タブ）は40字を超えたら切る（`Base.astro` の shortTitle、見出しはそのまま）
 - フォントは Google から読まずに @fontsource でサイトから出す
 - 全ページの上に翻訳ボタン（English・繁體中文・한국어）。Google 翻訳へのリンクだけで、翻訳後のページは Google のアドレスで開く（`Base.astro` の translate）
+- 404 ページには広告のコードを入れず、noindex を付ける（`Base.astro` の `bare`）。共有の画像が幅 600px 未満の記事は X の小さいカードにする
+- 説明文（カード・検索結果・RSS）は、他の年の記事への案内（↓↓↓…はこちら・※…更新・▼…）とリンクだけの行（関連記事のカード）を飛ばして本文の書き出しから作る（`src/lib/themes.ts` の excerpt）
