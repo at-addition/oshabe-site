@@ -1,0 +1,33 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import { byMonth, monthUrl } from '../lib/months';
+
+// 月別アーカイブの入口（/archive/）。年ごとに、記事のある月とその本数を並べる。フッターから辿れる
+const months = byMonth(await getCollection('posts'));
+const years = new Map<string, [string, number][]>();
+for (const [ym, posts] of months) years.set(ym.slice(0, 4), [...(years.get(ym.slice(0, 4)) ?? []), [ym, posts.length]]);
+const base = import.meta.env.BASE_URL;
+const total = [...months.values()].reduce((n, p) => n + p.length, 0);
+---
+
+<Base title="月別アーカイブ" description={`オシャベの全 ${total} 本の記事を、書いた月ごとにたどれる一覧`}>
+  <Crumbs items={[{ name: 'トップ', href: base }, { name: '月別アーカイブ' }]} wide />
+  <article>
+    <h1>月別アーカイブ</h1>
+    {[...years].map(([y, list]) => (
+      <section>
+        <h2>{y}年</h2>
+        <ul class="months">
+          {list.map(([ym, n]) => <li><a href={monthUrl(base, ym)}>{Number(ym.slice(5, 7))}月</a> <small>{n}</small></li>)}
+        </ul>
+      </section>
+    ))}
+  </article>
+</Base>
+
+<style>
+  .months { display: flex; flex-wrap: wrap; gap: 8px 18px; padding-left: 0; list-style: none; }
+  .months small { color: var(--muted); }
+</style>

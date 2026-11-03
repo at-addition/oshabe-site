@@ -1,6 +1,7 @@
 import { getCollection } from 'astro:content';
 import type { APIRoute } from 'astro';
 import { catUrl } from '../lib/themes';
+import { byMonth } from '../lib/months';
 
 // Google などに記事の一覧を伝えるサイトマップ。トップと全記事（更新日があればそれを最終更新に）
 export const GET: APIRoute = async ({ site }) => {
@@ -9,7 +10,8 @@ export const GET: APIRoute = async ({ site }) => {
   const url = (path: string) => new URL(`${base}${path}`, site).href;
   const rows = [
     `<url><loc>${url('')}</loc></url>`,
-    ...['about/', 'privacy/', 'contact/'].map((p) => `<url><loc>${url(p)}</loc></url>`),
+    ...['about/', 'privacy/', 'contact/', 'archive/'].map((p) => `<url><loc>${url(p)}</loc></url>`),
+    ...[...byMonth(posts).keys()].map((ym) => `<url><loc>${url(ym + '/')}</loc></url>`),
     ...[...new Set(posts.flatMap((p) => p.data.categories))].map((c) => `<url><loc>${new URL(catUrl(base, c), site).href}</loc></url>`),
     ...posts.map((p) => {
       const d = (p.data.updatedDate ?? p.data.pubDate).toISOString().slice(0, 10);
