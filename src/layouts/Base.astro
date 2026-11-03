@@ -5,7 +5,7 @@
 import '@fontsource/zen-maru-gothic/900.css';
 import '@fontsource/zen-kaku-gothic-new/400.css';
 import '@fontsource/zen-kaku-gothic-new/700.css';
-import { THEMES } from '../lib/themes';
+import { THEMES, catUrl } from '../lib/themes';
 interface Props {
   title?: string;
   description?: string;
@@ -87,7 +87,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
         </a>
         <nav class="site-nav" aria-label="テーマ">
           {NAV.map((t) => (
-            <a href={`${base}?cat=${encodeURIComponent(t.cat)}`} style={`--hue:${t.hue}`}>{t.label}</a>
+            <a href={catUrl(base, t.cat)} style={`--hue:${t.hue}`}>{t.label}</a>
           ))}
         </nav>
       </div>
@@ -183,9 +183,22 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでか�
   .site-logo svg { display: block; width: 100%; height: auto; --logo-hole: var(--bg); }
   .site-nav { display: flex; gap: 6px; flex-wrap: wrap; padding: 6px 0; }
   .site-nav a {
+    flex: none;
     font-size: 0.8rem; font-weight: 700; text-decoration: none; padding: 4px 12px; border-radius: 999px;
     color: hsl(var(--hue) var(--sat) var(--light));
     background: hsl(var(--hue) 70% var(--tint));
+  }
+
+  /* スマホでは、テーマのボタンをロゴの下の1行に並べて横にスクロールさせる（2026-11-03）。
+     折り返すとヘッダーが3段・約155px になって画面に残り続け、フォントが届いたときに段が変わって本文がずれていた */
+  @media (max-width: 600px) {
+    .site-header .inner { min-height: 0; gap: 0; }
+    .site-name { padding: 6px 0 2px; }
+    .site-nav {
+      flex-wrap: nowrap; overflow-x: auto; width: calc(100% + 32px); margin: 0 -16px; padding: 4px 16px 8px;
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    }
+    .site-nav::-webkit-scrollbar { display: none; }
   }
 
   /* 固定ページ（プライバシーポリシー・お問い合わせなど）。記事ページは .post で別に組む */
