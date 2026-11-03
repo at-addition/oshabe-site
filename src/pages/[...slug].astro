@@ -32,6 +32,8 @@ const theme = themeOf(post.data.categories);
 // SNS で共有したときの画像（記事の最初の画像を JPEG で幅 1200 まで）
 const ogImage = post.data.cover ? (await getImage({ src: post.data.cover, width: 1200, format: 'jpeg' })).src : undefined;
 const base = import.meta.env.BASE_URL;
+// 予約投稿の名残で更新日が公開日より前の記事がある（2017/06/03/267）。その更新日は使わない
+const updated = post.data.updatedDate && post.data.updatedDate > post.data.pubDate ? post.data.updatedDate : undefined;
 const fmt = (d: Date) => d.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
 // 検索エンジン向けの構造化データ（記事）。新しい記事も同じ形で付く
 const ldUrl = new URL(`${base}${post.id}/`, Astro.site).href;
@@ -42,7 +44,7 @@ const posting = {
   '@type': 'BlogPosting',
   headline: post.data.title,
   datePublished: post.data.pubDate.toISOString(),
-  dateModified: (post.data.updatedDate ?? post.data.pubDate).toISOString(),
+  dateModified: (updated ?? post.data.pubDate).toISOString(),
   ...(ogImage ? { image: new URL(ogImage, Astro.site).href } : {}),
   author: { '@type': 'Person', name: 'オシャベ' },
   publisher: { '@type': 'Organization', name: 'オシャベ', logo: { '@type': 'ImageObject', url: new URL(`${base}icon-512.png`, Astro.site).href } },
@@ -58,7 +60,7 @@ const shareText = encodeURIComponent(post.data.title);
 const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrumbLd(crumbs, `${base}${post.id}/`, Astro.site)] };
 ---
 
-<Base title={post.data.title} description={excerpt(post.body, 110)} image={ogImage} type="article" jsonld={jsonld}>
+<Base title={post.data.title} description={excerpt(post.body, 110)} image={ogImage} largeImage={(post.data.cover?.width ?? 0) >= 600} type="article" jsonld={jsonld}>
   <Crumbs items={crumbs} />
   <article class="post" style={`--hue:${theme.hue}`}>
     <header class="post-head">
@@ -68,7 +70,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
       <h1>{post.data.title}</h1>
       <p class="date">
         <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
-        {post.data.updatedDate && <span>（{fmt(post.data.updatedDate)} 更新）</span>}
+        {updated && <span>（{fmt(updated)} 更新）</span>}
       </p>
     </header>
     {age >= 1 && (
@@ -77,7 +79,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
     <div class="body">
       <Content />
     </div>
-    <div class="share" aria-label="この記事を共有">
+    <div class="share" role="group" aria-label="この記事を共有">
       <span>この記事をシェア</span>
       <a class="x" href={`https://x.com/intent/post?text=${shareText}&url=${shareUrl}`} target="_blank" rel="noopener">X でポスト</a>
       <a class="line" href={`https://social-plugins.line.me/lineit/share?url=${shareUrl}`} target="_blank" rel="noopener">LINE で送る</a>

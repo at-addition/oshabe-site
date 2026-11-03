@@ -1,6 +1,8 @@
-"""google-context に取り出した記事（Markdown）と画像を、この Astro サイトへ取り込む。
+"""手元に取り出した昔の記事（Markdown）と画像を、この Astro サイトへ取り込む。
 
-    python -I scripts/import.py
+    python -I scripts/import.py <記事のフォルダ> <画像のフォルダ>
+
+取り込み元はこのリポジトリの外にあり、場所はここに書かない（公開リポジトリのため）。
 
 - 記事は src/content/posts/<元のパス>.md（元の URL と同じ道のりで出すため）
 - 画像は src/content/<元のパス>（記事が指しているものだけ）
@@ -29,8 +31,9 @@ HIDDEN_CATS = {'漫画', '家電', '雑学'}
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOMAIN = 'oshabe.com'
-SRC = rf'C:\@Addition\google-context\doc_txt\AdSenseブログ\{DOMAIN}\記事'
-BIN = rf'C:\@Addition\google-context\doc_bin\AdSenseブログ\{DOMAIN}'
+if len(sys.argv) != 3:
+    sys.exit('使い方: python -I scripts/import.py <記事のフォルダ> <画像のフォルダ>')
+SRC, BIN = sys.argv[1], sys.argv[2]
 POSTS = os.path.join(ROOT, 'src', 'content', 'posts')
 SKIP_PAGES = {'sitemap', 'privacy', 'contact_form'}
 
