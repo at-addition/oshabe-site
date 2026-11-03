@@ -114,12 +114,11 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 
 ## 広告とお問い合わせ
 
-- **広告は Google アドセンス。** パブリッシャー ID は `pub-5250963766765858`（hqzietq のアカウント。
-  2026-10-24 時点で「一定期間ご利用がないため無効」で、再有効化して `google@nakagawamail.com` を管理者に招待する予定）。
+- **広告は Google アドセンス。** パブリッシャー ID は `pub-5250963766765858`（運営者の Google アカウント。
+  2026-10-24 に「一定期間ご利用がないため無効」だったものを再有効化した）。
   全ページの `<head>` に `adsbygoogle.js` を入れ、`https://oshabe.com/ads.txt` に同じ ID を出している。
   ID を変えるときは `Base.astro` の `ADSENSE_CLIENT` と `public/ads.txt` の両方を直す
-- **お問い合わせは Google フォーム**「オシャベ お問い合わせ」（`google@nakagawamail.com` の持ち物。
-  Drive では `@Addition\google-context\doc_nat\AdSenseブログ\oshabe.com\`）。
+- **お問い合わせは Google フォーム**「オシャベ お問い合わせ」（運営者の Google アカウントの持ち物）。
   ログインなしで誰でも送れる。新しい回答はメールで届く。フォームの URL は `contact.astro` の `FORM_URL`
 - プライバシーポリシーは昔のものを取り込まず、2026-10-24 に書き直した（`privacy.astro`）
 
