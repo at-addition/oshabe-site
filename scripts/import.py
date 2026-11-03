@@ -389,6 +389,21 @@ for rel in written:
 print('unlinked', unlinked, file=sys.stderr)
 open(IMPORTED, 'w', encoding='utf-8', newline='\n').write('\n'.join(sorted(written)) + '\n')
 
+# 片付けの手順で外したカードや宣伝が指していた画像は、最初に写した時点では使われていたので残っている。
+# 書き終えた記事がどれも指していない画像は消す（公開リポジトリに第三者の画像を残さないため。2026-11-03）
+refs = set()
+for dp, _, fs in os.walk(POSTS):
+    for fn in fs:
+        if fn.endswith('.md'):
+            t = open(os.path.join(dp, fn), encoding='utf-8').read()
+            for src in re.findall(r'\]\(([^)\s]*wp-content/[^)\s]+)\)', t) + re.findall(r'^cover: "([^"]*wp-content/[^"]+)"', t, re.M):
+                refs.add(src[src.index('wp-content/'):])
+gone = sorted(u for u in used if u not in refs)
+for rel in gone:
+    os.remove(os.path.join(IMAGES, *rel.split('/')))
+open(os.path.join(ROOT, 'scripts', 'images.txt'), 'w', encoding='utf-8', newline='\n').write('\n'.join(sorted(used - set(gone))) + '\n')
+print('unused images removed', len(gone), file=sys.stderr)
+
 # 画像の説明（alt）を付ける。新しい記事は公開のたびに同じ道具が付ける
 import subprocess
 subprocess.run([sys.executable, '-I', os.path.join(ROOT, 'scripts', 'fill_alt.py')], check=True)
