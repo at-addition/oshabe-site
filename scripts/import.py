@@ -15,7 +15,7 @@
   外した記事は scripts/excluded.tsv に並べる。戻すときは INCLUDE_GOSSIP を True にして取り込み直すだけ
 - 漫画・家電・雑学のカテゴリの記事も外す（2026-10-24 本人指示）。戻すときは INCLUDE_HIDDEN を True にする
 """
-import json, os, re, shutil, sys
+import collections, json, os, re, shutil, sys
 
 # 芸能の記事も出すなら True にする
 INCLUDE_GOSSIP = False
@@ -227,6 +227,39 @@ for rel in written:
         http_dropped += k
         open(f, 'w', encoding='utf-8', newline='\n').write(s2)
 print('http images dropped', http_dropped, file=sys.stderr)
+
+# 取り出したときの崩れの残りを片付ける（2026-11-03 本人「取り込みなおして」）
+# - 空の見出し（「#### 」だけの行）と、「|」だけの段落（表の枠の残り）は、画面に空の帯や縦線として出ていたので外す
+# - 「2019年版はこちら↓↓↓ https://oshabe.com/… 抜粋...」のように、行の途中に崩れたブログカードの URL が残ったものは、
+#   URL をその記事のタイトルのリンクにし、後ろの抜粋（別の記事の書き出し）は外す
+cleaned = collections.Counter()
+SELF_URL = r'(?<![(\[<])https?://(?:www\.)?' + re.escape(DOMAIN) + r'/((?:\d{4}/\d{2}/\d{2}/)?[^\s/)\]]+(?:/[^\s/)\]]+)*)/?'
+for rel in written:
+    f = os.path.join(POSTS, *rel.split('/'))
+    s = open(f, encoding='utf-8').read()
+    head, sep, body = s.partition('\n---\n')
+    body, k = re.subn(r'^#{1,6}[ \t　|｜]*$', '', body, flags=re.M)
+    cleaned['空の見出し'] += k
+    body, k = re.subn(r'^[ \t　]*[|｜]+[ \t　]*$', '', body, flags=re.M)
+    cleaned['「|」の段落'] += k
+    up = '../' * len(rel[:-3].split('/'))
+
+    def self_url(m):
+        path = m.group(1).strip('/')
+        if path not in titles:
+            return m.group(0)
+        cleaned['行の途中の URL'] += 1
+        return f'\n\n[{titles[path]}]({up}{path}/)\n\n'
+    lines = []
+    for ln in body.split('\n'):
+        if re.search(SELF_URL, ln) and not re.search(r'\]\(' + SELF_URL, ln):
+            ln = re.sub(r'[ \t　]*' + SELF_URL + r'[ \t　]*(?:[^\n]*?(?:\.\.\.|…))?[ \t　]*$', self_url, ln)
+        lines.append(ln.rstrip(' \t'))
+    body = re.sub(r'\n{3,}', '\n\n', '\n'.join(lines))
+    s2 = head + sep + body
+    if s2 != s:
+        open(f, 'w', encoding='utf-8', newline='\n').write(s2)
+print('cleaned', dict(cleaned), file=sys.stderr)
 
 # 閉店・移転した店や、無くなったページへのリンクには、後ろに注記を書き添える（2026-10-25 本人指示。表は scripts/link_notes.tsv）
 notes = dict(l.split('\t', 1) for l in open(os.path.join(ROOT, 'scripts', 'link_notes.tsv'), encoding='utf-8').read().splitlines()
