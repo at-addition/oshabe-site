@@ -15,7 +15,6 @@ export const THEMES: Theme[] = [
   { cat: 'バレンタイン', label: 'バレンタイン', hue: 330 },
   { cat: '100均', label: '100均', hue: 175 },
   { cat: '300均', label: '300均', hue: 150 },
-  { cat: 'おでかけ', label: 'おでかけ', hue: 120 },
   // ガチャ（カプセルトイ）は 2026-11-04 に本人の指示で足した
   { cat: 'ガチャ', label: 'ガチャ', hue: 85 },
   { cat: 'グッズ', label: 'グッズ', hue: 250 },

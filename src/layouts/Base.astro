@@ -44,7 +44,7 @@ const shortTitle = (s: string) => {
 const translate = (tl: string) => `https://translate.google.com/translate?sl=ja&tl=${tl}&u=${encodeURIComponent(canonical)}`;
 const pageTitle = title ? `${shortTitle(title)} | ${SITE_NAME}` : SITE_NAME;
 // ヘッダーに出すテーマ（よく書いた順）
-const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでかけ'].map((c) => THEMES.find((t) => t.cat === c)!);
+const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ'].map((c) => THEMES.find((t) => t.cat === c)!);
 ---
 
 <!doctype html>
