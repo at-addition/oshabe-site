@@ -11,10 +11,13 @@ export default defineConfig({
   site: 'https://oshabe.com',
   base: '/',
   trailingSlash: 'always',
+  // フォントのファイルは CSS に埋め込まない（4KB 未満が埋め込まれ、ページに無い文字の分まで毎回読ませていた。2026-11-06）
+  vite: { build: { assetsInlineLimit: (file) => (/\.(woff2?|ttf)$/.test(file) ? false : undefined) } },
   // 昔の WordPress の URL（RSS とサイトマップのページ）を今のページへ送る
   // 今は出していないカテゴリ（芸能・漫画・家電・雑学）の一覧はトップへ
   redirects: {
-    '/feed': '/rss.xml', '/sitemap': '/',
+    // 転送先はサイトの外の形（絶対 URL）で書く。'/rss.xml' だと trailingSlash で無いページ /rss.xml/ へ送ってしまう（2026-11-06）
+    '/feed': 'https://oshabe.com/rss.xml', '/sitemap': '/',
     '/category/news': '/', '/category/未分類': '/', '/category/漫画': '/', '/category/家電': '/', '/category/雑学': '/',
     // おでかけのカテゴリはやめた（2026-11-05 本人の指示）
     '/category/おでかけ': '/',

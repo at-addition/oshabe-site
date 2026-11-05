@@ -4,24 +4,31 @@ export interface Theme {
   cat: string;
   label: string;
   hue: number;
+  /** 明るい画面で、バッジの字の明るさ（薄い地の上で 4.5:1 に届く値。2026-11-06） */
+  light: number;
 }
 
 export const THEMES: Theme[] = [
-  { cat: 'USJ', label: 'USJ', hue: 215 },
-  { cat: 'ディズニーランド', label: 'ディズニー', hue: 275 },
-  { cat: 'ディズニーシー', label: 'ディズニー', hue: 275 },
-  { cat: 'ハロウィン', label: 'ハロウィン', hue: 26 },
-  { cat: 'クリスマス', label: 'クリスマス', hue: 355 },
-  { cat: 'バレンタイン', label: 'バレンタイン', hue: 330 },
-  { cat: '100均', label: '100均', hue: 175 },
-  { cat: '300均', label: '300均', hue: 150 },
+  { cat: 'USJ', label: 'USJ', hue: 215, light: 42 },
+  { cat: 'ディズニーランド', label: 'ディズニー', hue: 275, light: 42 },
+  { cat: 'ディズニーシー', label: 'ディズニー', hue: 275, light: 42 },
+  { cat: 'ハロウィン', label: 'ハロウィン', hue: 26, light: 37 },
+  { cat: 'クリスマス', label: 'クリスマス', hue: 355, light: 42 },
+  { cat: 'バレンタイン', label: 'バレンタイン', hue: 330, light: 42 },
+  { cat: '100均', label: '100均', hue: 175, light: 28 },
+  { cat: '300均', label: '300均', hue: 150, light: 29 },
   // ガチャ（カプセルトイ）は 2026-11-04 に本人の指示で足した
-  { cat: 'ガチャ', label: 'ガチャ', hue: 85 },
-  { cat: 'グッズ', label: 'グッズ', hue: 250 },
-  { cat: 'イベント', label: 'イベント', hue: 198 },
-  { cat: 'プチプラ', label: 'プチプラ', hue: 45 },
+  { cat: 'ガチャ', label: 'ガチャ', hue: 85, light: 28 },
+  { cat: 'グッズ', label: 'グッズ', hue: 250, light: 42 },
+  { cat: 'イベント', label: 'イベント', hue: 198, light: 35 },
+  { cat: 'プチプラ', label: 'プチプラ', hue: 45, light: 31 },
 ];
-const DEFAULT: Theme = { cat: '', label: 'ひとネタ', hue: 198 };
+const DEFAULT: Theme = { cat: '', label: 'ひとネタ', hue: 198, light: 35 };
+
+/** 色相から、明るい画面の字の明るさ（%）。色相はテーマごとに違う */
+export const lightOf = (hue: number | undefined) => (THEMES.find((t) => t.hue === hue) ?? DEFAULT).light;
+/** 要素の style に付ける色の変数（--hue と、明るい画面の字の明るさ --lt） */
+export const hueVars = (hue: number | undefined) => `--hue:${hue ?? DEFAULT.hue};--lt:${lightOf(hue)}%`;
 
 export function themeOf(categories: string[]): Theme {
   return THEMES.find((t) => categories.includes(t.cat)) ?? DEFAULT;
