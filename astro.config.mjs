@@ -22,6 +22,7 @@ export default defineConfig({
     // 同じく写真を撮った日へ移した（2026-11-05 本人の指示。麦わらストアは10月の日付で、という指示なので 10/18 にした）
     '/2026/11/05/mugiwara-store-goods': '/2026/10/18/mugiwara-store-goods/',
     '/2026/11/05/capcorom': '/2026/11/02/capcorom/',
+    '/2026/11/05/pokemon-center-stickers': '/2026/11/01/pokemon-center-stickers/',
     // 外した記事（2026-11-03 本人「AMEX の記事、中身の薄い記事、重複の1本を外して」。scripts/import.py の HIDDEN_POSTS）は近いカテゴリの一覧へ
     '/2018/08/30/usj_amex': '/category/usj/', '/usj_amex2': '/category/usj/', '/2016/09/23/65': '/category/usj/',
     '/2017/02/07/149': '/category/バレンタイン/', '/2016/09/07/48': '/category/ハロウィン/', '/2017/03/26/192': '/category/puchipura/',
