@@ -1,7 +1,7 @@
 ---
 title: "麦わらストアのワンピースグッズ2026【画像・値段】フィギュア、ぬいぐるみ"
 pubDate: "2026-10-18"
-categories: ["グッズ", "おでかけ", "プチプラ"]
+categories: ["グッズ", "プチプラ"]
 cover: "../../../../images/2026-10-18-mugiwara-store-goods-01.jpg"
 ---
 ONE PIECE 麦わらストア（ONE PIECE MUGIWARA STORE）に行ってきました！
