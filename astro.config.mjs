@@ -12,9 +12,10 @@ export default defineConfig({
   base: '/',
   trailingSlash: 'always',
   // 昔の WordPress の URL（RSS とサイトマップのページ）を今のページへ送る
+  // trailingSlash で / が付かないよう、RSS は URL で書く
   // 今は出していないカテゴリ（芸能・漫画・家電・雑学）の一覧はトップへ
   redirects: {
-    '/feed': '/rss.xml', '/sitemap': '/',
+    '/feed': 'https://oshabe.com/rss.xml', '/sitemap': '/',
     '/category/news': '/', '/category/未分類': '/', '/category/漫画': '/', '/category/家電': '/', '/category/雑学': '/',
     // おでかけのカテゴリはやめた（2026-11-05 本人の指示）
     '/category/おでかけ': '/',
