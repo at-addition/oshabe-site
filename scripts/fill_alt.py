@@ -4,6 +4,7 @@
 
 昔の記事は import.py の最後に、新しい記事は公開のたび（.github/workflows/deploy.yml のビルドの前）に動く。
 すでに説明が書いてある画像はそのまま。何度動かしても結果は同じ。
+別の記事へのカード（[![](画像) 題](リンク)）の画像は、リンクの題が読まれるので説明を空のまま（飾り）にし、番号にも数えない（2026-11-06）。
 """
 import json, os, re, sys
 
@@ -29,7 +30,7 @@ def fill(path):
         n += 1
         return f'![{title}（写真 {n}）]('
     head, sep, body = s.partition('\n---\n') if s.startswith('---') else ('', '', s)
-    body2 = re.sub(r'!\[\]\(', rep, body)
+    body2 = re.sub(r'(?<!\[)!\[\]\(', rep, body)
     if n:
         open(path, 'w', encoding='utf-8', newline='\n').write(head + sep + body2)
     return n
