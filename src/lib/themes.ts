@@ -46,7 +46,10 @@ export function excerpt(body: string | undefined, len = 70): string {
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/^#+\s.*$/gm, '')
     .replace(/https?:\/\/\S+/g, '')
-    .replace(/[*_`>|-]/g, '')
+    // Markdown の記号だけを消す。行頭の箇条書き・引用・区切り線と、強調・表の記号。語の中の - と _ は残す（#C-pla など。2026-11-06）
+    .replace(/^[ 　]*(?:[-*_]{3,})[ 　]*$/gm, '')
+    .replace(/^[ 　]*(?:[-*+>]|\d+\.)[ 　]+/gm, '')
+    .replace(/[*`|]/g, '')
     // 空白と改行は詰める。ただし英語の語の間（Koala's March など）は1つ残す
     .replace(/\s+/g, (_, i: number, s: string) => (/[A-Za-z0-9'’.,!?]/.test(s[i - 1] ?? '') && /[A-Za-z0-9]/.test(s[i + _.length] ?? '') ? ' ' : ''))
     .trim();
