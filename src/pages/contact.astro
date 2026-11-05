@@ -1,8 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
 
-// Google フォーム（運営者の Google アカウントの「オシャベ お問い合わせ」）。回答はフォームの持ち主にメールで届く
-const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe-4MkaUQhV3FFJeS-wK_DSC8Z-I2mjR6WYnogk2Jhb_QxrMw/viewform';
+// 送り先は Google フォーム（運営者の Google アカウントの「オシャベ お問い合わせ」）。回答はフォームの持ち主にメールで届く。
+// フォームの画面には持ち主のドメインが出るので、画面は開かせず、このページの入力欄から formResponse へ直に送る（2026-11-06）。
+// 設問を足す・消すときは、フォームの entry の番号もここで直す（番号はフォームの画面の HTML の FB_PUBLIC_LOAD_DATA_ にある）
+const FORM_ID = '1FAIpQLSe-4MkaUQhV3FFJeS-wK_DSC8Z-I2mjR6WYnogk2Jhb_QxrMw';
+const ACTION = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
+const ENTRY = { name: 'entry.938436071', mail: 'entry.1598231476', body: 'entry.459111936' };
 const base = import.meta.env.BASE_URL;
 ---
 
@@ -10,18 +14,69 @@ const base = import.meta.env.BASE_URL;
   <article>
     <h1>お問い合わせ</h1>
     <p>当サイトへのお問い合わせは、下のフォームからお送りください。返信が必要なときは、メールアドレスもご記入ください。</p>
-    <p><a class="button" href={FORM_URL}>お問い合わせフォームを開く</a></p>
+
+    <form class="cf" id="cf" action={ACTION} method="post" target="cf-sink">
+      <label>
+        <span>お名前（ニックネームでもかまいません）<em>必須</em></span>
+        <input type="text" name={ENTRY.name} required maxlength="100" autocomplete="nickname" />
+      </label>
+      <label>
+        <span>メールアドレス（返信が必要なとき）</span>
+        <input type="email" name={ENTRY.mail} maxlength="200" autocomplete="email" />
+      </label>
+      <label>
+        <span>お問い合わせの内容<em>必須</em></span>
+        <textarea name={ENTRY.body} required rows="8" maxlength="5000"></textarea>
+      </label>
+      <button type="submit" class="button">送信する</button>
+      <p class="cf-done" id="cf-done" role="status" hidden>送信しました。お問い合わせありがとうございます。</p>
+    </form>
+    <iframe name="cf-sink" id="cf-sink" title="送信の結果（表示しない）" hidden></iframe>
+
     <p>いただいた情報の扱いは<a href={`${base}privacy/`}>プライバシーポリシー</a>に書いています。</p>
   </article>
 </Base>
 
+<script>
+  // 送信の結果は見えない iframe に読み込む（Google フォームの画面を出さない）。読み込みが終わったら「送信しました」を出す
+  const form = document.getElementById('cf') as HTMLFormElement | null;
+  const sink = document.getElementById('cf-sink') as HTMLIFrameElement | null;
+  const done = document.getElementById('cf-done');
+  let sending = false;
+  form?.addEventListener('submit', () => {
+    sending = true;
+    form.querySelector('button')?.setAttribute('disabled', '');
+  });
+  sink?.addEventListener('load', () => {
+    if (!sending || !form || !done) return;
+    sending = false;
+    form.reset();
+    form.querySelector('button')?.removeAttribute('disabled');
+    done.hidden = false;
+  });
+</script>
+
 <style>
   h1 { font-size: 1.5rem; line-height: 1.5; margin: 32px 0 16px; }
+  .cf { display: grid; gap: 18px; margin: 24px 0; max-width: 640px; }
+  .cf label { display: grid; gap: 6px; }
+  .cf span { font-weight: 700; font-size: 0.95rem; }
+  .cf em { font-style: normal; font-weight: 400; font-size: 0.75rem; margin-left: 8px; padding: 1px 8px; border-radius: 999px; background: var(--line); color: var(--fg); }
+  .cf input, .cf textarea {
+    font: inherit; font-size: 16px; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid var(--muted); background: var(--surface); color: var(--fg); width: 100%;
+  }
+  .cf textarea { resize: vertical; }
   .button {
+    justify-self: start;
     display: inline-block;
-    padding: 8px 20px;
+    padding: 10px 28px;
+    font: inherit; font-weight: 700;
     border: 1px solid var(--accent);
     border-radius: 6px;
-    text-decoration: none;
+    background: var(--accent); color: var(--surface);
+    cursor: pointer;
   }
+  .button[disabled] { opacity: 0.6; cursor: default; }
+  .cf-done { margin: 0; padding: 12px 16px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
 </style>
