@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import { themeOf, excerpt } from '../lib/themes';
+import { themeOf, excerpt, hueVars } from '../lib/themes';
 
 interface Props {
   post: CollectionEntry<'posts'>;
@@ -15,7 +15,7 @@ const base = import.meta.env.BASE_URL;
 const date = post.data.pubDate.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
-<article class:list={['card', { featured }]} style={`--hue:${theme.hue};--mascot:url(${base}favicon.svg)`} data-cats={post.data.categories.join('|')} data-title={post.data.title}>
+<article class:list={['card', { featured }]} style={`${hueVars(theme.hue)};--mascot:url(${base}favicon.svg)`} data-cats={post.data.categories.join('|')} data-title={post.data.title}>
   <a href={`${base}${post.id}/`} class="card-link">
     <div class="thumb">
       {post.data.cover ? (

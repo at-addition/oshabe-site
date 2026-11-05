@@ -5,7 +5,7 @@
 import '@fontsource/zen-maru-gothic/900.css';
 import '@fontsource/zen-kaku-gothic-new/400.css';
 import '@fontsource/zen-kaku-gothic-new/700.css';
-import { THEMES, catUrl } from '../lib/themes';
+import { THEMES, catUrl, hueVars } from '../lib/themes';
 interface Props {
   title?: string;
   description?: string;
@@ -87,7 +87,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ']
         </a>
         <nav class="site-nav" aria-label="テーマ">
           {NAV.map((t) => (
-            <a href={catUrl(base, t.cat)} style={`--hue:${t.hue}`}>{t.label}</a>
+            <a href={catUrl(base, t.cat)} style={hueVars(t.hue)}>{t.label}</a>
           ))}
         </nav>
       </div>
@@ -139,7 +139,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ']
     --fg: #231815;
     --muted: #6f6763;
     --line: #e3e8eb;
-    --accent: #0093d6;
+    --accent: #0077b6; /* 白地で 4.5:1 に届く色（前は #0093d6 で 3.4。2026-11-06） */
     --shadow: 0 1px 2px rgb(20 40 60 / 6%), 0 8px 24px rgb(20 40 60 / 8%);
     --radius: 16px;
     --sat: 70%;
@@ -159,6 +159,9 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ']
       --tint: 20%;
     }
   }
+  /* テーマの字の明るさ。明るい画面はテーマごとの値（hueVars の --lt）、暗い画面は全部同じ */
+  [style*='--lt'] { --light: var(--lt); }
+  @media (prefers-color-scheme: dark) { [style*='--lt'] { --light: 66%; } }
   * { box-sizing: border-box; }
   /* 画面には出さず、読み上げと見出しの順番のためだけに置く */
   .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
