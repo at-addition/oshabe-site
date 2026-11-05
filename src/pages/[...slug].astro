@@ -5,7 +5,7 @@ import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import Crumbs from '../components/Crumbs.astro';
 import { breadcrumbLd } from '../lib/crumbs';
-import { themeOf, excerpt, catUrl, mainCat } from '../lib/themes';
+import { themeOf, excerpt, catUrl, mainCat, hueVars } from '../lib/themes';
 import { monthOf, monthUrl } from '../lib/months';
 
 export async function getStaticPaths() {
@@ -63,7 +63,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
 
 <Base title={post.data.title} description={excerpt(post.body, 110) || post.data.title} image={ogImage} largeImage={(post.data.cover?.width ?? 0) >= 600} type="article" jsonld={jsonld}>
   <Crumbs items={crumbs} />
-  <article class="post" style={`--hue:${theme.hue}`}>
+  <article class="post" style={hueVars(theme.hue)}>
     <header class="post-head">
       <div class="meta">
         {post.data.categories.map((c) => <a class="chip" href={catUrl(base, c)}>#{c}</a>)}
@@ -146,7 +146,7 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
   .share span { font-size: 0.85rem; color: var(--muted); margin-right: 4px; }
   .share a { padding: 8px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; text-decoration: none; color: #fff; }
   .share .x { background: #000; border: 1px solid #444; }
-  .share .line { background: #06c755; }
+  .share .line { background: #06c755; color: #000; } /* 白字だと 2.3:1 で読みにくい（2026-11-06） */
   .pager { max-width: 760px; margin: 28px auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .pager a {
     display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: var(--radius);

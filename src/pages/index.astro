@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
-import { THEMES } from '../lib/themes';
+import { THEMES, hueVars } from '../lib/themes';
 import { FIRST } from '../lib/themes';
 // 当時のマスコットの鳥（design/original/beyan_177x156.png をなぞった SVG）
 import bird from '../assets/beyan.svg?raw';
@@ -32,7 +32,7 @@ const last = latest?.data.pubDate.getFullYear();
   <section class="filters" aria-label="カテゴリで絞り込む">
     <button type="button" class="f-cat" data-cat="" aria-pressed="true">すべて <small>{posts.length}</small></button>
     {cats.map((c) => (
-      <button type="button" class="f-cat" data-cat={c.cat} aria-pressed="false" style={c.hue !== undefined ? `--hue:${c.hue}` : undefined}>
+      <button type="button" class="f-cat" data-cat={c.cat} aria-pressed="false" style={c.hue !== undefined ? hueVars(c.hue) : undefined}>
         {c.cat} <small>{c.count}</small>
       </button>
     ))}
@@ -154,10 +154,11 @@ const last = latest?.data.pubDate.getFullYear();
     border: 1px solid var(--line); background: var(--surface); color: var(--fg);
   }
   .filters button small { color: var(--muted); margin-left: 2px; }
+  .filters button[style] small { color: inherit; } /* 色の付いた地では件数もテーマの字の色に（灰色だと 4.5:1 に届かない。2026-11-06） */
   .filters button[style] { color: hsl(var(--hue) var(--sat) var(--light)); border-color: transparent; background: hsl(var(--hue) 70% var(--tint)); }
   .filters button[aria-pressed='true'] { background: var(--fg); color: var(--bg); border-color: transparent; }
   .filters button[style][aria-pressed='true'] { background: hsl(var(--hue) 70% var(--light)); color: #fff; }
-  .filters button[aria-pressed='true'] small { color: inherit; opacity: 0.8; }
+  .filters button[aria-pressed='true'] small { color: inherit; }
 
   .more-wrap { text-align: center; margin: 28px 0 0; }
   .more {
