@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { THEMES, catUrl } from '../lib/themes';
+import { THEMES, catUrl, hueVars } from '../lib/themes';
 const base = import.meta.env.BASE_URL;
 // よく書いたカテゴリへの入口
 const cats = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ', 'バレンタイン'].map((c) => ({ c, hue: THEMES.find((t) => t.cat === c)?.hue }));
@@ -15,7 +15,7 @@ const cats = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ'
       <input type="search" name="q" placeholder="記事のタイトルで探す" aria-label="記事のタイトルで探す" />
       <button type="submit">探す</button>
     </form>
-    <p class="nf-cats">{cats.map(({ c, hue }) => <a href={catUrl(base, c)} style={`--hue:${hue}`}>{c}</a>)}</p>
+    <p class="nf-cats">{cats.map(({ c, hue }) => <a href={catUrl(base, c)} style={hueVars(hue)}>{c}</a>)}</p>
     <p><a href={import.meta.env.BASE_URL}>← 記事の一覧へ</a></p>
   </section>
 </Base>
