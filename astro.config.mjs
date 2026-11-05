@@ -2,7 +2,8 @@
 import { defineConfig } from 'astro/config';
 import { readFileSync } from 'node:fs';
 
-// 2026-11-04 に外した記事（本文の薄い30本とインスタ映えの8本。scripts/import.py の HIDDEN_POSTS）の転送先。記事のテーマのカテゴリの一覧へ
+// 2026-11-04 に外した記事（本文の薄い30本とインスタ映えの8本。scripts/import.py の HIDDEN_POSTS）の転送先。記事のテーマのカテゴリの一覧へ。
+// インスタ映えの8本はトップへ（2026-11-05。おでかけのカテゴリはやめ、インスタ映えのカテゴリを持つ記事も無いので、送れる一覧のページが無い）
 const hidden = JSON.parse(readFileSync(new URL('./scripts/redirects.json', import.meta.url), 'utf-8'));
 
 // 独自ドメイン oshabe.com の直下に出す（public/CNAME と GitHub の Pages 設定も oshabe.com）。
@@ -14,7 +15,8 @@ export default defineConfig({
   // 昔の WordPress の URL（RSS とサイトマップのページ）を今のページへ送る
   // 今は出していないカテゴリ（芸能・漫画・家電・雑学）の一覧はトップへ
   redirects: {
-    '/feed': '/rss.xml', '/sitemap': '/',
+    // RSS は絶対 URL で送る。'/rss.xml' と書くと trailingSlash: 'always' のため Astro が後ろに / を足し、無いページ（/rss.xml/）へ送っていた（2026-11-05）
+    '/feed': 'https://oshabe.com/rss.xml', '/sitemap': '/',
     '/category/news': '/', '/category/未分類': '/', '/category/漫画': '/', '/category/家電': '/', '/category/雑学': '/',
     // おでかけのカテゴリはやめた（2026-11-05 本人の指示）
     '/category/おでかけ': '/',
