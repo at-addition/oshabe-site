@@ -5282,7 +5282,6 @@ wp-content/uploads/2017/11/FEWGEWG-300x250.jpg
 wp-content/uploads/2017/11/FRWGWRG-300x250.jpg
 wp-content/uploads/2017/11/FWEF-300x250.jpg
 wp-content/uploads/2017/11/FWEGEW-300x250.jpg
-wp-content/uploads/2017/11/GERGAI-150x150.jpg
 wp-content/uploads/2017/11/GREGG-300x250.jpg
 wp-content/uploads/2017/11/GREHE.jpg
 wp-content/uploads/2017/11/GRWH.jpg
@@ -5406,7 +5405,6 @@ wp-content/uploads/2017/11/few-2-300x250.jpg
 wp-content/uploads/2017/11/few.jpg
 wp-content/uploads/2017/11/few53-300x250.jpg
 wp-content/uploads/2017/11/few55555.jpg
-wp-content/uploads/2017/11/fewDAI-150x150.jpg
 wp-content/uploads/2017/11/fewaagge-300x250.jpg
 wp-content/uploads/2017/11/fewdeg2.jpg
 wp-content/uploads/2017/11/fewdg.jpg
@@ -5499,7 +5497,6 @@ wp-content/uploads/2017/11/fjieww2.jpg
 wp-content/uploads/2017/11/fjiwe-150x150.jpg
 wp-content/uploads/2017/11/fnewge.jpg
 wp-content/uploads/2017/11/fnewjog3.jpg
-wp-content/uploads/2017/11/fniqpe-150x150.jpg
 wp-content/uploads/2017/11/fnjew.jpg
 wp-content/uploads/2017/11/fnwle2.jpg
 wp-content/uploads/2017/11/fqaes2er2.jpg
@@ -5603,7 +5600,6 @@ wp-content/uploads/2017/11/gnwe3.jpg
 wp-content/uploads/2017/11/gr3wg342-300x250.jpg
 wp-content/uploads/2017/11/gr4t4.jpg
 wp-content/uploads/2017/11/grdsgg.jpg
-wp-content/uploads/2017/11/greAI-150x150.jpg
 wp-content/uploads/2017/11/greg.jpg
 wp-content/uploads/2017/11/greg23qw-300x250.jpg
 wp-content/uploads/2017/11/greg33r3-300x250.jpg
@@ -6113,7 +6109,6 @@ wp-content/uploads/2018/01/eafw-300x250.jpg
 wp-content/uploads/2018/01/eagge-300x250.jpg
 wp-content/uploads/2018/01/easggg.jpg
 wp-content/uploads/2018/01/ee1t-300x250.jpg
-wp-content/uploads/2018/01/eetet.jpg
 wp-content/uploads/2018/01/efdsf2.jpg
 wp-content/uploads/2018/01/efe.jpg
 wp-content/uploads/2018/01/efewg-300x250.jpg
