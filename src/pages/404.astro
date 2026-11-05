@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import { THEMES, catUrl } from '../lib/themes';
 const base = import.meta.env.BASE_URL;
 // よく書いたカテゴリへの入口
-const cats = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'おでかけ', 'バレンタイン'].map((c) => ({ c, hue: THEMES.find((t) => t.cat === c)?.hue }));
+const cats = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ', 'バレンタイン'].map((c) => ({ c, hue: THEMES.find((t) => t.cat === c)?.hue }));
 ---
 
 <Base title="ページが見つかりません" description="お探しのページは見つかりませんでした。" bare>
