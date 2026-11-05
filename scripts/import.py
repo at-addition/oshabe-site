@@ -147,8 +147,9 @@ for name in sorted(os.listdir(SRC)):
     }
     if meta.get('更新'):
         fm['updatedDate'] = meta['更新']
-    # 一覧のカードに出す画像は、本文の最初の画像（記事の .md から見た相対パス。Astro が縮小して出す）
-    first = re.search(r'!\[[^\]]*\]\((\.\./[^)]+)\)', body)
+    # 一覧のカードに出す画像は、本文の最初の画像（記事の .md から見た相対パス。Astro が縮小して出す）。
+    # 別の記事へのカード（[![](画像) 題](リンク)）の画像は、その記事の画像なので飛ばす（2026-11-06）
+    first = re.search(r'(?<!\[)!\[[^\]]*\]\((\.\./[^)]+)\)', body)
     if first:
         fm['cover'] = first.group(1)
     lines = ['---'] + [f'{k}: {json.dumps(v, ensure_ascii=False)}' for k, v in fm.items()] + ['---', '']

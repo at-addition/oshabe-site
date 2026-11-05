@@ -1,3 +1,4 @@
+import { lightOf } from './themes';
 // 一覧の「もっと見る」で、HTML に入れていない記事のカードを cards.json から足す（トップとカテゴリの一覧で使う）。
 // ページにある最初のカードを写して中身を入れ替えるので、見た目は PostCard.astro と同じになる
 export type Row = { u: string; t: string; c: string; h: number; l: string; d: string; e: string; i?: string; w?: number; ht?: number };
@@ -14,6 +15,7 @@ export async function addCards(grid: HTMLElement, keep: (r: Row) => boolean = ()
     if (have.has(r.u) || !keep(r)) continue;
     const c = tpl.cloneNode(true) as HTMLElement;
     c.style.setProperty('--hue', String(r.h));
+    c.style.setProperty('--lt', `${lightOf(r.h)}%`);
     c.dataset.cats = r.c;
     c.dataset.title = r.t;
     c.querySelector('a')!.href = r.u;

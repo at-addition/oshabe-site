@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PostCard from '../../components/PostCard.astro';
 import Crumbs from '../../components/Crumbs.astro';
-import { THEMES, catSlug, catUrl, FIRST } from '../../lib/themes';
+import { THEMES, catSlug, catUrl, FIRST, hueVars } from '../../lib/themes';
 import { breadcrumbLd } from '../../lib/crumbs';
 
 // カテゴリごとの記事の一覧（/category/<slug>/）。記事が1本でもあるカテゴリは自動でページになる
@@ -28,7 +28,7 @@ const jsonld = {
 
 <Base title={`${cat}の記事`} description={`オシャベの「${cat}」の記事 ${posts.length} 本`} jsonld={jsonld}>
   <Crumbs items={items} wide />
-  <header class="cat-head" style={`--hue:${hue}`}>
+  <header class="cat-head" style={hueVars(hue)}>
     <h1>{cat}</h1>
     <p>{posts.length} 本の記事</p>
   </header>
