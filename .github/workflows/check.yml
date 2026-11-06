@@ -1,0 +1,25 @@
+# PR のたびにビルドし、サイト内のリンク切れ（転送先・画像を含む）を調べる。公開はしない（2026-11-06）
+# auto-pr.yml が作る PR では動かない（GITHUB_TOKEN で作った PR はほかの workflow を起こさない）。そちらは auto-pr.yml が自分でビルドする
+name: Check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # 公開のときと同じく、画像の説明を付けてからビルドする
+      - run: python3 scripts/fill_alt.py
+      - run: npm run build
+      - run: python3 -I scripts/check_links.py dist / oshabe.com
