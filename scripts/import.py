@@ -288,6 +288,28 @@ for rel in written:
         prev[0] = lv
         return '#' * lv + ' '
     body = re.sub(r'^(#{2,6}) ', clamp, body, flags=re.M)
+    # 関連記事のカード（[![](画像) 題](リンク)）を文字のリンクにする（2026-11-06 本人「古い記事の中のカード約3,000個を文字のリンクにして」）。
+    # カードの画像は別の記事の表紙の縮小版で、本文の写真と見分けにくく、ページも重くしていた。
+    # カードだけの行は箇条書きにし、続くカードは1つのリストにまとめる。文の途中のカードはリンクだけにする
+    CARD = re.compile(r'\[!\[[^\]]*\]\([^)]*\)[ \t　]*([^\]\n]+?)[ \t　]*\]\(([^)\s]+)\)')
+    k = len(CARD.findall(body))
+    if k:
+        cleaned['カード'] += k
+        out = []
+        for ln in body.split('\n'):
+            t = ln.strip(' \t　')
+            if CARD.match(t) and not CARD.sub('', t).strip(' \t　'):
+                items = [f'- [{m.group(1)}]({m.group(2)})' for m in CARD.finditer(t)]
+                # 前のカードの行との間の空行は詰める（1つのリストにする）
+                j = len(out)
+                while j and not out[j - 1].strip():
+                    j -= 1
+                if j and out[j - 1].startswith('- [') and out[j - 1].endswith(')'):
+                    del out[j:]
+                out.extend(items)
+            else:
+                out.append(CARD.sub(lambda m: f'[{m.group(1)}]({m.group(2)})', ln))
+        body = '\n'.join(out)
     # 外した記事を指す崩れたブログカード（URL の行・抜粋・「このサイト内」の行と、直前の【見出し】）は丸ごと外す
     body, k = re.subn(r'(?:^【[^】\n]*】[ \t]*\n+)?^[ \t]*https?://(?:www\.)?' + re.escape(DOMAIN) + '/(?:' + '|'.join(map(re.escape, excluded)) +
                       r')/?[ \t]*\n+(?:^[^\n]*(?:\.\.\.|…)[ \t]*\n+)?(?:^[ \t]*' + re.escape(DOMAIN) + r'（このサイト内）[ \t]*$)?', '', body, flags=re.M)
