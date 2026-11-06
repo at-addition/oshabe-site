@@ -47,7 +47,7 @@ const posting = {
   datePublished: post.data.pubDate.toISOString(),
   dateModified: (updated ?? post.data.pubDate).toISOString(),
   ...(ogImage ? { image: new URL(ogImage, Astro.site).href } : {}),
-  author: { '@type': 'Person', name: 'オシャベ' },
+  author: { '@type': 'Person', name: 'オシャベ', url: new URL(`${base}about/`, Astro.site).href },
   publisher: { '@type': 'Organization', name: 'オシャベ', logo: { '@type': 'ImageObject', url: new URL(`${base}icon-512.png`, Astro.site).href } },
   mainEntityOfPage: ldUrl,
   inLanguage: 'ja',
@@ -61,7 +61,7 @@ const shareText = encodeURIComponent(post.data.title);
 const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrumbLd(crumbs, `${base}${post.id}/`, Astro.site)] };
 ---
 
-<Base title={post.data.title} description={excerpt(post.body, 110) || post.data.title} image={ogImage} largeImage={(post.data.cover?.width ?? 0) >= 600} type="article" jsonld={jsonld}>
+<Base title={post.data.title} description={post.data.description || excerpt(post.body, 110) || post.data.title} image={ogImage} largeImage={(post.data.cover?.width ?? 0) >= 600} type="article" jsonld={jsonld}>
   <Crumbs items={crumbs} />
   <article class="post" style={hueVars(theme.hue)}>
     <header class="post-head">

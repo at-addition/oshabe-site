@@ -19,6 +19,8 @@ const posts = defineCollection({
       // 一覧のカードに出す画像。記事の .md から見た相対パス（無ければテーマの色の帯になる）
       cover: image().optional(),
       original: z.string().optional(),
+      // 検索結果・共有・RSS に出す説明文。無ければ本文の書き出しから作る（2026-11-06）
+      description: z.string().optional(),
     }),
 });
 
