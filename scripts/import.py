@@ -61,6 +61,16 @@ SKIP_PAGES = {'sitemap', 'privacy', 'contact_form'}
 # 昔のタイトルの直し（scripts/titles.tsv。2026-11-03、書いた本人の確認済み）
 TITLE_FIX = dict(l.split('\t', 1) for l in open(os.path.join(ROOT, 'scripts', 'titles.tsv'), encoding='utf-8').read().splitlines()
                  if l and not l.startswith('#'))
+# 説明文の直し（scripts/descriptions.tsv。2026-11-06）。書き出しが同じで、検索結果の説明文が重なっていた記事
+DESC_FIX = dict(l.split('\t', 1) for l in open(os.path.join(ROOT, 'scripts', 'descriptions.tsv'), encoding='utf-8').read().splitlines()
+                if l and not l.startswith('#'))
+# 本文の中の、リンクになっていない外部の URL の直し（2026-11-06）。開けなくなったページは文字だけにし、開けるものはリンクにする
+URL_FIX = {
+    '参照：セリアHP https://www.seria-group.com/recommendation/pickup/2019/08/post-70.html':
+        '参照：セリアの公式サイト（2019年の特集ページ。今は公開されていません）',
+    '引用：wikipedia：https://ja.wikipedia.org/wiki/%E7%A7%8B%E5%88%86%E3%81%AE%E6%97%A5':
+        '引用：[ウィキペディア「秋分の日」](https://ja.wikipedia.org/wiki/%E7%A7%8B%E5%88%86%E3%81%AE%E6%97%A5)',
+}
 
 
 def read(name):
@@ -147,6 +157,8 @@ for name in sorted(os.listdir(SRC)):
         'categories': [c for c in cats if c not in DROP_CATS],
         'original': meta['元の URL'],
     }
+    if path in DESC_FIX:
+        fm['description'] = DESC_FIX[path]
     if meta.get('更新'):
         fm['updatedDate'] = meta['更新']
     # 一覧のカードに出す画像は、本文の最初の画像（記事の .md から見た相対パス。Astro が縮小して出す）。
@@ -288,6 +300,9 @@ for rel in written:
         prev[0] = lv
         return '#' * lv + ' '
     body = re.sub(r'^(#{2,6}) ', clamp, body, flags=re.M)
+    for a, b in URL_FIX.items():
+        body, k = body.replace(a, b), body.count(a)
+        cleaned['外部の URL'] += k
     # 関連記事のカード（[![](画像) 題](リンク)）を文字のリンクにする（2026-11-06 本人「古い記事の中のカード約3,000個を文字のリンクにして」）。
     # カードの画像は別の記事の表紙の縮小版で、本文の写真と見分けにくく、ページも重くしていた。
     # カードだけの行は箇条書きにし、続くカードは1つのリストにまとめる。文の途中のカードはリンクだけにする

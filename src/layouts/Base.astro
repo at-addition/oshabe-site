@@ -21,8 +21,9 @@ interface Props {
   largeImage?: boolean;
 }
 const SITE_NAME = 'オシャベ';
-// 当時のロゴ（OSHABE.com）。元の PNG を色ごとになぞって SVG にしたもの（design/original/logo_338x109.png）
-import logo from '../assets/oshabe-logo.svg?raw';
+// 当時のロゴ（OSHABE.com）。元の PNG を色ごとになぞって SVG にしたもの（design/original/logo_338x109.png）。
+// 67KB あるので HTML に埋め込まず、public/oshabe-logo.svg の symbol を <use> で呼ぶ（2ページ目からはキャッシュが効く。2026-11-06）。
+// 色は今までどおり currentColor と --logo-hole で変わる。ロゴを直したら scripts/logo_symbol.py で public 側を作り直す（外側の viewBox は 0 0 と幅・高さ。symbol の viewBox の位置ずれを打ち消す）
 // Google アドセンスのパブリッシャー ID（運営者のアカウント。public/ads.txt と揃える）
 const ADSENSE_CLIENT = 'ca-pub-5250963766765858';
 const { title, description = '100均・USJ・季節のイベントの話題', image, type = 'website', jsonld, bare = false, largeImage = true } = Astro.props;
@@ -56,7 +57,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ']
     {bare ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <link rel="sitemap" href={`${base}sitemap.xml`} />
     <link rel="alternate" type="application/rss+xml" title={SITE_NAME} href={`${base}rss.xml`} />
-    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+    <script type="application/ld+json" set:html={JSON.stringify(ld).replace(/</g, '\\u003c')} />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:type" content={type} />
     <meta property="og:title" content={pageTitle} />
@@ -80,10 +81,11 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ']
     ></script>}
   </head>
   <body>
+    <a class="skip" href="#main">本文へ</a>
     <header class="site-header">
       <div class="inner">
         <a class="site-name" href={base} aria-label={SITE_NAME}>
-          <span class="site-logo" set:html={logo} />
+          <span class="site-logo"><svg viewBox="0 0 2509 688" aria-hidden="true"><use href={`${base}oshabe-logo.svg#logo`} /></svg></span>
         </a>
         <nav class="site-nav" aria-label="テーマ">
           {NAV.map((t) => (
@@ -115,7 +117,7 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ']
         }));
       }
     </script>
-    <main>
+    <main id="main">
       <slot />
     </main>
     <footer class="site-footer">
@@ -164,6 +166,9 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ']
   @media (prefers-color-scheme: dark) { [style*='--lt'] { --light: 66%; } }
   * { box-sizing: border-box; }
   /* 画面には出さず、読み上げと見出しの順番のためだけに置く */
+  /* キーボードで来たときだけ出る「本文へ」（2026-11-06） */
+  .skip { position: absolute; left: 8px; top: -60px; z-index: 10; padding: 8px 16px; border-radius: 8px; background: var(--surface); color: var(--fg); box-shadow: var(--shadow); }
+  .skip:focus { top: 8px; }
   .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   html { -webkit-text-size-adjust: 100%; }
   body {

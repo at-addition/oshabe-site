@@ -18,9 +18,12 @@ const last = latest?.data.pubDate.getFullYear();
 ---
 
 <Base>
+  <!-- ページの見出し（画面には出さない）。サイトの紹介の見出しは下の h2（2026-11-06） -->
+  <h1 class="sr-only">オシャベ（OSHABE.com）あなたをおしゃべりにするひとネタ</h1>
 
   {latest && (
     <section class="latest" aria-label="いちばん新しい記事">
+      <h2 class="sr-only">いちばん新しい記事</h2>
       <PostCard post={latest} featured />
     </section>
   )}
@@ -49,7 +52,7 @@ const last = latest?.data.pubDate.getFullYear();
   <section class="hero">
     <div class="hero-text">
       <p class="hero-kicker">OSHABE.com</p>
-      <h1>あなたを<br />おしゃべりにする<br />ひとネタ</h1>
+      <h2>あなたを<br />おしゃべりにする<br />ひとネタ</h2>
       <p class="hero-lead">100均の新商品、USJ やディズニーのグッズ、ハロウィンやクリスマスの小物。写真たっぷりで紹介します。</p>
       <p class="hero-stats">
         <span><b>{posts.length}</b> 記事</span>
@@ -122,7 +125,7 @@ const last = latest?.data.pubDate.getFullYear();
     margin-top: 64px; padding: 40px 0 8px; border-top: 1px solid var(--line);
   }
   .hero-kicker { margin: 0; font-size: 0.78rem; letter-spacing: 0.28em; color: var(--accent); font-weight: 700; }
-  .hero h1 {
+  .hero h2 {
     margin: 8px 0 14px; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 900;
     font-size: clamp(1.9rem, 5.6vw, 3.1rem); line-height: 1.3; letter-spacing: 0.03em;
   }
