@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import { readFileSync } from 'node:fs';
+import imgSizes from './scripts/img-sizes.mjs';
 
 // 2026-11-04 に外した記事（本文の薄い30本とインスタ映えの8本。scripts/import.py の HIDDEN_POSTS）の転送先。記事のテーマのカテゴリの一覧へ
 const hidden = JSON.parse(readFileSync(new URL('./scripts/redirects.json', import.meta.url), 'utf-8'));
@@ -11,6 +12,10 @@ export default defineConfig({
   site: 'https://oshabe.com',
   base: '/',
   trailingSlash: 'always',
+  // 本文の写真に大きさ違いの候補（srcset）を付ける。sizes は scripts/img-sizes.mjs がビルドの最後に表示の幅へ直す（2026-11-06）。
+  // 見た目は今の CSS（[...slug].astro の .body img）のままにするので、Astro の付ける CSS は使わない。一覧のカードの画像は PostCard.astro で layout="none"
+  image: { layout: 'constrained', responsiveStyles: false },
+  integrations: [imgSizes()],
   // フォントのファイルは CSS に埋め込まない（4KB 未満が埋め込まれ、ページに無い文字の分まで毎回読ませていた。2026-11-06）
   vite: { build: { assetsInlineLimit: (file) => (/\.(woff2?|ttf)$/.test(file) ? false : undefined) } },
   // 昔の WordPress の URL（RSS とサイトマップのページ）を今のページへ送る
