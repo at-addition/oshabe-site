@@ -29,10 +29,13 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.first.outputs.page_url }}
     steps:
-      - id: deployment
+      # GitHub 側の取り込み（syncing_files）が 10 分を超えて時間切れになることがある（2026-11-06〜07 に4回。ビルドは通っている）。
+      # deploy-pages の待ちは 10 分が上限で延ばせないので、時間切れのときはもう1回だけ出し直す
+      - id: first
+        continue-on-error: true
         uses: actions/deploy-pages@v5
-        # ファイルが 1万を超え、既定の 10 分では GitHub 側の取り込み（syncing_files）が終わらないことがある（2026-11-07 に2回）
-        with:
-          timeout: 1800000
+      - id: deployment
+        if: steps.first.outcome == 'failure'
+        uses: actions/deploy-pages@v5
