@@ -26,6 +26,8 @@ const SITE_NAME = 'オシャベ';
 // 色は今までどおり currentColor と --logo-hole で変わる。ロゴを直したら scripts/logo_symbol.py で public 側を作り直す（外側の viewBox は 0 0 と幅・高さ。symbol の viewBox の位置ずれを打ち消す）
 // Google アドセンスのパブリッシャー ID（運営者のアカウント。public/ads.txt と揃える）
 const ADSENSE_CLIENT = 'ca-pub-5250963766765858';
+// Google アナリティクス（GA4）の測定 ID（2026-11-07。プロパティ oshabe.com・ウェブ ストリーム「オシャベ」）
+const GA_ID = 'G-JKLRRS37XN';
 const { title, description = '100均・USJ・季節のイベントの話題', image, type = 'website', jsonld, bare = false, largeImage = true } = Astro.props;
 const base = import.meta.env.BASE_URL;
 // 検索と SNS 向け。正規の URL と、共有したときのタイトル・説明・画像
@@ -79,6 +81,21 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ']
       src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
       crossorigin="anonymous"
     ></script>}
+    <!-- Google アナリティクス。表示を遅らせないようページの読み込みが終わってから読む。oshabe.com 以外（翻訳のページ・手元の確認）では動かさない -->
+    <script is:inline define:vars={{ GA_ID }}>
+      if (location.hostname === 'oshabe.com') {
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', GA_ID);
+        addEventListener('load', () => {
+          const s = document.createElement('script');
+          s.async = true;
+          s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+          document.head.appendChild(s);
+        });
+      }
+    </script>
   </head>
   <body>
     <a class="skip" href="#main">本文へ</a>
