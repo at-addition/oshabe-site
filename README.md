@@ -12,12 +12,13 @@ Astro で作り、GitHub Pages に出す。`hazieta-site` と同じ作り。
 
 | 場所 | 中身 |
 | :--- | :--- |
-| `src/content/posts/` | 記事の Markdown。昔の記事 329 本は `scripts/import.py` が書き出す（手で直さない）。新しい記事は手で置く |
-| `src/content/wp-content/` | 昔の記事の画像 9,155 枚。`import.py` が毎回作り直す |
+| `src/content/posts/` | 記事の Markdown。昔の記事は `scripts/import.py` が書き出す（手で直さない。本数は `import.py` が最後に出す）。新しい記事は手で置く |
+| `src/content/wp-content/` | 昔の記事の画像。`import.py` が毎回作り直す（どの記事も指さなくなった画像は消える） |
 | `src/content/images/` | 新しい記事の画像を置くところ |
 | `src/pages/` | 一覧（`index.astro`）・記事（`[...slug].astro`）・404・プライバシーポリシー（`privacy.astro`）・お問い合わせ（`contact.astro`） |
 | `src/components/PostCard.astro` | 一覧のカード（画像・テーマのバッジ・日付・タイトル・抜き出し） |
-| `src/lib/themes.ts` | カテゴリから決める「テーマ」（USJ・ディズニー・ハロウィン・100均など）と色。カードの抜き出しもここ |
+| `src/lib/themes.ts` | カテゴリから決める「テーマ」（USJ・ディズニー・ハロウィン・100均など）と色 |
+| `src/lib/excerpt.ts` | 本文から説明文を抜き出す処理（ハジエッセイと同じファイル） |
 | `src/assets/beyan.svg` | トップのマスコットの鳥（なぞった SVG） |
 | `src/layouts/Base.astro` | 全ページ共通の枠（サイト名・説明文・フッター・色・アドセンスのコード） |
 | `public/CNAME` | 独自ドメイン `oshabe.com` |
@@ -131,6 +132,25 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 - **お問い合わせは Google フォーム**「オシャベ お問い合わせ」（運営者の Google アカウントの持ち物）。
   ログインなしで誰でも送れる。新しい回答はメールで届く。フォームの URL は `contact.astro` の `FORM_URL`
 - プライバシーポリシーは昔のものを取り込まず、2026-10-24 に書き直した（`privacy.astro`）
+
+
+## もう1つのサイトと共通のファイル（2026-11-07）
+
+ハジエッセイ（`hazieta-site`）とオシャベ（`oshabe-site`）は同じ作りで、次のファイルは中身をそろえている。
+**片方を直したら、もう片方も続けて直す。** 直さないときは、その理由をこの節に書く。
+
+| ファイル | そろえているもの |
+| :--- | :--- |
+| `src/lib/excerpt.ts` | 本文から説明文を抜き出す処理（中身は同じ。`diff` で確かめられる） |
+| `scripts/check_links.py` | サイト内のリンク切れの検査（中身は同じ） |
+| `.github/workflows/check.yml` | PR のたびにビルドと検査（違いは `check_links.py` に渡す base とドメインだけ） |
+| `.github/workflows/deploy.yml` | 公開（月1回の定期ビルドと、時間切れのときの出し直し） |
+| `.github/dependabot.yml` | 依存の更新の知らせ（月1回） |
+| `scripts/fill_alt.py` | 画像の説明を付ける（オシャベは商品名の行も使う。ハジエッセイは題だけ） |
+| `src/layouts/Base.astro` | 「本文へ」のリンク・構造化データの `</script>` よけ・404 の noindex・翻訳ボタン・X のカードの大きさ（色・ロゴ・広告はサイトごと） |
+| `scripts/import.py` | 取り込みの片付け（空の見出し・「\|」の段落・見出しの段・URL のままのリンクの文字）。取り込み元や外す記事はサイトごと |
+
+サイトごとに違うもの（サイト名・色・カテゴリ／ゲーム・広告・アナリティクス）は、それぞれの `Base.astro` と `themes.ts`／`games.ts` にある。
 
 ## ブランチ運用
 

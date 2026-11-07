@@ -1,0 +1,12 @@
+# 依存の更新の知らせ（月1回。2026-11-07）。PR が来たら check.yml が通るのを見てからマージする
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

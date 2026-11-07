@@ -260,4 +260,6 @@ const NAV = ['100均', 'USJ', 'ハロウィン', 'クリスマス', 'グッズ']
   .translate { display: flex; justify-content: flex-end; gap: 6px; max-width: 1080px; margin: 6px auto 0; padding: 0 16px; box-sizing: border-box; }
   .translate a { font-size: 0.75rem; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); text-decoration: none; }
   .translate a:hover { color: var(--fg); border-color: var(--fg); }
+  /* 「視差効果を減らす」設定の人には動きを止める（ハジエッセイと同じ。2026-11-07） */
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 </style>
