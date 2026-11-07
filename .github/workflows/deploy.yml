@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # 月1回、記事を足していなくても作り直す（「この記事は〇年に書いたものです」の年数などはビルドした日から数えるため。2026-11-07）
+  schedule:
+    - cron: '0 18 1 * *'   # 毎月1日 3:00（日本時間）
 
 permissions:
   contents: read
