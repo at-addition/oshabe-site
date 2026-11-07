@@ -51,6 +51,12 @@ HIDDEN_POSTS = {
     # 2026-11-07 本人「セリアの2本は外して。いつでも戻せるようにしておいて」。写真がセリアの公式サイトの画像（第三者の画像）
     '2019/09/06/507', '2019/09/06/508',
 }
+# 地の文の少ない昔の記事（scripts/hidden_thin.txt。2026-11-07、AdSense の審査のため一時的に）。INCLUDE_THIN を True にすると全部戻る
+INCLUDE_THIN = False
+if not INCLUDE_THIN:
+    HIDDEN_POSTS |= {l.split('\t', 1)[0] for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'hidden_thin.txt'), encoding='utf-8').read().splitlines()
+                     if l and not l.startswith('#')}
+
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOMAIN = 'oshabe.com'
