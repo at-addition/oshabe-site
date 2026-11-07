@@ -33,3 +33,6 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v5
+        # ファイルが 1万を超え、既定の 10 分では GitHub 側の取り込み（syncing_files）が終わらないことがある（2026-11-07 に2回）
+        with:
+          timeout: 1800000
