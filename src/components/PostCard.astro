@@ -30,7 +30,7 @@ const date = post.data.pubDate.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tok
         <time datetime={post.data.pubDate.toISOString()}>{date}</time>
       </div>
       <h3>{post.data.title}</h3>
-      <p class="excerpt">{excerpt(post.body, featured ? 120 : 60)}</p>
+      <p class="excerpt">{post.data.description || excerpt(post.body, featured ? 120 : 60)}</p>
     </div>
   </a>
 </article>
