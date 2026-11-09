@@ -1,9 +1,9 @@
 ---
 title: "TOP TOYのMayMei2026【画像・値段】冬のぬいぐるみ、がま口"
-pubDate: "2026-11-09"
+pubDate: "2026-11-10"
 description: "TOP TOYのMayMeiのぬいぐるみのブラインドボックス4種類を写真と値段で紹介。Winter Promise、Surprise Party、がま口型など、税込2,860円から3,300円まで（2026年11月9日時点）。"
 categories: ["グッズ", "イベント", "クリスマス"]
-cover: "../../../../images/2026-11-09-toptoy-maymei-winter-03.jpg"
+cover: "../../../../images/2026-11-10-toptoy-maymei-winter-03.jpg"
 ---
 寒くなってきて、ふわふわのぬいぐるみが恋しい季節になりましたね☆
 
@@ -25,7 +25,7 @@ MayMeiは、大きな目の子が動物の着ぐるみのようなフードを�
 
 MayMei Winter Promise Series Plush Doll Blind Box
 
-![](../../../../images/2026-11-09-toptoy-maymei-winter-03.jpg)
+![](../../../../images/2026-11-10-toptoy-maymei-winter-03.jpg)
 
 税込3,300円です。
 
@@ -41,7 +41,7 @@ MayMei Winter Promise Series Plush Doll Blind Box
 
 MayMei Winter Weirdness
 
-![](../../../../images/2026-11-09-toptoy-maymei-winter-04.jpg)
+![](../../../../images/2026-11-10-toptoy-maymei-winter-04.jpg)
 
 値札の文字は、写真では読み取れませんでした。
 
@@ -57,7 +57,7 @@ MayMei Winter Weirdness
 
 MayMei Surprise Party
 
-![](../../../../images/2026-11-09-toptoy-maymei-winter-01.jpg)
+![](../../../../images/2026-11-10-toptoy-maymei-winter-01.jpg)
 
 値札は「税込 2,860円」「税抜 2,600円」です。
 
@@ -74,7 +74,7 @@ MayMei Surprise Party
 
 MayMei Cute Pet Little Pocket Series Plush Doll Blind Box
 
-![](../../../../images/2026-11-09-toptoy-maymei-winter-02.jpg)
+![](../../../../images/2026-11-10-toptoy-maymei-winter-02.jpg)
 
 税込3,080円です。
 
