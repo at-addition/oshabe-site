@@ -26,7 +26,7 @@ const jsonld = {
 };
 ---
 
-<Base title={`${cat}の記事`} description={`オシャベの「${cat}」の記事 ${posts.length} 本`} jsonld={jsonld}>
+<Base title={`${cat}の記事`} description={`オシャベの「${cat}」の記事 ${posts.length} 本を、新しい順に写真つきで並べています。${posts.slice(0, 2).map((p) => p.data.title).join('／')}`} jsonld={jsonld}>
   <Crumbs items={items} wide />
   <header class="cat-head" style={hueVars(hue)}>
     <h1>{cat}</h1>
