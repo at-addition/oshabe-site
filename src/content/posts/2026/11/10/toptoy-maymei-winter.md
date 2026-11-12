@@ -1,7 +1,7 @@
 ---
 title: "TOP TOYのMayMei2026【画像・値段】冬のぬいぐるみ、がま口"
 pubDate: "2026-11-10"
-description: "TOP TOYのMayMeiのぬいぐるみのブラインドボックス4種類を写真と値段で紹介。Winter Promise、Surprise Party、がま口型など、税込2,860円から3,300円まで（2026年11月9日時点）。"
+description: "TOP TOYのMayMeiのブラインドボックス4種類を写真と値段で紹介。Winter Promise、Surprise Party、がま口型など、税込2,860円から3,300円まで（2026年11月9日時点）。"
 categories: ["グッズ", "イベント", "クリスマス"]
 cover: "../../../../images/2026-11-10-toptoy-maymei-winter-03.jpg"
 ---
