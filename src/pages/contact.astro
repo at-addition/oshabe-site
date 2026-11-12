@@ -10,7 +10,7 @@ const ENTRY = { name: 'entry.938436071', mail: 'entry.1598231476', body: 'entry.
 const base = import.meta.env.BASE_URL;
 ---
 
-<Base title="お問い合わせ" description="オシャベへのお問い合わせ">
+<Base title="お問い合わせ" description="オシャベへのお問い合わせのページです。記事の内容へのご質問やご感想は、こちらのフォームからお送りください。">
   <article>
     <h1>お問い合わせ</h1>
     <p>当サイトへのお問い合わせは、下のフォームからお送りください。返信が必要なときは、メールアドレスもご記入ください。</p>
@@ -28,8 +28,12 @@ const base = import.meta.env.BASE_URL;
         <span>お問い合わせの内容<em>必須</em></span>
         <textarea name={ENTRY.body} required rows="8" maxlength="5000"></textarea>
       </label>
+      <p class="cf-hp" aria-hidden="true">
+        <label>この欄には何も入れないでください<input type="text" id="cf-hp" tabindex="-1" autocomplete="off" /></label>
+      </p>
       <button type="submit" class="button">送信する</button>
       <p class="cf-done" id="cf-done" role="status" hidden>送信しました。お問い合わせありがとうございます。</p>
+      <p class="cf-done cf-fail" id="cf-fail" role="alert" hidden>送信できなかったようです。通信の状態を確かめて、少し時間をおいてからもう一度お試しください。</p>
     </form>
     <iframe name="cf-sink" id="cf-sink" title="送信の結果（表示しない）" hidden></iframe>
 
@@ -38,18 +42,38 @@ const base = import.meta.env.BASE_URL;
 </Base>
 
 <script>
-  // 送信の結果は見えない iframe に読み込む（Google フォームの画面を出さない）。読み込みが終わったら「送信しました」を出す
+  // 送信の結果は見えない iframe に読み込む（Google フォームの画面を出さない）。読み込みが終わったら「送信しました」を出す。
+  // 15秒たっても読み込みが終わらないときは、送れなかった案内を出す（通信が切れている・送り先に届かない）。
+  // 見えない欄（cf-hp）に何か入っていたら bot とみなし、送らずに「送信しました」だけ出す
   const form = document.getElementById('cf') as HTMLFormElement | null;
   const sink = document.getElementById('cf-sink') as HTMLIFrameElement | null;
   const done = document.getElementById('cf-done');
+  const fail = document.getElementById('cf-fail');
+  const hp = document.getElementById('cf-hp') as HTMLInputElement | null;
   let sending = false;
-  form?.addEventListener('submit', () => {
+  let timer = 0;
+  form?.addEventListener('submit', (e) => {
+    if (done) done.hidden = true;
+    if (fail) fail.hidden = true;
+    if (hp && hp.value) {
+      e.preventDefault();
+      form.reset();
+      if (done) done.hidden = false;
+      return;
+    }
     sending = true;
     form.querySelector('button')?.setAttribute('disabled', '');
+    timer = window.setTimeout(() => {
+      if (!sending) return;
+      sending = false;
+      form.querySelector('button')?.removeAttribute('disabled');
+      if (fail) fail.hidden = false;
+    }, 15000);
   });
   sink?.addEventListener('load', () => {
     if (!sending || !form || !done) return;
     sending = false;
+    window.clearTimeout(timer);
     form.reset();
     form.querySelector('button')?.removeAttribute('disabled');
     done.hidden = false;
@@ -77,5 +101,7 @@ const base = import.meta.env.BASE_URL;
     cursor: pointer;
   }
   .button[disabled] { opacity: 0.6; cursor: default; }
+  .cf-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .cf-fail { border-color: var(--accent); }
   .cf-done { margin: 0; padding: 12px 16px; border-radius: 8px; background: var(--surface); border: 1px solid var(--line); }
 </style>
