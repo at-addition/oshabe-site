@@ -56,7 +56,8 @@ coverPosition: "50% 30%"   # カードは 4:3 に切り抜く。商品が真ん�
 - スマホで撮った写真は `python -I scripts/prep_photos.py <写真のフォルダ> --date yyyy-mm-dd` で置く。
   撮った順に `yyyy-mm-dd-01.jpg` からの連番にし、向きを直し、長辺 1600px に縮め、位置情報などの EXIF を落とす。
   右下に昔の写真と同じ「OSHABE」の透かしを入れる（`scripts/watermark.png`。`--no-mark` で入れない、置いた画像に入れるだけなら `--mark <画像>`）。
-  HEIC は `pip install pillow-heif` が要る。`--sheet 一覧.jpg` で番号入りの縮小一覧も出せる
+  HEIC は `pip install pillow-heif` が要る。`--sheet 一覧.jpg` で番号入りの縮小一覧も出せる。
+  撮影情報の残った画像が入ると、PR の検査・フォームからの PR・公開が `scripts/check_exif.py` で止まる（ただし push した時点で履歴には残る）
 - 昔の記事と同じパスに置くと、次に `import.py` を動かしたときに止まって知らせる
 
 ## 昔の記事を取り込み直す
@@ -149,7 +150,8 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
 | :--- | :--- |
 | `src/lib/excerpt.ts` | 本文から説明文を抜き出す処理（中身は同じ。`diff` で確かめられる） |
 | `scripts/check_links.py` | サイト内のリンク切れの検査（中身は同じ） |
-| `.github/workflows/check.yml` | PR のたびにビルドと検査（違いは `check_links.py` に渡す base とドメインだけ） |
+| `scripts/check_exif.py` | 画像に位置情報などの撮影情報が残っていないかの検査（中身は同じ。PR の検査と公開の前、オシャベは auto-pr.yml でも。2026-11-14） |
+| `.github/workflows/check.yml` | PR のたびに撮影情報の検査・ビルド・リンク切れの検査（違いは `check_links.py` に渡す base とドメインだけ） |
 | `.github/workflows/deploy.yml` | 公開（月1回の定期ビルドと、時間切れのときの出し直し） |
 | `.github/dependabot.yml` | 依存の更新の知らせ（月1回） |
 | `scripts/fill_alt.py` | 画像の説明を付ける（オシャベは商品名の行も使う。ハジエッセイは題だけ） |

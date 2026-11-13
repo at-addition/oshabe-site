@@ -34,6 +34,9 @@ jobs:
             exit 1
           fi
 
+      # 画像に位置情報などの撮影情報が残っていないか（2026-11-14）。残っていれば PR を作らない
+      - run: python3 -I scripts/check_exif.py
+
       - uses: actions/setup-node@v7
         with:
           node-version: 22

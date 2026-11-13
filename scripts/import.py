@@ -28,8 +28,11 @@ NOT_GOSSIP = {'halloween2016', 'usj_amex2'}
 # 戻すときは集合から外すか INCLUDE_HIDDEN を True にして取り込み直す
 INCLUDE_HIDDEN = False
 HIDDEN_CATS = {'漫画', '家電', '雑学'}
-# 記事は出すが、カテゴリとしては付けないもの（2026-11-05 本人「おでかけをやめたい」。付け方がばらばらだったため）
-DROP_CATS = {'おでかけ'}
+# 記事は出すが、カテゴリとしては付けないもの（2026-11-05 本人「おでかけをやめたい」。付け方がばらばらだったため）。
+# ポケモンセンターは 2026-11-14 にやめた（グッズに集約。ポケモンセンターの記事はどれもグッズも付いている）
+DROP_CATS = {'おでかけ', 'ポケモンセンター'}
+# 名前を変えたカテゴリ（2026-11-14。ディズニーシーをディズニーに。ディズニーランドも同じ一覧にまとめる）
+RENAME_CATS = {'ディズニーシー': 'ディズニー', 'ディズニーランド': 'ディズニー'}
 # 記事ごとに外すもの（2026-11-03 本人「AMEX の記事、中身の薄い記事、重複の1本を外して」）。戻すときは集合から消すか INCLUDE_HIDDEN を True に。
 # 外した URL は astro.config.mjs の redirects でカテゴリの一覧などへ送る
 HIDDEN_POSTS = {
@@ -162,7 +165,7 @@ for name in sorted(os.listdir(SRC)):
     fm = {
         'title': title,
         'pubDate': meta['公開'],
-        'categories': [c for c in cats if c not in DROP_CATS],
+        'categories': list(dict.fromkeys(RENAME_CATS.get(c, c) for c in cats if c not in DROP_CATS)),
         'original': meta['元の URL'],
     }
     if path in DESC_FIX:
