@@ -18,6 +18,8 @@ const posts = defineCollection({
       categories: z.array(z.string()).default([]),
       // 一覧のカードに出す画像。記事の .md から見た相対パス（無ければテーマの色の帯になる）
       cover: image().optional(),
+      // カードは 4:3 に切り抜く。商品が真ん中に無い写真は、切り抜く位置を「横% 縦%」で書く（例: "50% 30%" は上寄り。無ければ真ん中）
+      coverPosition: z.string().regex(/^\d{1,3}% \d{1,3}%$/).optional(),
       original: z.string().optional(),
       // 検索結果・共有・RSS に出す説明文。無ければ本文の書き出しから作る（2026-11-06）
       description: z.string().optional(),

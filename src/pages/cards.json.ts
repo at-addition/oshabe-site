@@ -12,8 +12,9 @@ export const GET: APIRoute = async () => {
     const img = p.data.cover ? await getImage({ src: p.data.cover, width: 480 }) : undefined;
     return {
       u: `${base}${p.id}/`, t: p.data.title, c: p.data.categories.join('|'), h: t.hue, l: t.label,
-      d: p.data.pubDate.toISOString(), e: excerpt(p.body, 60),
+      d: p.data.pubDate.toISOString(), e: p.data.description || excerpt(p.body, 60),
       ...(img ? { i: img.src, w: img.attributes.width, ht: img.attributes.height } : {}),
+      ...(p.data.coverPosition ? { p: p.data.coverPosition } : {}),
     };
   }));
   return new Response(JSON.stringify(rows), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });
