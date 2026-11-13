@@ -19,7 +19,7 @@ const date = post.data.pubDate.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tok
   <a href={`${base}${post.id}/`} class="card-link">
     <div class="thumb">
       {post.data.cover ? (
-        <Image src={post.data.cover} alt="" width={featured ? 720 : 480} layout="none" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} />
+        <Image src={post.data.cover} alt="" width={featured ? 720 : 480} layout="none" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} style={post.data.coverPosition ? `object-position:${post.data.coverPosition}` : undefined} />
       ) : (
         <span class="thumb-fallback">{theme.label}</span>
       )}
