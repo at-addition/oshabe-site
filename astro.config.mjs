@@ -26,6 +26,9 @@ export default defineConfig({
     '/category/news': '/', '/category/未分類': '/', '/category/漫画': '/', '/category/家電': '/', '/category/雑学': '/',
     // おでかけのカテゴリはやめた（2026-11-05 本人の指示）
     '/category/おでかけ': '/',
+    // ポケモンセンターはグッズに集約し、ディズニーシー（とディズニーランド）はディズニーにした（2026-11-14 本人の指示）
+    '/category/ポケモンセンター': '/category/goods/',
+    '/category/ディズニーシー': '/category/ディズニー/', '/category/ディズニーランド': '/category/ディズニー/',
     // 公開した日の URL で出してしまった記事を、写真を撮った日へ移した（2026-11-03）
     '/2026/11/03/koalas-march-fantasy-soda': '/2026/07/15/koalas-march-fantasy-soda/',
     '/2026/11/04/usj-mario-goods': '/2026/09/21/usj-mario-goods/',

@@ -10,8 +10,8 @@ export interface Theme {
 
 export const THEMES: Theme[] = [
   { cat: 'USJ', label: 'USJ', hue: 215, light: 42 },
-  { cat: 'ディズニーランド', label: 'ディズニー', hue: 275, light: 42 },
-  { cat: 'ディズニーシー', label: 'ディズニー', hue: 275, light: 42 },
+  // ディズニーシー・ディズニーランドは 2026-11-14 に「ディズニー」1つにした（scripts/import.py の RENAME_CATS）
+  { cat: 'ディズニー', label: 'ディズニー', hue: 275, light: 42 },
   { cat: 'ハロウィン', label: 'ハロウィン', hue: 26, light: 37 },
   { cat: 'クリスマス', label: 'クリスマス', hue: 355, light: 42 },
   { cat: 'バレンタイン', label: 'バレンタイン', hue: 330, light: 42 },

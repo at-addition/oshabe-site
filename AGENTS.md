@@ -7,7 +7,7 @@
 - `src/content/posts/` は、置いた場所のパスがそのまま URL になる
 - 昔の記事（`scripts/imported.txt` に載っているもの）は `scripts/import.py` が書き出す。**手で直さない**（直すなら `import.py` を直して取り込み直す）
 - 新しい記事の画像は `src/content/images/` に置く。`src/content/wp-content/` は `import.py` が毎回作り直す
-- スマホの写真は `scripts/prep_photos.py` を通す（位置情報などの EXIF を落とし、透かしを入れる）
+- スマホの写真は `scripts/prep_photos.py` を通す（位置情報などの EXIF を落とし、透かしを入れる）。残っていると `scripts/check_exif.py` が PR と公開を止める
 - 記事の画像の説明（alt）は空で書いてよい。公開のたびに `scripts/fill_alt.py` が付ける
 - もう1つのサイトと共通のファイルは README の「もう1つのサイトと共通のファイル」。片方を直したらもう片方も直す
 
