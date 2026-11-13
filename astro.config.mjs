@@ -31,9 +31,14 @@ export default defineConfig({
     '/2026/11/04/usj-mario-goods': '/2026/09/21/usj-mario-goods/',
     // 同じく写真を撮った日へ移した（2026-11-05 本人の指示。麦わらストアは10月の日付で、という指示なので 10/18 にした）
     '/2026/11/05/mugiwara-store-goods': '/2026/10/18/mugiwara-store-goods/',
-    '/2026/11/05/capcorom': '/2026/11/02/capcorom/',
+    '/2026/11/05/capcorom': '/2026/10/16/capcorom/',
     '/2026/11/05/pokemon-center-stickers': '/2026/11/01/pokemon-center-stickers/',
     '/2026/11/06/myakumyaku-goods': '/2026/11/07/myakumyaku-goods/',
+    // 記事の日付を付け直した（2026-11-13）
+    '/2026/11/02/capcorom': '/2026/10/16/capcorom/',
+    '/2026/11/08/myakumyaku-mascot': '/2026/10/20/myakumyaku-mascot/',
+    '/2026/11/13/xmas-ornament-headband': '/2026/11/02/xmas-ornament-headband/',
+    '/2026/11/06/loft-new-year-2027': '/2026/11/13/loft-new-year-2027/',
     // 外した記事（2026-11-03 本人「AMEX の記事、中身の薄い記事、重複の1本を外して」。scripts/import.py の HIDDEN_POSTS）は近いカテゴリの一覧へ
     '/2018/08/30/usj_amex': '/category/usj/', '/usj_amex2': '/category/usj/', '/2016/09/23/65': '/category/usj/',
     '/2017/02/07/149': '/category/バレンタイン/', '/2016/09/07/48': '/category/ハロウィン/', '/2017/03/26/192': '/category/puchipura/',
