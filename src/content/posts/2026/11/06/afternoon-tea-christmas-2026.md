@@ -1,6 +1,7 @@
 ---
 title: "Afternoon Teaのクリスマス2026【画像・値段】紅茶、LEDライト"
-pubDate: "2026-11-13"
+pubDate: "2026-11-06"
+updatedDate: "2026-11-13"
 description: "Afternoon Tea LIVINGのクリスマス雑貨を写真と値段で紹介。Yumi Kitagishiの紅茶や貯金箱、LEDライトなど16点、税込648円から13,200円まで（2026年11月13日時点）。"
 categories: ["クリスマス", "グッズ", "イベント"]
 cover: "../../../../images/2026-11-13-afternoon-tea-christmas-2026-01.jpg"
@@ -19,7 +20,7 @@ Afternoon Tea LIVING（アフタヌーンティー・リビング）に行った
 
  ▼その他クリスマスグッズ2026はコチラ
 
-- [ワッツのクリスマス2026【画像・値段】オーナメント、カチューシャ、リース](../../../../2026/11/13/xmas-ornament-headband/)
+- [ワッツのクリスマス2026【画像・値段】オーナメント、カチューシャ、リース](../../../../2026/11/02/xmas-ornament-headband/)
 - [無印良品のクリスマスお菓子2026【画像・値段】バウムリース、ヘクセンハウス](../../../../2026/11/12/muji-christmas-sweets/)
 - [LAKOLE（ラコレ）のクリスマス2026【画像・値段】リース、ツリー](../../../../2026/11/11/lakole-christmas-2026/)
 - [ダイソーのクリスマス雑貨2026【画像・値段】ウッドオブジェ、スノードーム](../../../../2026/11/04/daiso-christmas-2026/)
@@ -192,7 +193,7 @@ English Tea Shop（イングリッシュティーショップ）の、クリス�
 
 いかがでしたか。
 
-Afternoon Tea LIVINGでは、Yumi Kitagishiの紅茶と雑貨、LEDライト、ガラスレスト、English Tea Shopの紅茶の16点が並んでいました。
+Afternoon Tea LIVINGでは、紅茶と雑貨、LEDライト、ガラスレストなど16点が並んでいました。
 
 値段は、税込648円から13,200円までです。
 
