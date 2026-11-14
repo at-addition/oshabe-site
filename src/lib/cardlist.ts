@@ -1,7 +1,7 @@
-import { lightOf } from './themes';
+import { lightOf, coverStyle } from './themes';
 // 一覧の「もっと見る」で、HTML に入れていない記事のカードを cards.json から足す（トップとカテゴリの一覧で使う）。
 // ページにある最初のカードを写して中身を入れ替えるので、見た目は PostCard.astro と同じになる
-export type Row = { u: string; t: string; c: string; h: number; l: string; d: string; e: string; i?: string; w?: number; ht?: number; p?: string };
+export type Row = { u: string; t: string; c: string; h: number; l: string; d: string; e: string; i?: string; w?: number; ht?: number; p?: string; z?: number };
 
 const fmt = (iso: string) => new Date(iso).toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
 
@@ -24,12 +24,14 @@ export async function addCards(grid: HTMLElement, keep: (r: Row) => boolean = ()
     if (r.i && img) {
       img.removeAttribute('srcset');
       img.src = r.i; img.width = r.w ?? 480; img.height = r.ht ?? 360; img.alt = '';
-      img.style.objectPosition = r.p ?? '';
+      const st = coverStyle(r.p, r.z);
+      if (st) img.setAttribute('style', st); else img.removeAttribute('style');
     } else if (r.i && fallback) {
       const im = document.createElement('img');
       for (const a of fallback.getAttributeNames()) if (a.startsWith('data-astro')) im.setAttribute(a, '');
       im.src = r.i; im.width = r.w ?? 480; im.height = r.ht ?? 360; im.alt = ''; im.loading = 'lazy';
-      if (r.p) im.style.objectPosition = r.p;
+      const st = coverStyle(r.p, r.z);
+      if (st) im.setAttribute('style', st);
       fallback.replaceWith(im);
     } else if (img) {
       const s = document.createElement('span');
