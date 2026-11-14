@@ -1,11 +1,11 @@
 ---
 import { getCollection, render, type CollectionEntry } from 'astro:content';
-import { getImage } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PostCard from '../components/PostCard.astro';
 import Crumbs from '../components/Crumbs.astro';
 import { breadcrumbLd } from '../lib/crumbs';
-import { themeOf, excerpt, catUrl, mainCat, hueVars } from '../lib/themes';
+import { themeOf, excerpt, catUrl, mainCat, hueVars, coverStyle } from '../lib/themes';
 import { monthOf, monthUrl } from '../lib/months';
 
 export async function getStaticPaths() {
@@ -32,6 +32,10 @@ const { Content } = await render(post);
 const theme = themeOf(post.data.categories);
 // SNS で共有したときの画像（記事の最初の画像を JPEG で幅 1200 まで）
 const ogImage = post.data.cover ? (await getImage({ src: post.data.cover, width: 1200, format: 'jpeg' })).src : undefined;
+// 題の下に出す表紙の写真（2026-11-14）。本文の最初の写真は、書き出しと「▼その他…」の後ろで、スマホでは2画面ほど下にあったため。
+// 切り抜きは一覧のカードと同じ 4:3 と coverPosition・coverZoom。拡大する分だけ大きい画像を作る（元の幅は超えない）
+const zoom = post.data.coverZoom ?? 1;
+const heroWidths = post.data.cover ? [...new Set([480, 760, 1140].map((w) => Math.min(Math.round(w * zoom), post.data.cover!.width)))] : [];
 const base = import.meta.env.BASE_URL;
 // 予約投稿の名残で更新日が公開日より前の記事がある（2017/06/03/267）。その更新日は使わない
 const updated = post.data.updatedDate && post.data.updatedDate > post.data.pubDate ? post.data.updatedDate : undefined;
@@ -74,6 +78,11 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
         {updated && <span>（{fmt(updated)} 更新）</span>}
       </p>
     </header>
+    {post.data.cover && (
+      <div class="hero">
+        <Image src={post.data.cover} alt="" widths={heroWidths} sizes="(max-width: 792px) calc(100vw - 32px), 760px" layout="none" loading="eager" fetchpriority="high" style={coverStyle(post.data.coverPosition, post.data.coverZoom)} />
+      </div>
+    )}
     {age >= 1 && (
       <p class="old-note">この記事は {year} 年に書いたものです。値段や販売の状況は当時のもので、今とは違うことがあります。</p>
     )}
@@ -113,6 +122,12 @@ const jsonld = { '@context': 'https://schema.org', '@graph': [posting, breadcrum
   h1 { font-family: 'Zen Maru Gothic', sans-serif; font-size: clamp(1.4rem, 4vw, 2rem); line-height: 1.45; margin: 14px 0 8px; font-weight: 900; }
   .date { margin: 0; color: var(--muted); font-size: 0.88rem; }
   .date-link { color: inherit; }
+  /* 表紙の写真。本文の写真と同じものが後ろにも出るので、読み上げでは飛ばす（alt は空） */
+  .hero {
+    position: relative; aspect-ratio: 4 / 3; overflow: hidden; margin: 0 0 24px;
+    border-radius: var(--radius); box-shadow: var(--shadow); background: var(--surface);
+  }
+  .hero :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .body { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px clamp(18px, 5vw, 48px); }
   /* 元の記事は1行ずつ段落になっているので、段落の間を詰めて当時の見え方に寄せる */
