@@ -45,5 +45,8 @@ export const FIRST = 24;
 const SLUGS: Record<string, string> = { USJ: 'usj', クリスマス: 'xmas', プチプラ: 'puchipura', グッズ: 'goods', イベント: 'event' };
 export const catSlug = (cat: string) => SLUGS[cat] ?? cat;
 export const catUrl = (base: string, cat: string) => `${base}category/${catSlug(cat)}/`;
+/** 一覧のカードの画像の style（切り抜く位置と、余白の多い写真の拡大。拡大は位置の点を中心に寄る。2026-11-14） */
+export const coverStyle = (pos?: string, zoom?: number) =>
+  [pos && `object-position:${pos}`, zoom && zoom > 1 && `transform:scale(${zoom});transform-origin:${pos ?? '50% 50%'}`].filter(Boolean).join(';') || undefined;
 /** 記事のパンくずに出すカテゴリ（テーマのカテゴリ、無ければ最初のカテゴリ） */
 export const mainCat = (categories: string[]) => (categories.includes(themeOf(categories).cat) ? themeOf(categories).cat : categories[0]);

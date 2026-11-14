@@ -9,12 +9,13 @@ export const GET: APIRoute = async () => {
   const posts = (await getCollection('posts')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
   const rows = await Promise.all(posts.map(async (p) => {
     const t = themeOf(p.data.categories);
-    const img = p.data.cover ? await getImage({ src: p.data.cover, width: 480 }) : undefined;
+    const img = p.data.cover ? await getImage({ src: p.data.cover, width: Math.round(480 * (p.data.coverZoom ?? 1)) }) : undefined;
     return {
       u: `${base}${p.id}/`, t: p.data.title, c: p.data.categories.join('|'), h: t.hue, l: t.label,
       d: p.data.pubDate.toISOString(), e: p.data.description || excerpt(p.body, 60),
       ...(img ? { i: img.src, w: img.attributes.width, ht: img.attributes.height } : {}),
       ...(p.data.coverPosition ? { p: p.data.coverPosition } : {}),
+      ...(p.data.coverZoom ? { z: p.data.coverZoom } : {}),
     };
   }));
   return new Response(JSON.stringify(rows), { headers: { 'Content-Type': 'application/json; charset=utf-8' } });

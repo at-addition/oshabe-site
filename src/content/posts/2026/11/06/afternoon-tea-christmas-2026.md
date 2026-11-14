@@ -5,6 +5,8 @@ updatedDate: "2026-11-13"
 description: "Afternoon Tea LIVINGのクリスマス雑貨を写真と値段で紹介。Yumi Kitagishiの紅茶や貯金箱、LEDライトなど16点、税込648円から13,200円まで（2026年11月13日時点）。"
 categories: ["クリスマス", "グッズ", "イベント"]
 cover: "../../../../images/2026-11-13-afternoon-tea-christmas-2026-01.jpg"
+coverPosition: "50% 25%"
+coverZoom: 1.2
 ---
 今年もクリスマスの贈り物を選ぶ季節がやって来ました☆
 

@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
-import { themeOf, excerpt, hueVars } from '../lib/themes';
+import { themeOf, excerpt, hueVars, coverStyle } from '../lib/themes';
 
 interface Props {
   post: CollectionEntry<'posts'>;
@@ -12,6 +12,8 @@ interface Props {
 const { post, featured = false, eager = featured } = Astro.props;
 const theme = themeOf(post.data.categories);
 const base = import.meta.env.BASE_URL;
+// 拡大するカードは、拡大しても粗くならないよう大きめの画像を作る
+const zoom = post.data.coverZoom ?? 1;
 const date = post.data.pubDate.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
@@ -19,7 +21,7 @@ const date = post.data.pubDate.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tok
   <a href={`${base}${post.id}/`} class="card-link">
     <div class="thumb">
       {post.data.cover ? (
-        <Image src={post.data.cover} alt="" width={featured ? 720 : 480} layout="none" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} style={post.data.coverPosition ? `object-position:${post.data.coverPosition}` : undefined} />
+        <Image src={post.data.cover} alt="" width={Math.round((featured ? 720 : 480) * zoom)} layout="none" loading={eager ? 'eager' : 'lazy'} fetchpriority={eager ? 'high' : undefined} style={coverStyle(post.data.coverPosition, post.data.coverZoom)} />
       ) : (
         <span class="thumb-fallback">{theme.label}</span>
       )}
@@ -50,7 +52,10 @@ const date = post.data.pubDate.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tok
     background: linear-gradient(135deg, hsl(var(--hue) 70% 62%), hsl(calc(var(--hue) - 12) 60% 42%));
     display: grid; place-items: center;
   }
-  .thumb :global(img) { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* 画像は枠いっぱいに重ねる。grid の行の高さが画像の縦に引っぱられ、縦長の写真は上の方だけが見えていて、
+     coverPosition が効いていなかった（2026-11-14 に気づいた） */
+  .thumb { position: relative; }
+  .thumb :global(img) { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
   /* 画像の無い記事は、マスコットの鳥とテーマ名の板にする */
   .thumb-fallback {
     width: 100%; height: 100%; display: grid; place-items: end center; padding-bottom: 14%; box-sizing: border-box;
