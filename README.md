@@ -178,6 +178,10 @@ gh api -X PUT repos/at-addition/oshabe-site/pages -f cname=oshabe.com
   重なった片方は、本来は別の画像だった可能性がある
 - **Astro 7 は `markdown.rehypePlugins` が既定で使えない**（Markdown の処理系が替わった）。画像とリンクを相対パスにして避けた
 - **Markdown の中の相対パスの画像は `.md` から見たファイルとして取り込まれる。** 無いとビルドが止まる
+- **Windows の手元では、rolldown 1.3 系の Windows 用の部品が Smart App Control に止められ、ビルドが `Cannot find native binding` で止まった**（2026-11-16〜18）。
+  1.2.19 までは止められない。`package.json` の `overrides` で rolldown を `1.2.19` にそろえている（astro は `^1.2.16`、vite は `~1.2.14` を求めていて、どちらも満たす。GitHub Actions も同じ版でビルドする）。
+  astro か vite が 1.3 以上を求めるようになったら、`overrides` を外して手元で読み込めるか確かめる（`node -e "require('@rolldown/binding-win32-x64-msvc')"`）。
+  lock を直すときは、`node_modules/astro/node_modules/rolldown` の古い行が残ると overrides が効かないので、その行を消してから `npm install`
 
 ## 公開の前に見たこと（2026-10-24）
 

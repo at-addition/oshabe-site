@@ -15,5 +15,8 @@
     "@fontsource/zen-kaku-gothic-new": "^5.3.1",
     "@fontsource/zen-maru-gothic": "^5.3.1",
     "astro": "^7.4.6"
+  },
+  "overrides": {
+    "rolldown": "1.2.19"
   }
 }
