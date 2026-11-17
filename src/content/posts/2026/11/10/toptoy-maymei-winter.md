@@ -1,8 +1,7 @@
 ---
 title: "TOP TOYのMayMei2026【画像・値段】冬のぬいぐるみ、がま口"
 pubDate: "2026-11-10"
-updatedDate: "2026-11-15"
-description: "TOP TOY（トップトイ）のMayMeiのブラインドボックス4種類を写真と値段で紹介。クリスマスのWinter Promise、がま口型など、税込2,860円から3,300円まで（2026年11月9日時点）。"
+description: "TOP TOY（トップトイ）のMayMeiのブラインドボックス4種類を写真と値段で紹介。クリスマスのWinter Promise、がま口型など、税込2,860円から3,300円まで。"
 categories: ["グッズ", "イベント", "クリスマス"]
 cover: "../../../../images/2026-11-10-toptoy-maymei-winter-03.jpg"
 coverPosition: "50% 35%"
@@ -30,7 +29,7 @@ MayMeiは、大きな目の子が動物の着ぐるみのようなフードを�
 
 ## TOP TOYのMayMei2026【画像一覧】
 
-値段は、店頭の値札に書かれていた税込の値段です（2026年11月9日時点）。
+値段は、店頭の値札に書かれていた税込の値段です。
 
 ### Winter Promise
 
