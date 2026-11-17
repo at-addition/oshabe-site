@@ -3,7 +3,8 @@ title: "フランフランのクリスマス2026【画像・値段】リース�
 pubDate: "2026-11-18"
 description: "Francfranc（フランフラン）のクリスマスリースとノルディックサンタのオブジェを写真と値段で紹介。リースは15種類、税込700円から5,000円まで（2026年11月17日時点）。"
 categories: ["クリスマス", "グッズ", "イベント"]
-cover: "../../../../images/2026-11-17-francfranc-christmas-2026-02.jpg"
+cover: "../../../../images/2026-11-17-francfranc-christmas-2026-04.jpg"
+coverPosition: "50% 30%"
 ---
 クリスマスまで、あと1か月ほどになりました☆
 

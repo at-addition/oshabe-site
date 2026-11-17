@@ -4,8 +4,8 @@ pubDate: "2026-11-15"
 updatedDate: "2026-11-17"
 description: "Francfranc（フランフラン）のクリスマスツリーを写真と値段で紹介。スターターセット3色、デスクトップツリー、チュールツリーなど7点、税込3,400円から13,800円まで（2026年11月17日時点）。"
 categories: ["クリスマス", "グッズ", "イベント"]
-cover: "../../../../images/2026-11-17-francfranc-christmas-tree-2026-05.jpg"
-coverPosition: "50% 10%"
+cover: "../../../../images/2026-11-17-francfranc-christmas-tree-2026-02.jpg"
+coverPosition: "50% 35%"
 ---
 今年もクリスマスツリーを出す季節がやって来ました☆
 
