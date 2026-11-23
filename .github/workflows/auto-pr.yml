@@ -1,7 +1,7 @@
 # Claude_作業依頼で作った記事の PR を作る（2026-11-03〜）。マージと公開は所有者が行う
 # 印は claude/ ブランチの最後の commit の1行目の [PR作成]。付けるのは routine の下請けで、付けてよいかは payload の「公開」で決まる
 # main からの差分が記事と画像だけで、ビルドが通るときだけ PR を作る
-name: Auto PR (Claude_作業依頼)
+name: Article PR
 
 on:
   push:
@@ -52,4 +52,4 @@ jobs:
         run: |
           title=$(git log -1 --format=%s | sed 's/ *\[PR作成\]//')
           gh pr view "$BRANCH" >/dev/null 2>&1 || gh pr create --base main --head "$BRANCH" --title "$title" --assignee "$GITHUB_REPOSITORY_OWNER" \
-            --body "Claude_作業依頼で作った記事。ビルドは通っている。中身を見てマージすると公開される（.github/workflows/auto-pr.yml が作った PR）。"
+            --body "記事と画像の点検・ビルドが完了しました。Checks と記事の内容を確認し、マージすると公開されます。"
