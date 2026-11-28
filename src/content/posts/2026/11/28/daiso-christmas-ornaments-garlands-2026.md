@@ -3,8 +3,9 @@ title: "ダイソーのクリスマス飾り2026【画像・値段】オーナ�
 pubDate: "2026-11-28"
 description: "ダイソーのクリスマス売り場から、クリスマスボール、チェーンガーランド、星のツリートップ、壁に掛けるモール飾り、パーティーモールを写真11枚で紹介します。税込110円から330円です。"
 categories: ["100均", "クリスマス", "グッズ", "プチプラ"]
-cover: "../../../../images/2026-11-17-daiso-christmas-ornaments-garlands-2026-07.jpg"
-coverPosition: "50% 39%"
+cover: "../../../../images/2026-11-17-daiso-christmas-ornaments-garlands-2026-03.jpg"
+coverPosition: "45% 38%"
+coverZoom: 1.3
 ---
 
 白い雪の結晶にするか、赤と緑のモールにするか。同じツリーでも、枝に掛ける色で雰囲気がずいぶん変わります。
